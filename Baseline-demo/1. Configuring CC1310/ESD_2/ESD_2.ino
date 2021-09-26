@@ -36,16 +36,17 @@ void detectStatus() {
   for (byte i = 0; i < 50; i++) {
     P1 = P1 + analogRead(A0);
     P2 = P2 + analogRead(A1);
-    delay(50);
+    delay(20);                      //speed up (20ms)
+    //delay(50);
   }
 
   P1 = P1 / 1000;
   P2 = P2 / 1000;
-  Serial.print("P1: ");
+  Serial.print("P1: ");             //testing the analog signal from ESD
   Serial.println(P1);
   Serial.print("P2: ");
   Serial.println(P2);
-  Serial.println();
+  Serial.println(); 
 
   if (P1 == 1 && P2 == p_value) {
     stat = "1"; // PASS
@@ -64,7 +65,7 @@ void detectStatus() {
 void sendStatus() {
   if (prevStat != stat) {
     value = tagName + stat;
-    char d[128];
+    char d[128];                              // declare string 
     value.toCharArray(d, sizeof(d));
     memcpy(&txPacket.payload, &d, sizeof(d)); // Copy the String value into the txPacket payload
 
