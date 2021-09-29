@@ -1,5 +1,5 @@
 raw/
 Testing
 **/.DS_Store
-
-.DS_Store
+.metadata/
+.jxbrowser.userdata/
