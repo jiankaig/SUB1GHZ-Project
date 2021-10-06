@@ -1,3 +1,6 @@
+ESD_temp
+- folder with ESD code that implements for reading 2 ESD devices
+
 ESD_2.ino 
 
 - this is code to load into CC1310(slave node)
