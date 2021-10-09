@@ -16,19 +16,38 @@ void setup() {
 
 // variables will change:
 int buttonState = 0;         // variable for reading the pushbutton status
-int redState = 1;
-int greenState = 1;
-int blueState = 1;
 int State = 0;
 
 void loop() {
-  setColor(0, 1, 1); // Red Color
-  delay(1000);
-  setColor(1, 0, 1); // Green Color
-  delay(1000);
-  setColor(1, 1, 0); // Blue Color
-  delay(1000);
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
 
+  //update state when button pressed
+  if( buttonState == HIGH){
+    State++;
+    if(State >3)
+    {
+      State=0;
+    }
+  }
+  
+    //state machine
+  switch (State){
+    case 0: //off all coloursled
+      setColor(1, 1, 1);
+      break;
+    case 1: //on red
+      setColor(0, 1, 1);
+      break;
+    case 2: //on green
+      setColor(1, 0, 1);
+      break;
+    case 3: //on blue
+      setColor(1, 1, 0);
+      break;
+    default: State = 0;
+    }
+  
 }
 
 void setColor(int redValue, int greenValue, int blueValue) {

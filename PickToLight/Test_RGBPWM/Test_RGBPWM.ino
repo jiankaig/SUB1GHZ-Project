@@ -35,8 +35,8 @@
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
 #define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
-#define GREEN 18 // may need to change this for your LaunchPad
-#define BLUE 11 // may need to change this for your LaunchPad
+#define GREEN 13 // may need to change this for your LaunchPad
+#define BLUE 12 // may need to change this for your LaunchPad
 #define delayTime 10 // delay between color changes, 10ms by default
 
 // Here we can introduce some global variables. These variables have a type
