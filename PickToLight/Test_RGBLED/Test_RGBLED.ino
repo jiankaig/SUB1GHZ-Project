@@ -1,6 +1,6 @@
-int redPin= 13;
-int greenPin =14;
-int bluePin = 15;
+int redPin= 19;//13;
+int greenPin =13;//14;
+int bluePin = 12;//15;
 
 void setup() {
 
@@ -12,17 +12,22 @@ void setup() {
 
 void loop() {
 
-  setColor(1, 0, 0); // Red Color
+  setColor(0, 1, 1); // Red Color
   delay(1000);
-  setColor(0, 1, 0); // Green Color
+  setColor(1, 0, 1); // Green Color
   delay(1000);
-  setColor(0, 0, 1); // Blue Color
+  setColor(1, 1, 0); // Blue Color
   delay(1000);
 
 }
 
 void setColor(int redValue, int greenValue, int blueValue) {
+  //reset all to high
+  digitalWrite(redPin, 1);
+  digitalWrite(greenPin, 1);
+  digitalWrite(bluePin, 1);
 
+  //write respective pins
   digitalWrite(redPin, redValue);
   digitalWrite(greenPin, greenValue);
   digitalWrite(bluePin, blueValue);
