@@ -35,8 +35,7 @@ void loop() {
 void detectStatus() {
   for (byte i = 0; i < 50; i++) {
     P1 = P1 + analogRead(A0);
-    P2 = P2 + analogRead(A1);
-    //delay(20);                      
+    P2 = P2 + analogRead(A1);                   
     delay(50); //50 ms delay
   }
 
