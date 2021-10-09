@@ -7,7 +7,7 @@ const int threshold = 250;
 int P1 = 0;
 int P2 = 0;
 
-const int p_value = 51;
+const int p_value = 47;
 const int off_value = 3;
 
 String stat;
@@ -36,8 +36,8 @@ void detectStatus() {
   for (byte i = 0; i < 50; i++) {
     P1 = P1 + analogRead(A0);
     P2 = P2 + analogRead(A1);
-    delay(20);                      //speed up (20ms)
-    //delay(50);
+    //delay(20);                      
+    delay(50); //50 ms delay
   }
 
   P1 = P1 / 1000;
@@ -48,13 +48,13 @@ void detectStatus() {
   Serial.println(P2);
   Serial.println(); 
 
-  if (P1 == 1 && P2 == p_value) {
+  if (P1 == 1 && P2 >= p_value) {
     stat = "1"; // PASS
   }
-  if (P1 == p_value && P2 == 1) {
+  if (P1 >= p_value && P2 == 1) {
     stat = "2"; // NO CONNECT
   }
-  if (P2 > 20 && P1 == p_value) {
+  if (P2 > 20 && P1 >= p_value) {
     stat = "3"; // FAIL
   }
   if (P1 < off_value && P2 < off_value) {
