@@ -74,6 +74,7 @@ void setup() {
 /* In the loop function we will...
  */
 char d[128];
+//String d = "";
 void loop() {
   /* Start processing Sub 1GHz*/
   // Wait / block for 2 second to receive a packet.
@@ -86,21 +87,14 @@ void loop() {
   
   if (status == EasyLink_Status_Success) {
 //    memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
-    memcpy(&d, &rxPacket.payload, sizeof(char));
+    memcpy(&d, &rxPacket.payload, sizeof(d));
     Serial.print("Packet received with lenght ");
     Serial.print(rxPacket.len);
     Serial.print(" and value ");
     
-//    Serial.println(value); //was   
-//    strValue += value;
-//    if(value == '\n')
-//      bReadDone = true;
-     
     Serial.println(d); //value
-//    if(d[0] == 'A'){
-//      bReadDone = true;  
-//      strValue = d;
-//    }
+    bReadDone = true;
+    strValue = d;
 
   } else {
 
