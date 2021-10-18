@@ -19,8 +19,8 @@ void setup() {
 
   SerialCC1.Println(myLink.version());
   txPacket.dstAddr[0] = 0xaa;
-//TESTing setup
-bReadDone = true;
+  //TESTing setup
+  bReadDone = true;
 }
 
 
@@ -28,7 +28,7 @@ void loop() {
 
   char ch = SerialCC1.Read();
   if (ch != 0) {
-
+    
     txt += ch;
     if (ch == '\n')
       bReadDone = true;
