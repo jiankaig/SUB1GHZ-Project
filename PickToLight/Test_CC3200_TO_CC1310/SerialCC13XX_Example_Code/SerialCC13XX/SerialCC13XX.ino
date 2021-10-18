@@ -8,7 +8,8 @@ EasyLink_TxPacket txPacket;
 EasyLink myLink;
 
 SerialCC SerialCC1;
-String txt;
+String txt = "";
+bool bReadDone = false;
 
 void setup() {
 
@@ -32,10 +33,16 @@ char ch = SerialCC1.Read();
 if(ch!=0){ 
   SerialCC1.Print("Ch:");
   SerialCC1.Println(String(ch));
-  txt = String(ch);
-  //SerialCC1.Print("Txt:");
-  //SerialCC1.Println(txt);
-  sendStatus();
+  txt += ch;
+  if(ch == '\n')
+    bReadDone = true;
+  
+  if(bReadDone){
+    bReadDone = false;
+    SerialCC1.Print("Txt:");
+    SerialCC1.Println(txt);
+    sendStatus();
+    }
 }
 }
 
@@ -63,5 +70,4 @@ else{
    //SerialCC1.Print(myLink.getStatusString(status));
   // SerialCC1.println(")");
 }
-d="";
 }
