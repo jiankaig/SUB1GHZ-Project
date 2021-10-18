@@ -9,7 +9,7 @@ int P2 = 0;
 int P3 = 0;
 int P4 = 0;
 
-const int p_value = 49;
+const int p_value = 48;
 const int off_value = 15;
 
 String stat_1;
@@ -64,26 +64,26 @@ void detectStatus() {
   Serial.println(P4);
   Serial.println();
 
-  if (P1 == 1 && P2 == p_value) {
+  if (P1 == 1 && P2 >= p_value) {
     stat_1 = "1"; // PASS
   }
-  if (P1 == p_value && P2 == 1) {
+  if (P1 >= p_value && P2 == 1) {
     stat_1 = "2"; // NO CONNECT
   }
-  if (P2 > 20 && P1 == p_value) {
+  if (P2 > 20 && P1 >= p_value) {
     stat_1 = "3"; // FAIL
   }
   if (P1 < off_value && P2 < off_value) {
     stat_1 = "4"; // POWER OFF
   }
 
-  if (P3 == 1 && P4 == p_value) {
+  if (P3 == 1 && P4 >= p_value) {
     stat_2 = "1"; // PASS
   }
-  if (P3 == p_value && P4 == 1) {
+  if (P3 >= p_value && P4 == 1) {
     stat_2 = "2"; // NO CONNECT
   }
-  if (P4 > 20 && P3 == p_value) {
+  if (P4 > 20 && P3 >= p_value) {
     stat_2 = "3"; // FAIL
   }
   if (P3 < off_value && P4 < off_value) {
