@@ -12,15 +12,12 @@ String txt = "";
 bool bReadDone = false;
 
 void setup() {
-
   SerialCC1.Begin(9600);
 
   myLink.begin();
 
   SerialCC1.Println(myLink.version());
   txPacket.dstAddr[0] = 0xaa;
-  //TESTing setup
-  bReadDone = true;
 }
 
 
@@ -35,7 +32,6 @@ void loop() {
 
     if (bReadDone) {
       bReadDone = false;
-
       sendStatus();
       txt = "";
     }
