@@ -21,9 +21,9 @@
 #include <WiFi.h>
 
 // your network name also called SSID
-char ssid[] = "energia";
+char ssid[] = "Sub1Ghz";
 // your network password
-char password[] = "supersecret";
+char password[] = "Seems12345";
 
 unsigned int localPort = 2390;      // local port to listen on
 
@@ -34,7 +34,8 @@ WiFiUDP Udp;
 
 void setup() {
   //Initialize serial and wait for port to open:
-  Serial.begin(115200);
+  Serial.begin(9600);
+  Serial1.begin(9600);
 
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to Network named: ");
@@ -83,6 +84,7 @@ void loop() {
     if (len > 0) packetBuffer[len] = 0;
     Serial.println("Contents:");
     Serial.println(packetBuffer);
+    Serial1.println(packetBuffer);
 
     // send a reply, to the IP address and port that sent us the packet we received
     Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
