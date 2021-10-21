@@ -25,6 +25,6 @@ void loop() {
     //Serial.print("len: ");
     //Serial.print(rxPacket.len);
     //Serial.print(", RX: ");
-    Serial.print(d);
+    Serial.print(d); //cc3200 will read from this serial..
   }
 }
