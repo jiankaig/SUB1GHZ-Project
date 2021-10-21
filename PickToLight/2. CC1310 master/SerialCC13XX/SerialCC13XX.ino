@@ -10,7 +10,7 @@ String inputString = ""; // a string to hold incoming data
 boolean stringComplete = false; // whether the string is complete
 
 void setup() {
-  SerialCC1.Begin(115200);
+  SerialCC1.Begin(9600);
   
   SerialCC1.Println("Hello");
   SerialCC1.Print("Starting.");
