@@ -1,17 +1,17 @@
 int redPin= 19;//13;
 int greenPin =13;//14;
 int bluePin = 12;//15;
-const int buttonPin = 11;// PUSH2;     // the number of the pushbutton pin
+const int buttonPin = 5;// PUSH2;     // the number of the pushbutton pin
 
 void setup() {
   // initialize the pushbutton pin as an input:
+  Serial.begin(9600);
   pinMode(buttonPin, INPUT);     //INPUT_PULLUP
-
+  
   // initialize led pins as output
-  pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
-
+  Serial.print("setup..");
 }
 
 // variables will change:
@@ -24,6 +24,7 @@ void loop() {
 
   //update state when button pressed
   if( buttonState == HIGH){
+    Serial.print("ok ");
     State++;
     if(State >3)
     {
@@ -34,16 +35,20 @@ void loop() {
     //state machine
   switch (State){
     case 0: //off all coloursled
+      Serial.print("ok 1");
       setColor(1, 1, 1);
       break;
     case 1: //on red
       setColor(0, 1, 1);
+      Serial.print("ok 2");
       break;
     case 2: //on green
       setColor(1, 0, 1);
+      Serial.print("ok 3");
       break;
     case 3: //on blue
       setColor(1, 1, 0);
+      Serial.print("ok 4");
       break;
     default: State = 0;
     }

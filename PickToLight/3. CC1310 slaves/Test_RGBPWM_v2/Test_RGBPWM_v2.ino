@@ -14,7 +14,10 @@
 //Sub 1GHz setup..
 #include "EasyLink.h"
 EasyLink_RxPacket rxPacket;
+EasyLink_TxPacket txPacket;
 EasyLink myLink;
+String txt = "";
+
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
@@ -40,7 +43,8 @@ String blueCode;
 String strValue = "";
 bool bReadDone = false;
 int PWM_RESOLUTION = 255; // this variable will hold our resolution.
-
+const int buttonPin = 11;// PUSH2;    
+int buttonState = LOW;  
 uint16_t value;
 
 /* This is our setup function. We want to set our LED pins as OUTPUT.
@@ -51,6 +55,9 @@ void setup() {
  // hurt to use it, especially if we want to call digitalWrite() for the
  // same pin in the same sketch.
  //INTIALISE as Red first //ALL TO HIGH, no colour
+
+ pinMode(buttonPin, INPUT);  //Input as pullup
+ 
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
@@ -77,7 +84,7 @@ void loop() {
   rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(2000);
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
-
+  
   EasyLink_Status status = myLink.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
@@ -99,7 +106,18 @@ void loop() {
 //    Serial.print(myLink.getStatusString(status));
 //    Serial.println(")");
   }
-
+  buttonState = digitalRead(buttonPin); //read ack
+  if(buttonState == HIGH) //if button is pressed (ack)
+  {
+    digitalWrite(RED,  HIGH);
+    digitalWrite(GREEN, HIGH);
+    digitalWrite(BLUE, HIGH);
+    Serial.println("User Acknowledge");
+    // Send AAX00010R255G255B255BB
+    //sendStatus();
+    buttonState = LOW;          
+  }
+  
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
@@ -115,12 +133,18 @@ void loop() {
 //    Serial.println(IdCode);
     strValue = "";
 
+    //int redInt;
+    //redInt = 255 - constrain(redCode.toInt(), 0, 255); 
+    
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
     if(IdCode == BoardID){
+      //analogWrite( RED, redInt );
       analogWrite( RED, redCode.toInt() );
       analogWrite( GREEN, greenCode.toInt() );
-      analogWrite( BLUE, blueCode.toInt() );    
+      analogWrite( BLUE, blueCode.toInt() );
+
+
 //      Serial.print("red: ");
 //      Serial.println(redCode);
 //      Serial.print("green: ");
@@ -134,4 +158,29 @@ void loop() {
  
 // delay( delayTime ); // wait for how long delay time is
  
+}
+
+
+void sendStatus() {
+  char data[128];
+  String txt ="AAX00010R255G255B255BB";
+  txt.toCharArray(data, sizeof(data));
+  memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
+ 
+  txPacket.len = sizeof(data); // Set the length of the packet
+  txPacket.absTime = EasyLink_ms_To_RadioTime(0); // Transmit immediately
+
+  EasyLink_Status status = myLink.transmit(&txPacket); //check trasmit status
+
+  if (status == EasyLink_Status_Success) {
+    Serial.print("TX: ");
+    //Serial.Println(data);
+  }
+  else {
+    Serial.print("TX Error code: ");
+    //SerialCC1.Print(String(status));
+    //SerialCC1.Print(" (");
+    //SerialCC1.Print(myLink.getStatusString(status));
+    // SerialCC1.println(")");
+  }
 }
