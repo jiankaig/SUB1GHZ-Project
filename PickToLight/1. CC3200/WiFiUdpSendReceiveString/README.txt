@@ -1,0 +1,1 @@
+This code will being receiving packet from UDP and send UART TX to cc1310 master
