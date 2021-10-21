@@ -1,1 +1,2 @@
 - This code contain the web hosting and transferring of data to web server
+- help link if having trouble loading cc3200: https://embeddedcomputing.weebly.com/launchpad-cc3200-wifi.html
