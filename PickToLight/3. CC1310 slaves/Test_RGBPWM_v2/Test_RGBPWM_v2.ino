@@ -1,19 +1,14 @@
 /*
- Example 01: Fade RGB LED (PWM)
- Sidekick Basic Kit for TI LaunchPad
+ Test_RGBPWM_v2 : CC1310 Slave device application for single 5050 LED
 
- Now we are going to use the special tricolor LED. RGB stands for
- Red, Green, and Blue which are primary colors that can make any
- color we want. This LED can help us make different colors that
- can mean different things.
+ This program receives command from master CC1310 device via EasyLink API. 
+ Inteprets command into an input string for further processing of device ID
+ and RGB values. 
 
- We are going to use Pulse Width Modulation to let the LED fade.
- Certain pins on the LaunchPad are PWM capable. In Energia, we call
- this analogWrite() capable. We will want to use those to connect
- to our LED. If you are not sure, check the Energia pin maps on
- the website for your LaunchPad.
+ If device ID is correct, programm wil proceed to change the RGB LED state
+ accordingly. The respective output pins for red, green, blue can be customiszed.
+ BoardID can also be customiszed in order to match each slave device.
  
- This example code is in the public domain.
 */
 
 //Sub 1GHz setup..
@@ -27,6 +22,7 @@ EasyLink myLink;
 #define GREEN 13 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define delayTime 10 // delay between color changes, 10ms by default
+String BoardID = "0001"; // change this according to desired device identification
 
 // Here we can introduce some global variables. These variables have a type
 // (int) and a name. We can use the variables in any function that comes after
@@ -43,7 +39,6 @@ String greenCode;
 String blueCode;
 String strValue = "";
 bool bReadDone = false;
-String BoardID = "0001";
 int PWM_RESOLUTION = 255; // this variable will hold our resolution.
 
 uint16_t value;
