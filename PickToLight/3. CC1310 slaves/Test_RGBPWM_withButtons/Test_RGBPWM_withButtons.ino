@@ -43,8 +43,8 @@ String blueCode;
 String strValue = "";
 bool bReadDone = false;
 int PWM_RESOLUTION = 255; // this variable will hold our resolution.
-//const int buttonPin = 11;// PUSH2;    
-//int buttonState = LOW;  
+const int buttonPin = 11;// PUSH2;    
+int buttonState = LOW;  
 uint16_t value;
 
 /* This is our setup function. We want to set our LED pins as OUTPUT.
@@ -56,7 +56,7 @@ void setup() {
  // same pin in the same sketch.
  //INTIALISE as Red first //ALL TO HIGH, no colour
 
- //pinMode(buttonPin, INPUT);  //Input as pullup
+ pinMode(buttonPin, INPUT);  //Input as pullup
  
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
@@ -105,6 +105,17 @@ void loop() {
 //    Serial.print(" (");
 //    Serial.print(myLink.getStatusString(status));
 //    Serial.println(")");
+  }
+  buttonState = digitalRead(buttonPin); //read ack
+  if(buttonState == HIGH) //if button is pressed (ack)
+  {
+    digitalWrite(RED,  HIGH);
+    digitalWrite(GREEN, HIGH);
+    digitalWrite(BLUE, HIGH);
+    Serial.println("User Acknowledge");
+    // Send AAX00010R255G255B255BB
+    //sendStatus();
+    buttonState = LOW;          
   }
   
  /* Start processing LED */
