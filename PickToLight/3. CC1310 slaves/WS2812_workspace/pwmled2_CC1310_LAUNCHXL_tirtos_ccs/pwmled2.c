@@ -50,35 +50,35 @@
 void *mainThread(void *arg0)
 {
     /* Period and duty in microseconds */
-//    uint16_t   pwmPeriod = 3000;
-    uint32_t   pwmPeriod = 800000;//3000;
-    uint32_t   duty = 0;
-//    uint16_t   dutyInc = 100;
-    uint32_t   dutyInc = PWM_DUTY_FRACTION_MAX/100;//100;
-    uint32_t   dutyT1H = PWM_DUTY_FRACTION_MAX / 100 * 64 ;
-    uint32_t   dutyT0H  = PWM_DUTY_FRACTION_MAX / 100 * 32 ;
+    //    uint16_t   pwmPeriod = 3000;
+        uint32_t   pwmPeriod = 800000;//3000;
+        uint32_t   duty = 0;
+    //    uint16_t   dutyInc = 100;
+        uint32_t   dutyInc = PWM_DUTY_FRACTION_MAX/100;//100;
+        uint32_t   dutyT1H = PWM_DUTY_FRACTION_MAX / 100 * 64 ;
+        uint32_t   dutyT0H  = PWM_DUTY_FRACTION_MAX / 100 * 32 ;
 
-    /* Sleep time in microseconds */
-    uint32_t   time = 50000;
-    PWM_Handle pwm1 = NULL;
-    PWM_Handle pwm2 = NULL;
-    PWM_Params params;
+        /* Sleep time in microseconds */
+        uint32_t   time = 50000;
+        PWM_Handle pwm1 = NULL;
+        PWM_Handle pwm2 = NULL;
+        PWM_Params params;
 
-    /* Call driver init functions. */
-    PWM_init();
+        /* Call driver init functions. */
+        PWM_init();
 
-    PWM_Params_init(&params);
-//    params.dutyUnits = PWM_DUTY_US;
-    params.dutyUnits = PWM_DUTY_FRACTION;//PWM_DUTY_US;
-    params.dutyValue = 0;
-//    params.periodUnits = PWM_PERIOD_US;
-    params.periodUnits = PWM_PERIOD_HZ;//PWM_PERIOD_US;
-    params.periodValue = pwmPeriod;
-    pwm1 = PWM_open(Board_PWM0, &params);
-    if (pwm1 == NULL) {
-        /* Board_PWM0 did not open */
-        while (1);
-    }
+        PWM_Params_init(&params);
+    //    params.dutyUnits = PWM_DUTY_US;
+        params.dutyUnits = PWM_DUTY_FRACTION;//PWM_DUTY_US;
+        params.dutyValue = 0;
+    //    params.periodUnits = PWM_PERIOD_US;
+        params.periodUnits = PWM_PERIOD_HZ;//PWM_PERIOD_US;
+        params.periodValue = pwmPeriod;
+        pwm1 = PWM_open(Board_PWM0, &params);
+        if (pwm1 == NULL) {
+            /* Board_PWM0 did not open */
+            while (1);
+        }
 
     PWM_start(pwm1);
 
@@ -90,24 +90,22 @@ void *mainThread(void *arg0)
 
     PWM_start(pwm2);
 
+//    usleep(time); // wait abit before sending
+
     /* Loop forever incrementing the PWM duty */
-    while (1) {
-        if(duty > PWM_DUTY_FRACTION_MAX/8)
+        while (1) {
+
             PWM_setDuty(pwm1, dutyT1H);
-        else if(duty < PWM_DUTY_FRACTION_MAX/8)
-            PWM_setDuty(pwm1, dutyT0H);
 
-//        PWM_setDuty(pwm1, duty);
+            PWM_setDuty(pwm2, dutyT0H);
 
-        PWM_setDuty(pwm2, duty);
+            duty = (duty + dutyInc);
 
-        duty = (duty + dutyInc);
+    //        if (duty == pwmPeriod || (!duty)) {
+            if (duty >= PWM_DUTY_FRACTION_MAX/2 || (!duty)) {
+                dutyInc = - dutyInc;
+            }
 
-//        if (duty == pwmPeriod || (!duty)) {
-        if (duty >= PWM_DUTY_FRACTION_MAX/2 || (!duty)) {
-            dutyInc = - dutyInc;
+//            usleep(time);
         }
-
-        usleep(time);
-    }
 }
