@@ -33,7 +33,6 @@
 
 // Include the SPI library.
 #include <SPI.h>
-
 #define PIXELS 1 // number of pixels along led strip
 void setup() 
 {
