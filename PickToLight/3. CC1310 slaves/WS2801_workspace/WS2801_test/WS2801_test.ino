@@ -1,9 +1,9 @@
 // -*- mode:c++; -*-
 /// @file WS2801_test.ino
 /// 
-/// @brief Example for driving several WS2801 RGB LED modules over SPI on an Arduino UNO.
+/// @brief Example for driving several WS2801 RGB LED modules over SPI on an CC1310 Launchpad.
 ///
-/// @author Garth Zeglin
+/// @author Garth Zeglin, Jian Kai
 /// @date 2014-09-13
 ///
 /// @remarks The WS2801 LED driver has three current controlled LED outputs with
@@ -24,56 +24,104 @@
 /// first module, the second three the second module, etc.  In other words, the
 /// strand is not a shift register.  Extra data has no effect.
 
-/// This sketch assumes the following electrical connections from the Arduino to
+/// This sketch assumes the following electrical connections from the CC1310 to
 /// the first module in a chain:
 
-/// PIN11 (MOSI)  ->  DAT
-/// PIN13 (SCK)   ->  CLK
+/// PIN9 (MOSI)  ->  DAT
+/// PIN10 (SCK)   ->  CLK
 /// GND           ->  GND
 
 // Include the SPI library.
 #include <SPI.h>
-#define PIXELS 1 // number of pixels along led strip
+#define PIXELS 3 // number of pixels along led strip
+Color pixelColor[PIXELS] = {0}; //store pixel color data
+
+struct Color
+{
+  public:
+    byte r;
+    byte g;
+    byte b;
+}Red, Green, Blue, Yellow, Rainbow;
+//typedef struct color Color;
+int RainbowState = 0;
+void setPixelColor(Color c, int index); // function prototype
+
 void setup() 
 {
+  //init SPI
   SPI.begin();  // initialize SPI hardware
-  Serial.begin(9600);
+//  SPI.setClockDivider(SPI_CLOCK_DIV2);  // defined for each clock speed
+//  SPI.setBitOrder(MSBFIRST);
+//  SPI.setDataMode(SPI_MODE1);   // MOSI normally low.
+
+  Serial.begin(9600); // for debugging
+
+  //init colours
+  Red = Color{0xBB,0x00,0x00};
+  Green = Color{0x00,0xBB,0x00};
+  Blue = Color{0x00,0x00,0xBB};
+  Yellow = Color{0xBB,0xBB,0x00};
+  Rainbow = Color{0xBB,0x00,0x00}; // start from red
+  show();// set all leds to 0 intially
 }
 
 void loop() 
 {
-  static uint8_t cycle = 0;
-//  delayMicroseconds(500); //Wait for 500us to go into reset  
+  show();
+  rainbow(10);
+//  setPixelColor(Color{0x01,0x00,0x00}, 0);
+//  setPixelColor(Color{0,1,0}, 1);
+//  setPixelColor(Blue, 2);
+}
 
-    byte red   =  0x00;
-    byte green =  0xBB;
-    byte blue  =  0x00;
-    
-    byte red2   =  0x00;
-    byte green2 =  0x00;
-    byte blue2  =  0xBB;
-    
-    byte red3   =  0xBB;
-    byte green3 =  0x00;
-    byte blue3  =  0x00;
-    
-    SPI.transfer( red2   );
-    SPI.transfer( green2 );
-    SPI.transfer( blue2  );
-    SPI.transfer( red3  );
-    SPI.transfer( green3 );
-    SPI.transfer( blue3  );
-//    SPI.transfer( red   );
-//    SPI.transfer( green );
-//    SPI.transfer( blue  );
-    SPI.transfer( 0x00 );
-    SPI.transfer( 0x00 );
-    SPI.transfer( 0x00 );
-    delay(1000); //1 sec
+// Sends three bytes to the LED strip by SPI.
+void sendRGB (byte r, byte g, byte b) {
+    SPI.transfer(r); 
+    SPI.transfer(g); 
+    SPI.transfer(b); 
+} // end of sendRGB
+
+// Wait long enough without sending any bits and update all pixels
+void show(){
+  delayMicroseconds(1000); //Wait for 500us to go into reset 
+  byte r_value, g_value, b_value;
+  for(int i = 0; i<PIXELS; i++){
+    r_value = pixelColor[i].r;
+    g_value = pixelColor[i].g;
+    b_value = pixelColor[i].b;
+    sendRGB(r_value,g_value,b_value);
+    }
   
-//  delay(1);  // delay 1 millisecond to allow outputs to update
-//  cycle++;   // update the overall animation
+} // end of show
 
-  // add a delay to control the overall frame rate
-//  delay(20); 
+// set Pixel Color by index, assuming indexing starts from 0
+void setPixelColor(Color c, int index){
+  pixelColor[index] = c;
+}
+void rainbow(int wait){
+  delay(wait);
+  switch(RainbowState){
+    case 0: Rainbow.r--;
+            Rainbow.g++;
+            if(Rainbow.r == 0)
+              RainbowState++;
+            break;
+    case 1: Rainbow.g--;
+            Rainbow.b++;
+            if(Rainbow.g == 0)
+              RainbowState++;
+            break;
+    case 2: Rainbow.b--;
+            Rainbow.r++;
+            if(Rainbow.b == 0)
+              RainbowState = 0;
+            break;
+  }
+
+  //set all pixels to same color
+  for(int i = 0; i<PIXELS; i++){
+    setPixelColor(Rainbow, i);
+  }
+  
 }
