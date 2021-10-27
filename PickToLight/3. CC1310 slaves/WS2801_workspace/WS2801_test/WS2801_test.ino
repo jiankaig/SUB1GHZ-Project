@@ -34,8 +34,6 @@
 // Include the SPI library.
 #include <SPI.h>
 #define PIXELS 3 // number of pixels along led strip
-Color pixelColor[PIXELS] = {0}; //store pixel color data
-
 struct Color
 {
   public:
@@ -46,6 +44,7 @@ struct Color
 //typedef struct color Color;
 int RainbowState = 0;
 void setPixelColor(Color c, int index); // function prototype
+Color pixelColor[PIXELS] = {0}; //store pixel color data
 
 void setup() 
 {
