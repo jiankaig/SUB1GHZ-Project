@@ -1,10 +1,10 @@
 // -*- mode:c++; -*-
-/// @file WS2801_test.ino
+/// @file WS2801_Controller.ino
 /// 
 /// @brief Example for driving several WS2801 RGB LED modules over SPI on an CC1310 Launchpad.
 ///
 /// @author Garth Zeglin, Jian Kai
-/// @date 2014-09-13
+/// @date 2021-10-27
 ///
 /// @remarks The WS2801 LED driver has three current controlled LED outputs with
 /// 8-bit precision (256 levels).  It is controlled over SPI by sending 24 bits
@@ -31,97 +31,23 @@
 /// PIN10 (SCK)   ->  CLK
 /// GND           ->  GND
 
-// Include the SPI library.
-#include <SPI.h>
-#define PIXELS 3 // number of pixels along led strip
-Color pixelColor[PIXELS] = {0}; //store pixel color data
+#include "WS2801_Controller.h"
 
-struct Color
-{
-  public:
-    byte r;
-    byte g;
-    byte b;
-}Red, Green, Blue, Yellow, Rainbow;
-//typedef struct color Color;
-int RainbowState = 0;
-void setPixelColor(Color c, int index); // function prototype
+#define PIXELS 4 // number of pixels along led strip
 
+WS2801_Controller strip = WS2801_Controller(PIXELS);
 void setup() 
 {
-  //init SPI
-  SPI.begin();  // initialize SPI hardware
-//  SPI.setClockDivider(SPI_CLOCK_DIV2);  // defined for each clock speed
-//  SPI.setBitOrder(MSBFIRST);
-//  SPI.setDataMode(SPI_MODE1);   // MOSI normally low.
-
-  Serial.begin(9600); // for debugging
-
-  //init colours
-  Red = Color{0xBB,0x00,0x00};
-  Green = Color{0x00,0xBB,0x00};
-  Blue = Color{0x00,0x00,0xBB};
-  Yellow = Color{0xBB,0xBB,0x00};
-  Rainbow = Color{0xBB,0x00,0x00}; // start from red
-  show();// set all leds to 0 intially
+  strip.begin(); // LEDs should be all off at start
+  delay(2000); //wait 2secs 
 }
 
 void loop() 
 {
-  show();
-  rainbow(10);
-//  setPixelColor(Color{0x01,0x00,0x00}, 0);
-//  setPixelColor(Color{0,1,0}, 1);
-//  setPixelColor(Blue, 2);
-}
+    strip.rainbow(10);
 
-// Sends three bytes to the LED strip by SPI.
-void sendRGB (byte r, byte g, byte b) {
-    SPI.transfer(r); 
-    SPI.transfer(g); 
-    SPI.transfer(b); 
-} // end of sendRGB
-
-// Wait long enough without sending any bits and update all pixels
-void show(){
-  delayMicroseconds(1000); //Wait for 500us to go into reset 
-  byte r_value, g_value, b_value;
-  for(int i = 0; i<PIXELS; i++){
-    r_value = pixelColor[i].r;
-    g_value = pixelColor[i].g;
-    b_value = pixelColor[i].b;
-    sendRGB(r_value,g_value,b_value);
-    }
+//  strip.setPixelColor(WS2801_Controller::Color{0x01,0x00,0x00}, 0); // set 1st led with RGB value in hex
+//  strip.setPixelColor(WS2801_Controller::Color{1,1,0}, 1); // set 2nd led with RGB value in dec
   
-} // end of show
-
-// set Pixel Color by index, assuming indexing starts from 0
-void setPixelColor(Color c, int index){
-  pixelColor[index] = c;
-}
-void rainbow(int wait){
-  delay(wait);
-  switch(RainbowState){
-    case 0: Rainbow.r--;
-            Rainbow.g++;
-            if(Rainbow.r == 0)
-              RainbowState++;
-            break;
-    case 1: Rainbow.g--;
-            Rainbow.b++;
-            if(Rainbow.g == 0)
-              RainbowState++;
-            break;
-    case 2: Rainbow.b--;
-            Rainbow.r++;
-            if(Rainbow.b == 0)
-              RainbowState = 0;
-            break;
-  }
-
-  //set all pixels to same color
-  for(int i = 0; i<PIXELS; i++){
-    setPixelColor(Rainbow, i);
-  }
-  
+    strip.show(); // send all data in one go thru SPI
 }

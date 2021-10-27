@@ -1,4 +1,20 @@
 #include "WS2801_Controller.h"
+#include <Arduino.h> // for delay() and delayMicroseconds();
+
+WS2801_Controller::WS2801_Controller(int pixels){
+  pixels_ = pixels;
+//  pixelColor = WS2801_Controller::Color[pixels_];
+//    pixelColor[0] = Color{0x00,0x00,0x00};
+//    pixelColor[1] = Color{0x00,0x00,0x00};
+//    pixelColor[2] = Color{0x00,0x00,0x00};
+//    begin();
+    //assign pixelColor to {0}
+//    pixelColor = {0};
+}
+
+WS2801_Controller::~WS2801_Controller(){
+    
+}
 
 void WS2801_Controller::begin(){
   //init SPI
@@ -23,7 +39,7 @@ void WS2801_Controller::sendRGB (byte r, byte g, byte b){
 void WS2801_Controller::show(){
     delayMicroseconds(1000); //Wait for 500us to go into reset 
     byte r_value, g_value, b_value;
-    for(int i = 0; i<PIXELS; i++){
+    for(int i = 0; i<pixels_; i++){
         r_value = pixelColor[i].r;
         g_value = pixelColor[i].g;
         b_value = pixelColor[i].b;
@@ -56,7 +72,7 @@ void WS2801_Controller::rainbow(int wait){
   }
 
   //set all pixels to same color
-  for(int i = 0; i<PIXELS; i++){
+  for(int i = 0; i<pixels_; i++){
     setPixelColor(Rainbow, i);
   }
   
