@@ -25,7 +25,7 @@ String txt = "";
 #define GREEN 13 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define delayTime 10 // delay between color changes, 10ms by default
-String BoardID = "0001"; // change this according to desired device identification
+String BoardID = "0002"; // change this according to desired device identification
 
 // Here we can introduce some global variables. These variables have a type
 // (int) and a name. We can use the variables in any function that comes after
@@ -43,9 +43,15 @@ String blueCode;
 String strValue = "";
 bool bReadDone = false;
 int PWM_RESOLUTION = 255; // this variable will hold our resolution.
-const int buttonPin = 11;// PUSH2;    
-int buttonState = LOW;  
+const int buttonPin = 11;// PUSH2; Number of pushbutton pin
+
 uint16_t value;
+
+//For Button and debounce variables
+int buttonState = 0;
+int lastButtonState = LOW;
+long lastDebounceTime = 0;
+long debounceDelay = 50;
 
 /* This is our setup function. We want to set our LED pins as OUTPUT.
  * We can also set them to HIGH at the beginning.
@@ -56,13 +62,13 @@ void setup() {
  // same pin in the same sketch.
  //INTIALISE as Red first //ALL TO HIGH, no colour
 
- pinMode(buttonPin, INPUT);  //Input as pullup
+ pinMode(buttonPin, INPUT_PULLUP);  //Input as pullup
  
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
  digitalWrite(RED, LOW);
- digitalWrite(GREEN, HIGH);
+ digitalWrite(GREEN, LOW);
  digitalWrite(BLUE, HIGH);
 
   //Sub 1GHz setup..
@@ -106,17 +112,24 @@ void loop() {
 //    Serial.print(myLink.getStatusString(status));
 //    Serial.println(")");
   }
-  buttonState = digitalRead(buttonPin); //read ack
-  if(buttonState == HIGH) //if button is pressed (ack)
-  {
-    digitalWrite(RED,  HIGH);
-    digitalWrite(GREEN, HIGH);
-    digitalWrite(BLUE, HIGH);
-    Serial.println("User Acknowledge");
+
+  
+  // buttonState = digitalRead(buttonPin); //read ack
+  
+  /*
+    if(buttonState == HIGH)
+    {
+      digitalWrite(RED,  LOW);
+      digitalWrite(GREEN, LOW);
+      digitalWrite(BLUE, LOW);
+      Serial.println("User Acknowledge");
     // Send AAX00010R255G255B255BB
-    //sendStatus();
-    buttonState = LOW;          
-  }
+      sendStatus();
+      buttonState = 0; 
+    }*/
+
+
+  //lastButtonState = buttonState;
   
  /* Start processing LED */
   if (bReadDone){
@@ -163,7 +176,7 @@ void loop() {
 
 void sendStatus() {
   char data[128];
-  String txt ="AAX00010R255G255B255BB";
+  String txt ="AAX00020R000G000B000BB";
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
@@ -174,13 +187,9 @@ void sendStatus() {
 
   if (status == EasyLink_Status_Success) {
     Serial.print("TX: ");
-    //Serial.Println(data);
+    Serial.print(data);
   }
   else {
     Serial.print("TX Error code: ");
-    //SerialCC1.Print(String(status));
-    //SerialCC1.Print(" (");
-    //SerialCC1.Print(myLink.getStatusString(status));
-    // SerialCC1.println(")");
   }
 }
