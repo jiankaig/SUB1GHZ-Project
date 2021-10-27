@@ -24,6 +24,7 @@ String txt = "";
 #define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
 #define GREEN 13 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
+#define buttonPin 11 // button pin
 #define delayTime 10 // delay between color changes, 10ms by default
 String BoardID = "0002"; // change this according to desired device identification
 
@@ -43,8 +44,7 @@ String blueCode;
 String strValue = "";
 bool bReadDone = false;
 int PWM_RESOLUTION = 255; // this variable will hold our resolution.
-const int buttonPin = 11;// PUSH2; Number of pushbutton pin
-
+//const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 uint16_t value;
 
 //For Button and debounce variables
@@ -52,6 +52,7 @@ int buttonState = 0;
 int lastButtonState = LOW;
 long lastDebounceTime = 0;
 long debounceDelay = 50;
+volatile byte state = LOW;
 
 /* This is our setup function. We want to set our LED pins as OUTPUT.
  * We can also set them to HIGH at the beginning.
@@ -63,13 +64,13 @@ void setup() {
  //INTIALISE as Red first //ALL TO HIGH, no colour
 
  pinMode(buttonPin, INPUT_PULLUP);  //Input as pullup
- 
+ attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
- digitalWrite(RED, LOW);
- digitalWrite(GREEN, LOW);
- digitalWrite(BLUE, HIGH);
+ //digitalWrite(RED, LOW);
+ //digitalWrite(GREEN, LOW);
+ //digitalWrite(BLUE, HIGH);
 
   //Sub 1GHz setup..
   Serial.begin(9600);
@@ -79,12 +80,28 @@ void setup() {
    
 }
 
+/*interurpt state change */
+void blink() {
+  state = !state;
+}
 /* In the loop function we will...
  */
 char d[128];
 //String d = "";
 void loop() {
-  /* Start processing Sub 1GHz*/
+  //buttonState = digitalRead(buttonPin); //read ack
+  if (state) {
+     delay(100);     
+     digitalWrite(40, HIGH);  
+     digitalWrite(RED, HIGH);
+     digitalWrite(GREEN, HIGH);
+     digitalWrite(BLUE, HIGH);
+     sendStatus();
+     state = !state;
+  } 
+  else{
+    digitalWrite(40,LOW);
+     /* Start processing Sub 1GHz*/
   // Wait / block for 2 second to receive a packet.
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
   rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(2000);
@@ -106,16 +123,18 @@ void loop() {
 
   } else {
 
-//    Serial.print("Error receiving packet with status code: ");
-//    Serial.print(status);
-//    Serial.print(" (");
-//    Serial.print(myLink.getStatusString(status));
-//    Serial.println(")");
+//      Serial.print("Error receiving packet with status code: ");
+//      Serial.print(status);
+//      Serial.print(" (");
+//      Serial.print(myLink.getStatusString(status));
+//      Serial.println(")");
   }
 
-  
-  // buttonState = digitalRead(buttonPin); //read ack
-  
+  /*
+  else {
+    // turn LED off:
+    
+  }*/
   /*
     if(buttonState == HIGH)
     {
@@ -166,13 +185,15 @@ void loop() {
 //      Serial.println(blueCode);
     }
   }
+  
+ 
+  }
 
   
  
 // delay( delayTime ); // wait for how long delay time is
  
 }
-
 
 void sendStatus() {
   char data[128];
@@ -187,7 +208,7 @@ void sendStatus() {
 
   if (status == EasyLink_Status_Success) {
     Serial.print("TX: ");
-    Serial.print(data);
+    Serial.println(data);
   }
   else {
     Serial.print("TX Error code: ");
