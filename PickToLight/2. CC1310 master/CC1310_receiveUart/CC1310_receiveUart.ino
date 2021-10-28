@@ -22,7 +22,7 @@ void setup() {
 
 int i = 0;
 void loop() {
-
+  // receiving UART from CC3200
   char ch= SerialCC1.Read();
 
   if(ch!=0) //or use isAlphaNumeric(ch) && !isSpace(ch)
