@@ -4,5 +4,6 @@ WS2801_test - modified from http://cmuphyscomp.github.io/physcomp-f15/exercises/
 
 Arduino-LED-Strip-WS2801-Example-master - adopted from https://github.com/christoph-daehne/Arduino-LED-Strip-WS2801-Example
 
+WS2801_Controller -  wrapper for WS2801_test 
 
-WS2801_test main example using for our project
+WS2801_Controller main example using for our project
