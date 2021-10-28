@@ -22,27 +22,16 @@ void setup() {
 
 
 void loop() {
-
-  char ch = SerialCC1.Read();
-  if (ch != 0) {
-    
-    txt += ch;
-    if (ch == '\n')
-      bReadDone = true;
-
-    if (bReadDone) {
-      bReadDone = false;
-      sendStatus();
-      txt = "";
-    }
-
-  }
+  
+  //receive UART from CC3200 and send string to CC1310master wirelessly via sub1ghz
+  com_CC3200toCC1310(txt, bReadDone);
+  
 }
 
 
-void sendStatus() {
+void sendStatus(String text) {
   char d[128];
-  txt.toCharArray(d, sizeof(d));
+  text.toCharArray(d, sizeof(d));
   memcpy(&txPacket.payload, &d, sizeof(d)); // Copy the String value into the txPacket payload
  
   txPacket.len = sizeof(d); // Set the length of the packet
@@ -61,4 +50,18 @@ void sendStatus() {
     //SerialCC1.Print(myLink.getStatusString(status));
     // SerialCC1.println(")");
   }
+}
+void com_CC3200toCC1310(String txt, bool bReadDone){
+  char ch = SerialCC1.Read();
+    if (ch != 0) {
+      txt += ch;
+      if (ch == '\n')
+        bReadDone = true;
+  
+      if (bReadDone) {
+        bReadDone = false;
+        sendStatus(txt); // sendStatus via Easylink/Sub1Ghz
+        txt = "";
+      }
+    }
 }
