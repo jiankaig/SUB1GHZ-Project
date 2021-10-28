@@ -24,21 +24,8 @@ int i = 0;
 void loop() {
 
   char ch= SerialCC1.Read();
-//  // add it to the inputString:
-//  inputString += ch;
-//  // if the incoming character is a newline, set a flag
-//  // so the main loop can do something about it:
-//  if (isAlphaNumeric(ch)) 
-//    stringComplete = true;
-//
-//  if (stringComplete) {
-//    SerialCC1.Print("stringComplete");
-//    SerialCC1.Print(inputString);
-//    // clear the string:
-//    inputString = "";
-//    stringComplete = false;
-//  }
-  if(isAlphaNumeric(ch) && !isSpace(ch)) //ch!=0 , isAlphaNumeric(ch) && !isSpace(ch)
+
+  if(ch!=0) //or use isAlphaNumeric(ch) && !isSpace(ch)
   {
     SerialCC1.Print(String(i)+":");
     SerialCC1.Print(ch);
@@ -46,4 +33,24 @@ void loop() {
     SerialCC1.Print("\n");
   }
     
+}
+
+bool processInputString(char ch, String& inputString){
+  // add it to the inputString:
+  inputString += ch;
+  // if the incoming character is a newline, set a flag
+  // so the main loop can do something about it:
+  if (isAlphaNumeric(ch)) 
+    stringComplete = true;
+  else
+    return false; // return stringComplete state
+
+  if (stringComplete) {
+    SerialCC1.Print("stringComplete");
+    SerialCC1.Print(inputString);
+    // clear the string:
+    inputString = "";
+    stringComplete = false;
+    return true; // return stringComplete state
+  }
 }
