@@ -21,11 +21,11 @@ String txt = "";
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
-#define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
-#define GREEN 13 // may need to change this for your LaunchPad
+#define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
+#define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0001"
+#define BOARDID "0002"
 
 // Here we can introduce some global variables. These variables have a type
 // (int) and a name. We can use the variables in any function that comes after
@@ -48,6 +48,9 @@ void setup() {
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
+ digitalWrite(RED, HIGH);
+ digitalWrite(GREEN, HIGH);
+ digitalWrite(BLUE, HIGH);
 
   //Sub 1GHz setup..
   Serial.begin(9600);
@@ -123,7 +126,7 @@ void sendStatus() {
   }
 }
 
-int writeLEDfromStr(String strValue);
+int writeLEDfromStr(String strValue)
 {
     String IdCode, redCode, greenCode, blueCode;
     //split substring into RGB if relevant
