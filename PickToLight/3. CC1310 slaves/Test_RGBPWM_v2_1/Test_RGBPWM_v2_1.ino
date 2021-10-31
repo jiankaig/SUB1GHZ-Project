@@ -21,32 +21,21 @@ String txt = "";
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
-#define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
-#define GREEN 13 // may need to change this for your LaunchPad
+#define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
+#define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define delayTime 10 // delay between color changes, 10ms by default
-String BoardID = "0001"; // change this according to desired device identification
+#define BOARDID "0002"
 
 // Here we can introduce some global variables. These variables have a type
 // (int) and a name. We can use the variables in any function that comes after
 // Global variables are useful because we can save the state of a variable to
 // use in later operations and functions.
-int redVal;
-int greenVal;
-int blueVal;
 
 //RGD LED Command syntax as follows: XXXXRXXXGXXXB AAX00010R000G255B000BB
-String IdCode;
-String redCode;
-String greenCode;
-String blueCode;
 String strValue = "";
 bool bReadDone = false;
-int PWM_RESOLUTION = 255; // this variable will hold our resolution.
-//const int buttonPin = 11;// PUSH2;    
-//int buttonState = LOW;  
-uint16_t value;
-
+String BoardID = BOARDID; // change this according to desired device identification
 /* This is our setup function. We want to set our LED pins as OUTPUT.
  * We can also set them to HIGH at the beginning.
  */
@@ -54,14 +43,12 @@ void setup() {
  // We don't have to use pinMode() when using analogWrite() but it doesn't
  // hurt to use it, especially if we want to call digitalWrite() for the
  // same pin in the same sketch.
- //INTIALISE as Red first //ALL TO HIGH, no colour
-
- //pinMode(buttonPin, INPUT);  //Input as pullup
  
+ //INTIALISE LEDs 
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
- digitalWrite(RED, LOW);
+ digitalWrite(RED, HIGH);
  digitalWrite(GREEN, HIGH);
  digitalWrite(BLUE, HIGH);
 
@@ -88,7 +75,6 @@ void loop() {
   EasyLink_Status status = myLink.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
-//    memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
     memcpy(&d, &rxPacket.payload, sizeof(d));
     Serial.print("Packet received with lenght ");
     Serial.print(rxPacket.len);
@@ -99,7 +85,6 @@ void loop() {
     strValue = d;
 
   } else {
-
 //    Serial.print("Error receiving packet with status code: ");
 //    Serial.print(status);
 //    Serial.print(" (");
@@ -110,41 +95,8 @@ void loop() {
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
-    //split substring into RGB if relevant
-    // assumes that command is : AAX00010R000G255B000BB
-    IdCode = strValue.substring(3,7); //0001
-    redCode = strValue.substring(9,12); 
-    greenCode = strValue.substring(13,16);
-    blueCode = strValue.substring(17,20);
-    Serial.print("strValue: ");
-    Serial.println(strValue);
-//    Serial.print("IdCode: ");
-//    Serial.println(IdCode);
-    strValue = "";
-
-    //int redInt;
-    //redInt = 255 - constrain(redCode.toInt(), 0, 255); 
-    
-    //if ID matches this board ID, process LED\
-    //change LED colour based on command sent
-    if(IdCode == BoardID){
-      //analogWrite( RED, redInt );
-      analogWrite( RED, redCode.toInt() );
-      analogWrite( GREEN, greenCode.toInt() );
-      analogWrite( BLUE, blueCode.toInt() );
-
-
-//      Serial.print("red: ");
-//      Serial.println(redCode);
-//      Serial.print("green: ");
-//      Serial.println(greenCode);
-//      Serial.print("blue: ");
-//      Serial.println(blueCode);
-    }
+    writeLEDfromStr(strValue);
   }
-
-  
- 
 // delay( delayTime ); // wait for how long delay time is
  
 }
@@ -172,4 +124,27 @@ void sendStatus() {
     //SerialCC1.Print(myLink.getStatusString(status));
     // SerialCC1.println(")");
   }
+}
+
+int writeLEDfromStr(String strValue)
+{
+    String IdCode, redCode, greenCode, blueCode;
+    //split substring into RGB if relevant
+    // assumes that command is : AAX00010R000G255B000BB
+    IdCode = strValue.substring(3,7); //0001
+    redCode = strValue.substring(9,12); 
+    greenCode = strValue.substring(13,16);
+    blueCode = strValue.substring(17,20);
+    strValue = "";
+    
+    //if ID matches this board ID, process LED\
+    //change LED colour based on command sent
+    if(IdCode == BoardID){
+      //analogWrite( RED, redInt );
+      analogWrite( RED, 255-redCode.toInt() );
+      analogWrite( GREEN, 255-greenCode.toInt() );
+      analogWrite( BLUE, 255-blueCode.toInt() );
+      return 1;//success
+    }
+    return -1;//error BoardID mismatch
 }
