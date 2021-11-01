@@ -112,27 +112,8 @@ void loop() {
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
-  EasyLink_Status status = myLink.receive(&rxPacket);
+  EasyLink_Status status = myLink.receive(RxDoneCb);
   
-  if (status == EasyLink_Status_Success) {
-    //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
-    memcpy(&d, &rxPacket.payload, sizeof(d));
-    Serial.print("Packet received with lenght ");
-    Serial.print(rxPacket.len);
-    Serial.print(" and value ");
-    
-    Serial.println(d); //value
-    bReadDone = true;
-    strValue = d;
-
-  } else {
-
-//      Serial.print("Error receiving packet with status code: ");
-//      Serial.print(status);
-//      Serial.print(" (");
-//      Serial.print(myLink.getStatusString(status));
-//      Serial.println(")");
-  }
 
  /* Start processing LED */
   if (bReadDone){
@@ -200,4 +181,38 @@ void sendStatus() {
   else {
     Serial.print("TX Error code: ");
   }
+}
+void RxDoneCb(EasyLink_RxPacket * rxPacket, EasyLink_Status status)
+{
+    //after packet received, this calback function should be called
+    if (status == EasyLink_Status_Success) {
+      /* Toggle LED2 to indicate RX, clear LED1 */
+//        PIN_setOutputValue(pinHandle, Board_PIN_LED2,!PIN_getOutputValue(Board_PIN_LED2));
+//        PIN_setOutputValue(pinHandle, Board_PIN_LED1, 0);
+//        /* Copy contents of RX packet to TX packet */
+//        memcpy(&txPacket.payload, rxPacket->payload, rxPacket->len);
+//        /* Permit echo transmission */
+//        bBlockTransmit = false;
+
+      //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
+      memcpy(&d, &rxPacket->payload, sizeof(d));
+      Serial.print("Packet received with lenght ");
+      Serial.print(rxPacket->len);
+      Serial.print(" and value ");
+      
+      Serial.println(d); //value
+      bReadDone = true;
+      strValue = d;
+  
+    }
+    else
+    {
+        /* Set LED1 and clear LED2 to indicate error */
+//        PIN_setOutputValue(pinHandle, Board_PIN_LED1, 1);
+//        PIN_setOutputValue(pinHandle, Board_PIN_LED2, 0);
+//        /* Block echo transmission */
+//        bBlockTransmit = true;
+    }
+
+//    Semaphore_post(echoDoneSem);
 }
