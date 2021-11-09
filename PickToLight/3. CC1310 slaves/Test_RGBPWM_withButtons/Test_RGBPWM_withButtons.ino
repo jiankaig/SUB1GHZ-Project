@@ -24,7 +24,7 @@ String txt = "";
 #define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
 #define GREEN 11 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
-#define buttonPin 13 // button pin PUSH1
+#define buttonPin PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
 String BoardID = "0002"; // change this according to desired device identification
 
@@ -52,7 +52,7 @@ volatile byte buttonState = LOW;
 int lastButtonState = LOW;
 long lastDebounceTime = 0;
 long debounceDelay = 50;
-volatile byte state = LOW;
+volatile byte state = HIGH;
 bool state_Send = false;
 char d[128];
 /* This is our setup function. We want to set our LED pins as OUTPUT.
@@ -65,7 +65,7 @@ void setup() {
  //INTIALISE as Red first //ALL TO HIGH, no colour
 
  pinMode(buttonPin, INPUT_PULLUP);  //Input as pullup
- //attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
+ attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
@@ -78,37 +78,26 @@ void setup() {
    
 }
 
-/*//interurpt state change 
+//interurpt state change 
 void blink() {
   state = !state;
-}*/
+}
 /* In the loop function we will...
  */
 
 //String d = "";
 void loop() {
-  //buttonState = digitalRead(buttonPin); //read ack
-  //if (state) { //interrupt state
-  buttonState = digitalRead(buttonPin);
-  if(buttonState == HIGH){
-    state_Send = true;
-    buttonState = LOW;
-  }
-
-  if(state_Send == true)
+  //buttonState = digitalRead(buttonPin);  //read ack
+  if(state == LOW)
   {
-     //delay(10);     
-     //digitalWrite(40, HIGH);  
-     reset_LED();
-     sendStatus();
-     state_Send = false;
-    // state = !state;
-  } 
-    //digitalWrite(40,LOW);
-     /* Start processing Sub 1GHz*/
-  // Wait / block for 2 second to receive a packet.
+    //rxPacket.absTime = EasyLink_ms_To_RadioTime(1);
+    reset_LED();
+    sendStatus();
+    buttonState = HIGH;
+  }
+  
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(2000);
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(150);
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
@@ -127,8 +116,8 @@ void loop() {
 
   } else {
 
-//      Serial.print("Error receiving packet with status code: ");
-//      Serial.print(status);
+     Serial.println("Error receiving packet with status code: ");
+//    Serial.print(status);
 //      Serial.print(" (");
 //      Serial.print(myLink.getStatusString(status));
 //      Serial.println(")");
@@ -159,30 +148,20 @@ void loop() {
       analogWrite( RED, redCode.toInt() );
       analogWrite( GREEN, greenCode.toInt() );
       analogWrite( BLUE, blueCode.toInt() );
-
-//      Serial.print("red: ");
-//      Serial.println(redCode);
-//      Serial.print("green: ");
-//      Serial.println(greenCode);
-//      Serial.print("blue: ");
-//      Serial.println(blueCode);
     }
   }
- 
-// delay( delayTime ); // wait for how long delay time is
- 
 }
 
 void reset_LED()
 {
-  digitalWrite(RED, HIGH);
-  digitalWrite(GREEN, HIGH);
-  digitalWrite(BLUE, HIGH);
+  digitalWrite(RED, LOW);
+  digitalWrite(GREEN, LOW);
+  digitalWrite(BLUE, LOW);
 }
 
 void sendStatus() {
   char data[128];
-  String txt ="AAX00020R000G255B255BB";
+  String txt ="AAX00020R000G000B000BB";
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
@@ -194,8 +173,7 @@ void sendStatus() {
   if (status == EasyLink_Status_Success) {
     Serial.print("TX: ");
     Serial.println(data);
-    digitalWrite(buttonPin, LOW);
-    
+    //digitalWrite(buttonPin, LOW);
   }
   else {
     Serial.print("TX Error code: ");
