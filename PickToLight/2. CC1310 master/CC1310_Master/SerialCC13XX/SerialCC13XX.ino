@@ -11,6 +11,7 @@ EasyLink myLink;
 SerialCC SerialCC1;
 String txt = "";
 bool bReadDone = false;
+String strValue = "";
 
 void setup() {
   SerialCC1.Begin(9600);
@@ -55,6 +56,7 @@ void txStatus(String text) {
 }
 
 void rxStatus(){
+  char d[128];
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
   rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(150);
   // Turn the receiver on immediately
