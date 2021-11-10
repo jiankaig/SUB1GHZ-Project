@@ -12,11 +12,13 @@ EasyLink myLink;
 SerialCC SerialCC1;
 String txt = "";
 bool bReadDone = false;
+bool bRecDone = true;
 String strValue = "";
+
 
 void setup() {
   SerialCC1.Begin(9600);
-
+  Serial.begin(9600);
   myLink.begin();
 
   //SerialCC1.Println(myLink.version());
@@ -26,9 +28,16 @@ void setup() {
 
 void loop() {
   //receive which board button is reset 
-  rxStatus();
+  
   //receive UART from CC3200 and send string to CC1310master wirelessly via sub1ghz
+  
   com_CC3200toCC1310();
+
+  if(bRecDone == true)
+  {
+    rxStatus(); //uncomment this
+  }
+
 }
 
 
@@ -62,16 +71,17 @@ void rxStatus(){
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
-  //EasyLink_Status status = myLink.receive(&rxPacket);
-  /*
+  EasyLink_Status status = myLink.receive(&rxPacket);
+  
   if (status == EasyLink_Status_Success) {
     //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
     memcpy(&f, &rxPacket.payload, sizeof(f));
     //SerialCC1.print("Packet received with lenght ");
     //SerialCC1.print(rxPacket.len);
     //SerialCC1.print(" and value ");
-    
-    //SerialCC1.Print(f); //value
+    Serial.print(f);
+    //bRecDone = true;
+    //SerialCC1.Println(f); //value
     //bReadDone = true;
     strValue = f;
 
@@ -82,21 +92,27 @@ void rxStatus(){
 //      Serial.print(" (");
 //      Serial.print(myLink.getStatusString(status));
 //      Serial.println(")");
-  }*/
+  }
   
 }
 
 void com_CC3200toCC1310(){
+  
   char ch = SerialCC1.Read();
-    if (ch != 0) {
+    if(ch != 0) {
       txt += ch;
       if (ch == '\n')
         bReadDone = true;
-  
+        
       if (bReadDone) {
         bReadDone = false;
         txStatus(txt); // send Status via Easylink/Sub1Ghz
         txt = "";
+        bRecDone = false;
+
+      }
+      else{
+        
       }
     }
 }
