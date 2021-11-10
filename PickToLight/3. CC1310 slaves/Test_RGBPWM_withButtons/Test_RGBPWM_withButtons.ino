@@ -21,12 +21,14 @@ String txt = "";
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
-#define RED 19 // pin 19 is always PWM capable according to LaunchPad standard
-#define GREEN 11 // may need to change this for your LaunchPad
+#define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
+#define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
-#define buttonPin PUSH1 // button pin PUSH1 //13
+#define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-String BoardID = "0002"; // change this according to desired device identification
+#define BOARDID "0002"
+
+String BoardID = BOARDID; // change this according to desired device identification
 
 // Here we can introduce some global variables. These variables have a type
 // (int) and a name. We can use the variables in any function that comes after
@@ -43,7 +45,7 @@ String greenCode;
 String blueCode;
 String strValue = "";
 bool bReadDone = false;
-int PWM_RESOLUTION = 255; // this variable will hold our resolution.
+
 //const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 uint16_t value;
 
@@ -69,7 +71,9 @@ void setup() {
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
-
+ digitalWrite(RED, LOW);
+ digitalWrite(GREEN, HIGH);
+ digitalWrite(BLUE, HIGH);
   //Sub 1GHz setup..
   Serial.begin(9600);
   // begin defaults to EasyLink_Phy_50kbps2gfsk
@@ -126,37 +130,38 @@ void loop() {
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
+    writeLEDfromStr(strValue);
+  }
+}
+
+void reset_LED()
+{
+  digitalWrite(RED, HIGH);
+  digitalWrite(GREEN, HIGH);
+  digitalWrite(BLUE, HIGH);
+}
+
+int writeLEDfromStr(String strValue)
+{
+    String IdCode, redCode, greenCode, blueCode;
     //split substring into RGB if relevant
     // assumes that command is : AAX00010R000G255B000BB
     IdCode = strValue.substring(3,7); //0001
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
-    Serial.print("strValue: ");
-    Serial.println(strValue);
-//    Serial.print("IdCode: ");
-//    Serial.println(IdCode);
     strValue = "";
-
-    //int redInt;
-    //redInt = 255 - constrain(redCode.toInt(), 0, 255); 
     
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
     if(IdCode == BoardID){
       //analogWrite( RED, redInt );
-      analogWrite( RED, redCode.toInt() );
-      analogWrite( GREEN, greenCode.toInt() );
-      analogWrite( BLUE, blueCode.toInt() );
+      analogWrite( RED, 255-redCode.toInt() );
+      analogWrite( GREEN, 255-greenCode.toInt() );
+      analogWrite( BLUE, 255-blueCode.toInt() );
+      return 1;//success
     }
-  }
-}
-
-void reset_LED()
-{
-  digitalWrite(RED, LOW);
-  digitalWrite(GREEN, LOW);
-  digitalWrite(BLUE, LOW);
+    return -1;//error BoardID mismatch
 }
 
 void sendStatus() {
