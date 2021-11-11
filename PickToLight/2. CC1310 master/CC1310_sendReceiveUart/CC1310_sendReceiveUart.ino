@@ -13,17 +13,22 @@ boolean stringComplete = false; // whether the string is complete
 // set pin numbers:
 const int greenledPin =  GREEN_LED;      // the number of the LED pin
 const int redledPin =  RED_LED;      // the number of the LED pin
+const int buttonPin = PUSH2;     // the number of the pushbutton pin
 
 // Variables will change:
 int greenledState = LOW;             // ledState used to set the LED
 int redledState = LOW;             // ledState used to set the LED
-
+int buttonState = 0;         // variable for reading the pushbutton status
+int lastButtonState = LOW;   // the previous reading from the input pin
+long lastDebounceTime = 0;  // the last time the output pin was toggled
+long debounceDelay = 50;    // the debounce time; increase if the output flickers
 
 void setup() {
   SerialCC1.Begin(115200);
+//  Serial.begin(9600);
   
-  SerialCC1.Println("RECEIVER");
-  SerialCC1.Print("Starting.");
+  SerialCC1.Println("SENDER");
+//  SerialCC1.Print("Starting.");
 
   // reserve 200 bytes for the inputString:
   inputString.reserve(200);
@@ -31,23 +36,33 @@ void setup() {
   // set the digital pin as output: for Led toogle
   pinMode(greenledPin, OUTPUT);  
   pinMode(redledPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP); 
    
 }
 
 int i = 0;
+char msg = 'c';
 void loop() {
-  // receiving UART from CC3200
+  //send initial msg
+  checkButtonAndSendMsg(msg);
+  
+  // receiving UART
   char ch= SerialCC1.Read();
 
   if(ch!=0) //or use isAlphaNumeric(ch) && !isSpace(ch)
   {
     toggleGreenLed();
+    SerialCC1.Print(ch); // echo
 //    SerialCC1.Print(String(i)+":");
-    SerialCC1.Print(ch);
+//    SerialCC1.Print(ch);
 //    i += 1;
 //    SerialCC1.Print("\n");
-    delay(500);
   }
+  
+  // sending UART
+  SerialCC1.Print("message");
+  delay(1000);
+  toggleRedLed();
     
 }
 
@@ -91,4 +106,25 @@ bool processInputString(char ch, String& inputString){
     stringComplete = false;
     return true; // return stringComplete state
   }
+}
+
+void checkButtonAndSendMsg(char msg){
+  // read the state of the switch into a local variable:
+  int reading = digitalRead(buttonPin);
+  // If the switch changed, due to noise or pressing:
+  if (reading != lastButtonState) {
+    // reset the debouncing timer
+    lastDebounceTime = millis();
+  } 
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // whatever the reading is at, it's been there for longer
+    // than the debounce delay, so take it as the actual current state:
+    buttonState = reading;
+  }
+  if(!buttonState){
+    SerialCC1.Print(msg);
+  }
+  // save the reading.  Next time through the loop,
+  // it'll be the lastButtonState:
+  lastButtonState = reading;
 }
