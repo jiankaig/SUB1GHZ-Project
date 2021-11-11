@@ -41,33 +41,36 @@ void setup() {
 }
 
 int i = 0;
-char msg = 'c';
-bool ReadStringDone = false;
+String msg = "msg";
+bool receiveState = false;
+
 void loop() {
+  //testbench should keep sending for some time then stop sending and receive instead
 //  if(buttonState)
-//    checkButtonAndSendMsg(msg)//if bbutton is pressed, send uart and toggle red led 1sec
+//    checkButtonAndSendMsg(msg);//if bbutton is pressed, send uart and toggle red led 1sec
   
-  if(ReadStringDone == false){
-    // receiving UART
-    char ch= SerialCC1.Read();
-
-    if(isAlphaNumeric(ch) && !isSpace(ch)) //or use isAlphaNumeric(ch) && !isSpace(ch) // ch!=0
-    {
-      toggleGreenLed();
-      ReadStringDone = processInputString(ch, inputString);
-      delay(500);
-    }
-  }
-
-  if(ReadStringDone == true){
-    toggleRedLed();
+  if(receiveState == false){
     // sending UART
+    toggleRedLed();
     SerialCC1.Print("message");
     delay(5000);
-//    toggleRedLed();
+    toggleRedLed();
+    receiveState = true;
   }
-  
-    
+ 
+  if(receiveState == true)
+    receiveUart();
+}
+
+void receiveUart(){
+  // receiving UART
+  char ch= SerialCC1.Read();
+
+  if(ch!=0) //or use isAlphaNumeric(ch) && !isSpace(ch)
+  {
+    toggleGreenLed();
+    delay(500);
+  }
 }
 
 void toggleGreenLed(){
@@ -112,7 +115,7 @@ bool processInputString(char ch, String& inputString){
   }
 }
 
-void checkButtonAndSendMsg(char msg){
+void checkButtonAndSendMsg(String msg){
   // read the state of the switch into a local variable:
   int reading = digitalRead(buttonPin);
   // If the switch changed, due to noise or pressing:
@@ -126,7 +129,10 @@ void checkButtonAndSendMsg(char msg){
     buttonState = reading;
   }
   if(!buttonState){
+    toggleRedLed();
     SerialCC1.Print(msg);
+    delay(1000);
+    toggleRedLed();
   }
   // save the reading.  Next time through the loop,
   // it'll be the lastButtonState:
