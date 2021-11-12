@@ -33,7 +33,7 @@
 
 #include "WS2801_Controller.h"
 
-#define PIXELS 4 // number of pixels along led strip
+#define PIXELS 3 // number of pixels along led strip
 typedef WS2801_Controller::Color Color; // alias for Color struct
 WS2801_Controller strip = WS2801_Controller(PIXELS);
 
@@ -45,11 +45,14 @@ void setup()
 
 void loop() 
 {
-    strip.rainbow(10); // simple animation to test led strip functionality
+//    strip.rainbow(10); // simple animation to test led strip functionality
+    strip.simple(Color{0,126,0}, 1000); // another simple animation to test led strip functionality
 
 // Color{} may be set with values 0-255 or 0x0-0xBB
-//  strip.setPixelColor(Color{0x01,0x00,0x00}, 0); // set 1st led with RGB value in hex
-//  strip.setPixelColor(WS2801_Controller::Color{1,1,0}, 1); // set 2nd led with RGB value in dec
+//  strip.setPixelColor(Color{0,0,255}, 0); // set 1st led with RGB value
+//  strip.setPixelColor(Color{0,255,0}, 1); // set 2nd led with RGB value
+//  strip.setPixelColor(Color{255,0,0}, 2); // set 3nd led with RGB value
   
+//    strip.clear();
     strip.show(); // send all data in one go thru SPI
 }

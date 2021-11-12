@@ -3,13 +3,6 @@
 
 WS2801_Controller::WS2801_Controller(int pixels){
   pixels_ = pixels;
-//  pixelColor = WS2801_Controller::Color[pixels_];
-//    pixelColor[0] = Color{0x00,0x00,0x00};
-//    pixelColor[1] = Color{0x00,0x00,0x00};
-//    pixelColor[2] = Color{0x00,0x00,0x00};
-//    begin();
-    //assign pixelColor to {0}
-//    pixelColor = {0};
 }
 
 WS2801_Controller::~WS2801_Controller(){
@@ -26,6 +19,7 @@ void WS2801_Controller::begin(){
   Blue = Color{0x00,0x00,0xBB};
   Yellow = Color{0xBB,0xBB,0x00};
   Rainbow = Color{0xBB,0x00,0x00}; // start from red
+  White = Color{0x0B,0x0B,0x0B}; 
 
   show();// set all leds to 0 intially
 }
@@ -50,6 +44,12 @@ void WS2801_Controller::show(){
 void WS2801_Controller::setPixelColor(Color c, int index){
     pixelColor[index] = c;
 }
+
+void WS2801_Controller::clear(){
+  for(int i = 0; i<pixels_; i++){
+    setPixelColor(Color{0,0,0}, i);
+  }
+} 
 
 void WS2801_Controller::rainbow(int wait){
     delay(wait);
@@ -76,4 +76,15 @@ void WS2801_Controller::rainbow(int wait){
     setPixelColor(Rainbow, i);
   }
   
+}
+
+void WS2801_Controller::simple(Color c, int wait){
+  for(int i = 0; i<pixels_; i++){
+    setPixelColor(c, i);
+    show();
+    delay(wait);
+  }
+  clear();
+  show();
+  delay(wait);
 }
