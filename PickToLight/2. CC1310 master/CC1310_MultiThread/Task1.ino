@@ -1,9 +1,9 @@
-void setup() {
+void setupTask1() {
   // put your setup code here, to run once:
-
+  
 }
 
-void loop() {
+void loopTask1() {
   // put your main code here, to run repeatedly: 
   
 }
