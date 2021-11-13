@@ -70,9 +70,8 @@ void setup() {
 
 void loop() {
   String data = "";
-  if (Serial1.available() > 0 && bReadUart == false) {
+  if (Serial1.available() > 0) {
        data = Serial1.readString();
-       bReadUart = true;
    }
    Serial.print(data);
    
