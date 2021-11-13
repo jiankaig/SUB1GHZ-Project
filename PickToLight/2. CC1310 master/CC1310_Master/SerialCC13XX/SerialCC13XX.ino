@@ -30,12 +30,15 @@ void loop() {
   //receive which board button is reset 
   
   //receive UART from CC3200 and send string to CC1310master wirelessly via sub1ghz
+
+  //rxStatus(); //uncomment this for RX
   
   com_CC3200toCC1310();
-
-  if(bRecDone == true)
-  {
-    rxStatus(); //uncomment this
+  if (bReadDone) {
+        bReadDone = false;
+        txStatus(txt); // send Status via Easylink/Sub1Ghz
+        txt = "";
+        bRecDone = false;
   }
 
 }
@@ -53,7 +56,7 @@ void txStatus(String text) {
 
   if (status == EasyLink_Status_Success) {
     //SerialCC1.Print("TX: ");
-    SerialCC1.Println(d);
+    //SerialCC1.Println(d);
   }
   else {
     //SerialCC1.Print("TX Error code: ");
@@ -64,10 +67,11 @@ void txStatus(String text) {
   }
 }
 
+
 void rxStatus(){
   char f[128];
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(1000);
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
@@ -96,23 +100,14 @@ void rxStatus(){
   
 }
 
-void com_CC3200toCC1310(){
-  
+
+void com_CC3200toCC1310()
+{
   char ch = SerialCC1.Read();
+  //read only when there is something
     if(ch != 0) {
       txt += ch;
       if (ch == '\n')
         bReadDone = true;
-        
-      if (bReadDone) {
-        bReadDone = false;
-        txStatus(txt); // send Status via Easylink/Sub1Ghz
-        txt = "";
-        bRecDone = false;
-
-      }
-      else{
-        
-      }
     }
 }
