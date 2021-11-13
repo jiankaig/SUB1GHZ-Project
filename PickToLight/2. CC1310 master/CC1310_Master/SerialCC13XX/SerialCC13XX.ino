@@ -31,15 +31,16 @@ void loop() {
   
   //receive UART from CC3200 and send string to CC1310master wirelessly via sub1ghz
 
-  //rxStatus(); //uncomment this for RX
+  rxStatus(); //uncomment this for RX
   
-  com_CC3200toCC1310();
+  //com_CC3200toCC1310();
+  /*
   if (bReadDone) {
         bReadDone = false;
-        txStatus(txt); // send Status via Easylink/Sub1Ghz
+        //txStatus(txt); // send Status via Easylink/Sub1Ghz
         txt = "";
         bRecDone = false;
-  }
+  }*/
 
 }
 
@@ -56,7 +57,7 @@ void txStatus(String text) {
 
   if (status == EasyLink_Status_Success) {
     //SerialCC1.Print("TX: ");
-    //SerialCC1.Println(d);
+    SerialCC1.Println(d);
   }
   else {
     //SerialCC1.Print("TX Error code: ");
@@ -71,24 +72,23 @@ void txStatus(String text) {
 void rxStatus(){
   char f[128];
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(1000);
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
   EasyLink_Status status = myLink.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
-    //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
     memcpy(&f, &rxPacket.payload, sizeof(f));
     //SerialCC1.print("Packet received with lenght ");
     //SerialCC1.print(rxPacket.len);
     //SerialCC1.print(" and value ");
-    Serial.print(f);
+    SerialCC1.Println(f);
     //bRecDone = true;
     //SerialCC1.Println(f); //value
     //bReadDone = true;
     strValue = f;
-
+    
   } else {
 
      //SerialCC1.Println("Error receiving packet with status code: ");
