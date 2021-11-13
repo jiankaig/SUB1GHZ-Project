@@ -1,5 +1,6 @@
 
 EasyLink_RxPacket rxPacket;
+String strValue = "";
 
 void setupTask2() {
   // put your setup code here, to run once:
@@ -11,5 +12,35 @@ void loopTask2() {
   // 1. keep receving from easyline,
   // 2. if message received, then send uart message once and,
   // 3. back to step 1
+
+
+  char f[128];
+  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
+  // Turn the receiver on immediately
+  rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
+  
+  EasyLink_Status status = myLink.receive(&rxPacket);
+  
+  if (status == EasyLink_Status_Success) {
+    //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
+    memcpy(&f, &rxPacket.payload, sizeof(f));
+    //SerialCC1.print("Packet received with lenght ");
+    //SerialCC1.print(rxPacket.len);
+    //SerialCC1.print(" and value ");
+    Serial.print(f);
+    //bRecDone = true;
+    //SerialCC1.Println(f); //value
+    //bReadDone = true;
+    strValue = f;
+
+  } else {
+
+     //SerialCC1.Println("Error receiving packet with status code: ");
+//    Serial.print(status);
+//      Serial.print(" (");
+//      Serial.print(myLink.getStatusString(status));
+//      Serial.println(")");
+  }
   
 }
