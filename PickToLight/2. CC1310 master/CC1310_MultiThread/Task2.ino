@@ -5,7 +5,7 @@ String strValue = "";
 void setupTask2() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  myLink.begin();
+  myLink2.begin();
 }
 
 void loopTask2() {
@@ -21,7 +21,7 @@ void loopTask2() {
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
-  EasyLink_Status status = myLink.receive(&rxPacket);
+  EasyLink_Status status = myLink2.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
     //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));

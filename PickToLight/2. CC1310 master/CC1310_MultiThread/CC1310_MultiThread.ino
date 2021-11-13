@@ -6,6 +6,7 @@
 
 SerialCC SerialCC1;
 EasyLink myLink;
+EasyLink myLink2;
 
 void setup() {
   // put your setup code here, to run once:
