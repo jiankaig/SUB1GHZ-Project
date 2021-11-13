@@ -8,6 +8,7 @@ void setupTask1() {
   // put your setup code here, to run once:
   SerialCC1.Begin(9600);
   myLink.begin();
+   txPacket.dstAddr[0] = 0xaa;
 }
 
 void loopTask1() {
