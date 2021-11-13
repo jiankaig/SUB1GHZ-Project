@@ -4,7 +4,8 @@ String strValue = "";
 
 void setupTask2() {
   // put your setup code here, to run once:
-  
+  Serial.begin(9600);
+  myLink.begin();
 }
 
 void loopTask2() {
