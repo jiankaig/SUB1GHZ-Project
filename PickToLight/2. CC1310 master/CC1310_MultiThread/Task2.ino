@@ -1,11 +1,12 @@
 
 EasyLink_RxPacket rxPacket;
 String strValue = "";
+void EasyLink_ReceiveCb_function(EasyLink_RxPacket * rxPacket, EasyLink_Status status);
 
 void setupTask2() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  myLink2.begin();
+  myLink.begin();
 }
 
 void loopTask2() {
@@ -16,12 +17,13 @@ void loopTask2() {
 
 
   char f[128];
-  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
-  // Turn the receiver on immediately
-  rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
-  
-  EasyLink_Status status = myLink2.receive(&rxPacket);
+//  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
+//  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
+//  // Turn the receiver on immediately
+//  rxPacket.absTime = EasyLink_ms_To_RadioTime(0); 
+//  EasyLink_Status status = myLink.receive(&rxPacket);
+ 
+  EasyLink_Status status = myLink.receive(EasyLink_ReceiveCb_function);
   
   if (status == EasyLink_Status_Success) {
     //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
@@ -45,3 +47,14 @@ void loopTask2() {
   }
   
 }
+void EasyLink_ReceiveCb_function(EasyLink_RxPacket * rxPacket, EasyLink_Status status){
+//  char f[128];
+  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
+  rxPacket->rxTimeout = EasyLink_ms_To_RadioTime(200);
+  // Turn the receiver on immediately
+  rxPacket->absTime = EasyLink_ms_To_RadioTime(0);
+  
+  status = myLink.receive(rxPacket);
+}
+
+  
