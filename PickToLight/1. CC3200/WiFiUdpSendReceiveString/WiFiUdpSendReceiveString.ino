@@ -29,12 +29,13 @@ unsigned int localPort = 2390;      // local port to listen on
 
 char packetBuffer[255]; //buffer to hold incoming packet
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
-String data = "";
+//String data = "";
 bool bReadUart = false;
 
 WiFiUDP Udp;
 
 void setup() {
+  
   //Initialize serial and wait for port to open:
   Serial.begin(9600);
   Serial1.begin(9600);
@@ -68,6 +69,7 @@ void setup() {
 }
 
 void loop() {
+  String data = "";
   if (Serial1.available() > 0 && bReadUart == false) {
        data = Serial1.readString();
        bReadUart = true;
