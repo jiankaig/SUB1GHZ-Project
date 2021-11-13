@@ -1,5 +1,9 @@
 EasyLink_TxPacket txPacket;
 
+String txt = "";
+bool bReadDone = false;
+bool bRecDone = true;
+
 void setupTask1() {
   // put your setup code here, to run once:
   SerialCC1.Begin(9600);
@@ -27,4 +31,27 @@ void com_CC3200toCC1310()
       if (ch == '\n')
         bReadDone = true;
     }
+}
+
+void txStatus(String text) {
+  char d[128];
+  text.toCharArray(d, sizeof(d));
+  memcpy(&txPacket.payload, &d, sizeof(d)); // Copy the String value into the txPacket payload
+ 
+  txPacket.len = sizeof(d); // Set the length of the packet
+  txPacket.absTime = EasyLink_ms_To_RadioTime(0); // Transmit immediately
+
+  EasyLink_Status status = myLink.transmit(&txPacket); //check transmit status
+
+  if (status == EasyLink_Status_Success) {
+    //SerialCC1.Print("TX: ");
+    //SerialCC1.Println(d);
+  }
+  else {
+    //SerialCC1.Print("TX Error code: ");
+    //SerialCC1.Print(String(status));
+    //SerialCC1.Print(" (");
+    //SerialCC1.Print(myLink.getStatusString(status));
+    // SerialCC1.println(")");
+  }
 }
