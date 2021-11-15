@@ -72,8 +72,8 @@ void loop() {
   String data = "";
   if (Serial1.available() > 0) {
        data = Serial1.readString();
+       Serial.print(data);
    }
-   Serial.print(data);
    
   // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
