@@ -31,6 +31,7 @@ char packetBuffer[255]; //buffer to hold incoming packet
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
 //String data = "";
 bool bReadUart = false;
+bool packetreceiving = false;
 
 WiFiUDP Udp;
 
@@ -70,15 +71,17 @@ void setup() {
 
 void loop() {
   String data = "";
-  if (Serial1.available() > 0) {
-       data = Serial1.readString();
-       Serial.print(data);
-   }
+  if(Serial1.available() > 0 && packetreceiving == false) 
+  {
+     data = Serial1.readString();
+     Serial.print(data);
+  }
    
   // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
   if (packetSize)
   {
+    packetreceiving = true;
     Serial.print("Received packet of size ");
     Serial.println(packetSize);
     Serial.print("From ");
@@ -93,6 +96,8 @@ void loop() {
     Serial.println("Contents:");
     Serial.println(packetBuffer);
     Serial1.println(packetBuffer);
+    packetreceiving == false;
+    
 
     // send a reply, to the IP address and port that sent us the packet we received
     Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
