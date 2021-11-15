@@ -11,8 +11,9 @@ EasyLink myLink;
 
 SerialCC SerialCC1;
 String txt = "";
+bool bReading = false;
 bool bReadDone = false;
-bool bRecDone = true;
+bool bRecDone = false;
 String strValue = "";
 
 
@@ -30,18 +31,17 @@ void loop() {
   //receive which board button is reset 
   
   //receive UART from CC3200 and send string to CC1310master wirelessly via sub1ghz
-
-  rxStatus(); //uncomment this for RX
-  
-  //com_CC3200toCC1310();
-  /*
+  com_CC3200toCC1310();
   if (bReadDone) {
         bReadDone = false;
-        //txStatus(txt); // send Status via Easylink/Sub1Ghz
+        txStatus(txt); // send Status via Easylink/Sub1Ghz
         txt = "";
-        bRecDone = false;
-  }*/
-
+  }
+  
+  if(bReading == false)
+  {
+    rxStatus(); //uncomment this for RX
+  }
 }
 
 
@@ -57,7 +57,7 @@ void txStatus(String text) {
 
   if (status == EasyLink_Status_Success) {
     //SerialCC1.Print("TX: ");
-    SerialCC1.Println(d);
+    //SerialCC1.Println(d);
   }
   else {
     //SerialCC1.Print("TX Error code: ");
@@ -72,7 +72,7 @@ void txStatus(String text) {
 void rxStatus(){
   char f[128];
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(200);
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(300);
   // Turn the receiver on immediately
   rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
   
@@ -80,17 +80,17 @@ void rxStatus(){
   
   if (status == EasyLink_Status_Success) {
     memcpy(&f, &rxPacket.payload, sizeof(f));
-    //SerialCC1.print("Packet received with lenght ");
-    //SerialCC1.print(rxPacket.len);
-    //SerialCC1.print(" and value ");
-    SerialCC1.Println(f);
+    
+    //SerialCC1.Println(f);
     //bRecDone = true;
     //SerialCC1.Println(f); //value
     //bReadDone = true;
-    strValue = f;
+    Serial.println(f);
+    //strValue = f;
+    
     
   } else {
-
+     bRecDone = false;
      //SerialCC1.Println("Error receiving packet with status code: ");
 //    Serial.print(status);
 //      Serial.print(" (");
@@ -106,6 +106,7 @@ void com_CC3200toCC1310()
   char ch = SerialCC1.Read();
   //read only when there is something
     if(ch != 0) {
+      bReading = true;
       txt += ch;
       if (ch == '\n')
         bReadDone = true;
