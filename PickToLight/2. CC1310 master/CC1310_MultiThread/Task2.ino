@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 //
 //EasyLink_RxPacket rxPacket;
 //String strValue = "";
@@ -46,7 +46,7 @@
 //  }
 //  
 //}
-=======
+
 
 EasyLink_RxPacket rxPacket;
 String strValue = "";
@@ -107,4 +107,3 @@ void EasyLink_ReceiveCb_function(EasyLink_RxPacket * rxPacket, EasyLink_Status s
 }
 
   
->>>>>>> 46e1d5ee6cbd33a5952295607f9ba40981586dee
