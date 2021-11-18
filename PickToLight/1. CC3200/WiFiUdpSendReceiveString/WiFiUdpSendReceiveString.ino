@@ -21,9 +21,9 @@
 #include <WiFi.h>
 
 // your network name also called SSID
-char ssid[] = "Sub1Ghz";
+char ssid[] = "Andy"; // Sub1Ghz
 // your network password
-char password[] = "Seems12345";
+char password[] = "123456789v";   //Seems12345
 
 unsigned int localPort = 2390;      // local port to listen on
 
