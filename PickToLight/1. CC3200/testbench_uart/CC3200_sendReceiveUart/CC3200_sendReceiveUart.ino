@@ -20,35 +20,31 @@ void setup() {
   Serial.println("TESTBENCH START");
 }
 
-//String data;
+bool printdata = false;
+String data;
+String data_uart;
 
 void loop() {
   // Serial is for user to key input from serial monitor/emulator
   // Serial1 is for UART TX/RX to be CC1310 board
-//  String data = "";
-//  if (Serial.available() > 0) {   
-////       data = Serial.readString();
-//       Serial1.println(Serial.readString());  
-//       toggleRedLed();
-//  }
+  //String data = "";
+  /*
+  if (Serial.available() > 0) {   
+       data = Serial.readString();
+       Serial1.println(Serial.readString());  
+       toggleRedLed();
+  }*/
   
-//  String data_uart = "";
+  //String data_uart = "";
   if (Serial1.available() > 0) {   
-//       data_uart = Serial1.readString();
-       Serial.println(Serial1.readString());  
-       toggleGreenLed();
+       data_uart = Serial1.readString();
+       printdata = true;
+       //toggleGreenLed();
   }
-
-//  if (Serial.available()) {      // If anything comes in Serial (USB),
-//    Serial1.write(Serial.read());   // read it and send it out Serial1 (pins 0 & 1)
-//    toggleRedLed();
-//  }
-//
-//  if (Serial1.available()) {     // If anything comes in Serial1 (pins 0 & 1)
-//    Serial.write(Serial1.read());   // read it and send it out Serial (USB)
-//    toggleGreenLed();
-//  }
-  
+  if(printdata == true)
+  {
+    Serial.println(data_uart);  
+  }
 //  delay(500);
    //Serial1.println(data);
 }
