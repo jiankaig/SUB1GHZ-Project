@@ -1,4 +1,3 @@
-@@ -0,0 +1,76 @@
 #ifndef __CC3200R1M1RGC__
 // Do not include SPI for CC3200 LaunchPad
 #include <SPI.h>
@@ -11,8 +10,8 @@ int redledState = LOW;             // ledState used to set the LED
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(112500);
-  Serial1.begin(112500);
+  Serial.begin(9600);
+  Serial1.begin(9600);
 
   // set the digital pin as output: for Led toogle
   pinMode(greenledPin, OUTPUT);  
@@ -27,11 +26,11 @@ void loop() {
   // Serial is for user to key input from serial monitor/emulator
   // Serial1 is for UART TX/RX to be CC1310 board
 //  String data = "";
-  if (Serial.available() > 0) {   
-//       data = Serial.readString();
-       Serial1.println(Serial.readString());  
-       toggleRedLed();
-  }
+//  if (Serial.available() > 0) {   
+////       data = Serial.readString();
+//       Serial1.println(Serial.readString());  
+//       toggleRedLed();
+//  }
   
 //  String data_uart = "";
   if (Serial1.available() > 0) {   
