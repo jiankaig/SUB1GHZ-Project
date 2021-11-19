@@ -19,11 +19,11 @@
 #include <SPI.h>
 #endif
 #include <WiFi.h>
+//#define SHOW_UART1_RX
 
 // your network name also called SSID
-char ssid[] = "Andy"; // Sub1Ghz
-// your network password
-char password[] = "123456789v";   //Seems12345
+char ssid[] = "Sub1Ghz";
+char password[] = "Seems12345";
 
 unsigned int localPort = 2390;      // local port to listen on
 
@@ -32,14 +32,15 @@ char  ReplyBuffer[] = "acknowledged";       // a string to send back
 //String data = "";
 bool bReadUart = false;
 bool packetreceiving = false;
-
 WiFiUDP Udp;
+String ret;
+char  char_array[] = "";       // a string to send back
 
 void setup() {
   
   //Initialize serial and wait for port to open:
   Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial1.begin(115200);
 
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to Network named: ");
@@ -67,21 +68,38 @@ void setup() {
 
   Serial.println("\nWaiting for a connection from a client...");
   Udp.begin(localPort);
+  Serial.println("connected.");
+  
+  AT_init(); //sends AT commands to Easylink API for initialising
+
+  Udp.beginPacket("192.168.18.7", 53124);
+  Udp.write("INIT DONE");
+  Udp.endPacket();
 }
 
 void loop() {
-  String data = "";
-  if(Serial1.available() > 0 && packetreceiving == false) 
+
+#ifdef SHOW_UART1_RX
+  if(Serial1.available() > 0) 
   {
-     data = Serial1.readString();
-     Serial.print(data);
+    Serial.print("Received: ");
+    Serial.println(Serial1.readString());
+    
+//    ret = Serial1.readString();
+//    Serial.println(ret); 
+
+//    strcpy(char_array, ret.c_str());
+//    // send a reply, to the IP address and port that sent us the packet we received
+//    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+//    Udp.write(char_array);
+//    Udp.endPacket();
   }
-   
+#endif
+ 
   // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
   if (packetSize)
   {
-    packetreceiving = true;
     Serial.print("Received packet of size ");
     Serial.println(packetSize);
     Serial.print("From ");
@@ -96,13 +114,20 @@ void loop() {
     Serial.println("Contents:");
     Serial.println(packetBuffer);
     Serial1.println(packetBuffer);
-    packetreceiving == false;
     
 
     // send a reply, to the IP address and port that sent us the packet we received
     Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
     Udp.write(ReplyBuffer);
     Udp.endPacket();
+  }
+  else{
+    //If not getting any UDP packets from application
+    //Receive Mode - Ask EasyLink API to check radio
+    Serial1.println("AT+RX<CR>"); 
+//    ret = Serial1.readString(); //flushes the serial1 buffer
+
+    //if ret not timeout, pass ret thru Udp...?
   }
 }
 
@@ -122,4 +147,10 @@ void printWifiStatus() {
   Serial.print("signal strength (RSSI):");
   Serial.print(rssi);
   Serial.println(" dBm");
+}
+
+void AT_init(){
+  Serial.println("INITIALISING EasyLink AT API..");
+  Serial1.println("AT+I 0001<CR>");
+  Serial1.println("ATPRO=100<CR>");
 }
