@@ -72,9 +72,9 @@ void setup() {
   
   AT_init(); //sends AT commands to Easylink API for initialising
 
-  Udp.beginPacket("192.168.18.7", 53124);
-  Udp.write("INIT DONE");
-  Udp.endPacket();
+//  Udp.beginPacket("192.168.18.7", 53124);
+//  Udp.write("INIT DONE");
+//  Udp.endPacket();
 }
 
 void loop() {
