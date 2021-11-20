@@ -1,10 +1,10 @@
-#include "SerialCC.h"
-#include "uart.h"
-#include "ioc.h"
-#include "prcm.h"
+//#include "SerialCC.h"
+//#include "uart.h"
+//#include "ioc.h"
+//#include "prcm.h"
 
 
-SerialCC SerialCC1;
+//SerialCC SerialCC1;
 
 String inputString = ""; // a string to hold incoming data
 boolean stringComplete = false; // whether the string is complete
@@ -24,19 +24,20 @@ long lastDebounceTime = 0;  // the last time the output pin was toggled
 long debounceDelay = 50;    // the debounce time; increase if the output flickers
 
 void setup() {
-  SerialCC1.Begin(9600);
-//  Serial.begin(9600);
   
-  SerialCC1.Println("SENDER");
+  //SerialCC1.Begin(115200);
+  Serial.begin(9600);
+  
+//  SerialCC1.Println("SENDER");
 //  SerialCC1.Print("Starting.");
 
   // reserve 200 bytes for the inputString:
-  inputString.reserve(200);
+  //inputString.reserve(200);
 
   // set the digital pin as output: for Led toogle
-  pinMode(greenledPin, OUTPUT);  
+  //pinMode(greenledPin, OUTPUT);  
   pinMode(redledPin, OUTPUT);
-  pinMode(buttonPin, INPUT_PULLUP); 
+  //pinMode(buttonPin, INPUT_PULLUP); 
    
 }
 
@@ -66,7 +67,7 @@ void loop() {
 //    delay(5000);
 ////    toggleRedLed();
 //  }
-  SerialCC1.Print("message");
+  Serial.print("msg");
   delay(500);  
 }
 
@@ -91,7 +92,7 @@ void toggleRedLed(){
     // set the LED with the ledState of the variable:
     digitalWrite(redledPin, redledState);
 }
-  
+  /*
 bool processInputString(char ch, String& inputString){
   // add it to the inputString:
   inputString += ch;
@@ -110,8 +111,9 @@ bool processInputString(char ch, String& inputString){
     stringComplete = false;
     return true; // return stringComplete state
   }
-}
+}*/
 
+/*
 void checkButtonAndSendMsg(char msg){
   // read the state of the switch into a local variable:
   int reading = digitalRead(buttonPin);
@@ -131,4 +133,4 @@ void checkButtonAndSendMsg(char msg){
   // save the reading.  Next time through the loop,
   // it'll be the lastButtonState:
   lastButtonState = reading;
-}
+}*/
