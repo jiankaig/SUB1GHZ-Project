@@ -56,7 +56,7 @@ long lastDebounceTime = 0;
 long debounceDelay = 50;
 volatile byte state = HIGH;
 bool state_Send = false;
-char d[128];
+char d[32]; //128
 /* This is our setup function. We want to set our LED pins as OUTPUT.
  * We can also set them to HIGH at the beginning.
  */
@@ -74,12 +74,14 @@ void setup() {
  digitalWrite(RED, LOW);
  digitalWrite(GREEN, HIGH);
  digitalWrite(BLUE, HIGH);
- //Sub 1GHz setup..
- Serial.begin(9600);
- // begin defaults to EasyLink_Phy_50kbps2gfsk
- myLink.begin();
- Serial.println(myLink.version());
- 
+  //Sub 1GHz setup..
+  Serial.begin(9600);
+  // begin defaults to EasyLink_Phy_50kbps2gfsk
+  myLink.begin();
+  Serial.println(myLink.version());
+
+  // Set the destination address to 0xaa
+  txPacket.dstAddr[0] = 0xaa;
 }
 
 //interurpt state change 
@@ -165,8 +167,8 @@ int writeLEDfromStr(String strValue)
 }
 
 void sendStatus() {
-  char data[128];
-  String txt ="AAX00020R000G000B000BB";
+  char data[32]; //128
+  String txt ="BUTTON PRESSED";
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
@@ -183,4 +185,5 @@ void sendStatus() {
   else {
     Serial.print("TX Error code: ");
   }
+//  delay(1000);
 }

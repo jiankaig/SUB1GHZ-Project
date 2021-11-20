@@ -19,7 +19,7 @@
 #include <SPI.h>
 #endif
 #include <WiFi.h>
-//#define SHOW_UART1_RX
+#define SHOW_UART1_RX
 
 // your network name also called SSID
 char ssid[] = "Sub1Ghz";
@@ -124,7 +124,8 @@ void loop() {
   else{
     //If not getting any UDP packets from application
     //Receive Mode - Ask EasyLink API to check radio
-    Serial1.println("AT+RX<CR>"); 
+    Serial1.println("AT+RX");
+    delay(1000); 
 //    ret = Serial1.readString(); //flushes the serial1 buffer
 
     //if ret not timeout, pass ret thru Udp...?
@@ -152,5 +153,6 @@ void printWifiStatus() {
 void AT_init(){
   Serial.println("INITIALISING EasyLink AT API..");
   Serial1.println("AT+I 0001<CR>");
-  Serial1.println("ATPRO=100<CR>");
+  Serial1.println("ATPRO=4000000<CR>");
+  Serial.println("INITIALISE DONE");
 }
