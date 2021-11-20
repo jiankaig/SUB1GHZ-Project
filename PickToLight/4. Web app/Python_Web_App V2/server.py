@@ -19,7 +19,7 @@ def device2():
 @app.route('/1-GH')                       #Turn on Green LED
 def GH1():  
 
-    UDP_Sender.udpSender("AAX00010R255G000B255BB") #Send LED cmd 
+    UDP_Sender.udpSender("AT+TX AAX00010R255G000B255BB") #Send LED cmd 
 
     now = datetime.datetime.now()                  #Check date&time 
 
@@ -33,7 +33,7 @@ def GH1():
 
 @app.route('/1-GL')
 def GL1():
-    UDP_Sender.udpSender("AAX00010R255G255B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R255G255B255BB")
 
     now = datetime.datetime.now()
 
@@ -45,7 +45,7 @@ def GL1():
 
 @app.route('/1-RH')
 def RH1():
-    UDP_Sender.udpSender("AAX00010R000G255B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R000G255B255BB")
 
     now = datetime.datetime.now()
 
@@ -57,7 +57,7 @@ def RH1():
 
 @app.route('/1-RL')
 def RL1():
-    UDP_Sender.udpSender("AAX00010R255G255B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R255G255B255BB")
 
     now = datetime.datetime.now()
 
@@ -69,7 +69,7 @@ def RL1():
 
 @app.route('/1-BH')
 def BH1():
-    UDP_Sender.udpSender("AAX00010R255G255B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R255G255B000BB")
 
     now = datetime.datetime.now()
 
@@ -81,7 +81,7 @@ def BH1():
 
 @app.route('/1-BL')
 def BL1():
-    UDP_Sender.udpSender("AAX00010R255G255B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R255G255B255BB")
 
     now = datetime.datetime.now()
 
@@ -93,7 +93,7 @@ def BL1():
 
 @app.route('/2-GH')
 def GH2():
-    UDP_Sender.udpSender("AAX00020R000G255B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G255B000BB")
 
     now = datetime.datetime.now()
 
@@ -105,7 +105,7 @@ def GH2():
 
 @app.route('/2-GL')
 def GL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
 
     now = datetime.datetime.now()
 
@@ -117,7 +117,7 @@ def GL2():
 
 @app.route('/2-RH')
 def RH2():
-    UDP_Sender.udpSender("AAX00020R255G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R255G000B000BB")
 
     now = datetime.datetime.now()
 
@@ -129,7 +129,7 @@ def RH2():
 
 @app.route('/2-RL')
 def RL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
 
     now = datetime.datetime.now()
 
@@ -141,7 +141,7 @@ def RL2():
 
 @app.route('/2-BH')
 def BH2():
-    UDP_Sender.udpSender("AAX00020R000G000B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B255BB")
 
     now = datetime.datetime.now()
 
@@ -153,7 +153,7 @@ def BH2():
 
 @app.route('/2-BL')
 def BL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
