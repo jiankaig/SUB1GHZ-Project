@@ -74,12 +74,12 @@ void setup() {
  digitalWrite(RED, LOW);
  digitalWrite(GREEN, HIGH);
  digitalWrite(BLUE, HIGH);
-  //Sub 1GHz setup..
-  Serial.begin(9600);
-  // begin defaults to EasyLink_Phy_50kbps2gfsk
-  myLink.begin();
-  Serial.println(myLink.version());
-   
+ //Sub 1GHz setup..
+ Serial.begin(9600);
+ // begin defaults to EasyLink_Phy_50kbps2gfsk
+ myLink.begin();
+ Serial.println(myLink.version());
+ 
 }
 
 //interurpt state change 
