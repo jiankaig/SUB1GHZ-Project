@@ -36,7 +36,7 @@
 EasyLink_RxPacket rxPacket;
 EasyLink myLink;
 
-#define BOARDID "0004"
+#define BOARDID "04"
 #define PIXELS 3 // number of pixels along led strip
 typedef WS2801_Controller::Color Color; // alias for Color struct
 WS2801_Controller strip = WS2801_Controller(PIXELS);
@@ -115,12 +115,12 @@ int writeLEDfromStr(String strValue)
 {
     String IdCode, redCode, greenCode, blueCode, LedCode;
     //split substring into RGB if relevant
-    // assumes that command is : AAX 0001 0R 000 G 255 B 000 BB 1
-    IdCode = strValue.substring(3,7); //0001
+    // assumes that command is : AAX LL01 0R 000 G 255 B 000 BB 1
+    ledCode = strValue.substring(3,5); //LL
+    IdCode = strValue.substring(5,7); //01
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
-    ledCode = strValue.substring(22,23);
     strValue = "";
     
     //if ID matches this board ID, process LED\
@@ -130,7 +130,7 @@ int writeLEDfromStr(String strValue)
       //analogWrite( RED, 255-redCode.toInt() );
       //analogWrite( GREEN, 255-greenCode.toInt() );
       //analogWrite( BLUE, 255-blueCode.toInt() );
-      strip.setPixelColor(Color{redCode,greenCode, blueCode}, ledCode);
+      strip.setPixelColor(Color{redCode.toInt(),greenCode.toInt(), blueCode.toInt()}, ledCode.toInt());
       return 1;//success
     }
     return -1;//error BoardID mismatch
