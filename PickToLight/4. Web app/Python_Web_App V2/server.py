@@ -19,45 +19,45 @@ def device2():
 @app.route('/1-GH')
 def GH1():
 
-    UDP_Sender.udpSender("AT+TX AAX00020R000G255B000BB") #edit here hard code
+    UDP_Sender.udpSender("AT+TX AAX00010R000G255B000BB") #edit here hard code
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R255G000B255BB " + str(now) + "\n")
+        f.writelines("AAX00010R255G000B255BB " + str(now) + "\n")
 
-    SQLdb.sendCommandDB("AT+TX AAX00020R000G255B000BB", now)
+    SQLdb.sendCommandDB("AT+TX AAX00010R000G255B000BB", now)
 
     return "Success"
 
 
 @app.route('/1-GL')
 def GL1():
-    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R000G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00010R255G255B255BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00010R000G000B000BB" + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/1-RH')
 def RH1():
-    UDP_Sender.udpSender("AT+TX AAX00020R125G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R125G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00010R000G255B255BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00010R125G000B000BB" + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/1-RL')
 def RL1():
-    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00010R000G000B000BB")
 
     now = datetime.datetime.now()
 
@@ -69,99 +69,161 @@ def RL1():
 
 @app.route('/1-BH')
 def BH1():
-    UDP_Sender.udpSender("AT+TX AAX00040R000G000B255BB2") #hardcode for LED strip
+    UDP_Sender.udpSender("AT+TX AAX00010R000G000B255BB") 
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX00040R000G000B255BB2" + str(now) + "\n")
+        f.writelines("AT+TX AAX00010R000G000B255BB" + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/1-BL')
 def BL1():
-    UDP_Sender.udpSender("AT+TX AAX00040R000G000B000BB2") #hardcode for LED strip
-
+    UDP_Sender.udpSender("AT+TX AAX00010R000G000B000BB") 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00010R255G255B255BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00010R000G000B000BB" + str(now) + "\n")
 
     return "Success"
 
-
 @app.route('/2-GH')
 def GH2():
-    UDP_Sender.udpSender("AAX00020R000G255B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G255B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R000G255B000BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R000G255B000BB " + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/2-GL')
 def GL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R000G000B000BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/2-RH')
 def RH2():
-    UDP_Sender.udpSender("AAX00020R255G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R255G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R255G000B000BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R255G000B000BB " + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/2-RL')
 def RL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R000G000B000BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/2-BH')
 def BH2():
-    UDP_Sender.udpSender("AAX00020R000G000B255BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B255BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R000G000B255BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R000G000B255BB " + str(now) + "\n")
 
     return "Success"
 
 
 @app.route('/2-BL')
 def BL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
+    UDP_Sender.udpSender("AT+TX AAX00020R000G000B000BB")
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R000G000B000BB " + str(now) + "\n")
+        f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
+
+    return "Success"
+
+@app.route('/1-SRH')
+def SRH1():
+    UDP_Sender.udpSender("AT+TX AAX00040R255G000B000BB") 
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX00040R255G000B000BB" + str(now) + "\n")
+
+    return "Success"
+
+@app.route('/1-SRL')
+def SRL1():
+    UDP_Sender.udpSender("AT+TX AAX00040R000G000B000BB") 
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX00040R000G000B000BB" + str(now) + "\n")
+
+    return "Success"
+
+@app.route('/1-SGH')
+def SGH1():
+    UDP_Sender.udpSender("AT+TX AAX01040R000G255B000BB") 
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX01040R000G255B000BB" + str(now) + "\n")
+
+    return "Success"
+
+@app.route('/1-SGL')
+def SGL1():
+    UDP_Sender.udpSender("AT+TX AAX01040R000G000B000BB") 
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX01040R000G000B000BB" + str(now) + "\n")
+
+    return "Success"
+    
+@app.route('/1-SBH')
+def SBH1():
+    UDP_Sender.udpSender("AT+TX AAX02040R000G000B255BB") 
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX02040R000G255B000BB" + str(now) + "\n")
+
+    return "Success"
+
+@app.route('/1-SBL')
+def SBL1():
+    UDP_Sender.udpSender("AT+TX AAX02040R000G000B000BB") 
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AT+TX AAX02040R000G000B000BB" + str(now) + "\n")
 
     return "Success"
 
 
+    
 @app.route('/rgbVal',methods=['POST'])
 def rbgPost():
     Val = request.get_json()
@@ -178,5 +240,5 @@ def rbgPost():
 
 
 if __name__ == '__main__':
-    threading.Thread(target=lambda: app.run(host='127.0.0.1', port=5000, debug=True, use_reloader=False)).start()
+    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)).start()
     threading.Thread(target=UDP_Receiver.recv).start()

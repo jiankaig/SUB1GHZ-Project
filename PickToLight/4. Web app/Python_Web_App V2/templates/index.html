@@ -76,20 +76,53 @@
 <br>
 <button id="submitTable">Submit</button>
 <br>
-<h3>RED LED</h3>Output:                                           <!--  RED LED Header-->
+<h3>RED LED 1</h3>Output:                                           <!--  RED LED Header-->
 <button onclick="location.href='./1-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
 <button onclick="location.href='./1-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
 <hr style="height:2px;background-color:black"  >                  <!--  Line -->
 
-<h3>Green LED</h3>Output:                                         <!--  GREEN LED Header-->
+<h3>Green LED 1</h3>Output:                                         <!--  GREEN LED Header-->
 <button onclick="location.href='./1-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
 <button onclick="location.href='./1-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
 <hr style="height:2px;background-color:black"   >                  <!--  Line-->
 
-<h3>Blue LED</h3>Output:                                            <!--  YELLOW LED Header-->
+<h3>BLUE LED 1</h3>Output:                                            <!--  LED STRIP Header-->
 <button onclick="location.href='./1-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
 <button onclick="location.href='./1-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+<h3>RED LED 2</h3>Output:                                           <!--  RED LED Header-->
+<button onclick="location.href='./2-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./2-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+<hr style="height:2px;background-color:black"  >                  <!--  Line -->
+
+<h3>Green LED 2</h3>Output:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./2-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./2-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+<hr style="height:2px;background-color:black"   >                  <!--  Line-->
+
+<h3>BLUE LED 2</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./2-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./2-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO.0</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SRH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SRL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO1</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SGH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SGL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO2</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SBH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SBL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
 
 <h3>RGB</h3>Output:                                                   <!--  Color Picker Header-->
 <input type="color" id="second"><br><br>                          <!--  Color Picker-->
@@ -98,8 +131,8 @@
 
 
 <h3>Command</h3>                                                      <!--  Command Header-->
-<!-- AAX00010R255G255B000BB<input type="text" id="command">  -->
-AAX000<input type="text" id="deviceNumber"   >
+<!-- AAX00010R000G255B000BB<input type="text" id="command">  -->
+AT+TX AAX00<input type="text" id="deviceNumber"   >
 0R<input type="text" id="redVal"   >
 G<input type="text" id="greenVal"   >
 B<input type="text" id="blueVal"  >
