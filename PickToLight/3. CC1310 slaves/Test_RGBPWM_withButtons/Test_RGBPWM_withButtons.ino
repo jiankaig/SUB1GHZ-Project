@@ -168,7 +168,7 @@ int writeLEDfromStr(String strValue)
 
 void sendStatus() {
   char data[32]; //128
-  String txt ="BUTTON PRESSED";
+  String txt ="AAX00020R000G000B000BB0";
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
