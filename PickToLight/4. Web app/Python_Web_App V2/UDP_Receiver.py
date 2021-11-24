@@ -2,12 +2,12 @@ import socket
 import datetime
 import SQLdb
 
-hostname = socket.gethostname()            #automate get from your computer
+hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
 print("Local IP: " + local_ip + " Running on port 4550")
-ip_Addr = local_ip   # Must set ip of PC
-port = 4550             # Same port declare in cc3200 UDP receiver
+ip_Addr = local_ip  # Must set ip of PC
+port = 2390  # Same port declare in cc3200 UDP receiver
 #ip_Addr = input("Enter your IP address of the PC running the server.py: \n")
 
 
