@@ -13,6 +13,13 @@
             text-align: left;
             padding: 8px;
         }
+        .dot {
+              height: 25px;
+              width: 25px;
+              background-color: #7214;
+              border-radius: 50%;
+              display: inline-block;
+            }
     </style>
 </head>
 <body> <!--  Start of body tag -->
@@ -20,7 +27,7 @@
 <div class="w3-sidebar w3-light-grey w3-bar-block" style="width:15;" > <!-- SideBar tab-->
 <h3 class="w3-bar-item" style="border-bottom: 2px solid black;">Product</h3>  <!--  Title of sideBar tab-->
 <a href="/" style="background-color: darkgray;" class="w3-bar-item w3-button">PC00001</a> <!--  First SideBar Menu-->
-<a href="device2.html" class="w3-bar-item w3-button">PC00002</a> <!--  Second SideBar Menu-->
+<a href="#" class="w3-bar-item w3-button">PC00002</a> <!--  Second SideBar Menu-->
 <a href="#" class="w3-bar-item w3-button">PC00003</a> <!--  Third SideBar Menu-->
 </div>   <!--  End of SideBar tab -->
 
@@ -37,46 +44,85 @@
 <table>
     <tr>
       <th>Parts</th>
-      <th>LED</th>
-
+      <th>Color Picker</th>
+      <th>LED Lights</th>
     </tr>
     <tr>
       <td>Buzzer</td>
-      <td><input type="color" name="buzzer" class="tableColor"><!--  Color Picker--></td>
+      <td><input type="color" id="1" name="1" class="tableColor"><!--  Color Picker--></td>
+      <td style="text-align:center" ><span class="dot"></span></td>
     </tr>
     <tr>
       <td>Battery</td>
-      <td><input type="color" name="battery" class="tableColor"><!--  Color Picker--></td>
+      <td><input type="color" name="2" id="2" class="tableColor"><!--  Color Picker--></td>
+      <td style="text-align:center"><span class="dot"></span></td>
     </tr>
     <tr>
       <td>LED</td>
-      <td><input type="color" name="LED" class="tableColor" ><!--  Color Picker--></td>
+      <td><input type="color" name="3" id="3" class="tableColor" ><!--  Color Picker--></td>
+      <td style="text-align:center"><span class="dot"></span></td>
     </tr>
     <tr>
       <td>PCB</td>
-      <td><input type="color" name="PCB" class="tableColor" ><!--  Color Picker--></td>
+      <td><input type="color" name="4" id="4" class="tableColor" ><!--  Color Picker--></td>
+      <td style="text-align:center"><span class="dot"></span></td>
     </tr>
     <tr>
       <td>Regulator</td>
-      <td><input type="color" name="regulator" class="tableColor" ><!--  Color Picker--></td>
+      <td><input type="color" name="5" id="5" class="tableColor" ><!--  Color Picker--></td>
+      <td style="text-align:center"><span class="dot"></span></td>
     </tr>
 </table>
 <br>
 <button id="submitTable">Submit</button>
-<h3>RED LED</h3>Output:                                           <!--  RED LED Header-->
+<br>
+<h3>RED LED 1</h3>Output:                                           <!--  RED LED Header-->
 <button onclick="location.href='./1-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
 <button onclick="location.href='./1-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
 <hr style="height:2px;background-color:black"  >                  <!--  Line -->
 
-<h3>Green LED</h3>Output:                                         <!--  GREEN LED Header-->
+<h3>Green LED 1</h3>Output:                                         <!--  GREEN LED Header-->
 <button onclick="location.href='./1-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
 <button onclick="location.href='./1-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
 <hr style="height:2px;background-color:black"   >                  <!--  Line-->
 
-<h3>Blue LED</h3>Output:                                            <!--  YELLOW LED Header-->
+<h3>BLUE LED 1</h3>Output:                                            <!--  LED STRIP Header-->
 <button onclick="location.href='./1-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
 <button onclick="location.href='./1-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+<h3>RED LED 2</h3>Output:                                           <!--  RED LED Header-->
+<button onclick="location.href='./2-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./2-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+<hr style="height:2px;background-color:black"  >                  <!--  Line -->
+
+<h3>Green LED 2</h3>Output:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./2-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./2-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+<hr style="height:2px;background-color:black"   >                  <!--  Line-->
+
+<h3>BLUE LED 2</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./2-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./2-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO.0</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SRH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SRL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO1</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SGH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SGL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>LED STRIP NO2</h3>Output:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-SBH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-SBL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
 
 <h3>RGB</h3>Output:                                                   <!--  Color Picker Header-->
 <input type="color" id="second"><br><br>                          <!--  Color Picker-->
@@ -85,8 +131,8 @@
 
 
 <h3>Command</h3>                                                      <!--  Command Header-->
-<!-- AAX00010R255G255B000BB<input type="text" id="command">  -->
-AAX000<input type="text" id="deviceNumber"   >
+<!-- AAX00010R000G255B000BB<input type="text" id="command">  -->
+AT+TX AAX00<input type="text" id="deviceNumber"   >
 0R<input type="text" id="redVal"   >
 G<input type="text" id="greenVal"   >
 B<input type="text" id="blueVal"  >
@@ -217,11 +263,12 @@ function textInputFunc() {                                                      
     // Table RGB values
 
     $("#submitTable").click(function(){                                                           //  When button of the table is clicked
-
+      var cmdArray = [];
       var data = $(".tableColor").serializeArray();                                               //  Create a array of values by class of input
-
+      console.log(data);
       data.map(function(data){
       hexValues = data.value;
+      id = data.name;
 
       redVal = hexToRgb(hexValues).r;                                                             //  Pad red with '0's
       if (redVal<100){
@@ -251,18 +298,26 @@ function textInputFunc() {                                                      
           }
       }
       //rgbValues = redVal.toString()+greenVal.toString()+blueVal.toString();
-      rgbValues = "AAX00010R" + redVal.toString() + "G" + greenVal.toString() + "B" + blueVal.toString() + "BB" //    Combine into string
+      rgbValues = "AAX000"+ id + "0R" + redVal.toString() + "G" + greenVal.toString() + "B" + blueVal.toString() + "BB" //    Combine into string
 
-      data.value = rgbValues;
+      cmdArray.push(rgbValues);
+      });
 
       $.ajax({                        //  Send over to flask
-        data : {rgbValues:data.value},
-        type : 'GET',
-        url : '/rgbVal'
+        type : 'POST',
+        url : '/rgbVal',
+        data : JSON.stringify(cmdArray),
+        contentType: "application/json",
+        dataType: 'json'
         })
-
     });
+
+    // elements = document.getElementsByTagName("td")
+    //         for (var i = elements.length; i--;) {
+    //             if (elements[i].innerHTML === "Under maintenance") {
+    //             elements[i].style.color = "red";
+    //             }
+    //         }
   });
-});
     </script>
     </body>

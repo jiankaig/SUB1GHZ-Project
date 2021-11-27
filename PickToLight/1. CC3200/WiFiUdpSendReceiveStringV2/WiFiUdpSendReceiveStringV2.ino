@@ -34,7 +34,7 @@ bool bReadUart = false;
 bool packetreceiving = false;
 WiFiUDP Udp;
 String ret;
-char  char_array[] = "";       // a string to send back
+char  ret_char_array[] = "";       // a string to send back
 
 void setup() {
   
@@ -71,28 +71,31 @@ void setup() {
   Serial.println("connected.");
   
   AT_init(); //sends AT commands to Easylink API for initialising
-
-//  Udp.beginPacket("192.168.18.7", 53124);
-//  Udp.write("INIT DONE");
-//  Udp.endPacket();
 }
 
+int lastRemoteIP;
+int lastRemotePort;
 void loop() {
 
 #ifdef SHOW_UART1_RX
   if(Serial1.available() > 0) 
   {
     Serial.print("Received: ");
-    Serial.println(Serial1.readString());
-    
-//    ret = Serial1.readString();
-//    Serial.println(ret); 
+    ret = Serial1.readString(); 
+    Serial.println(ret); //printout for debug on serial monitor
 
-//    strcpy(char_array, ret.c_str());
-//    // send a reply, to the IP address and port that sent us the packet we received
-//    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
-//    Udp.write(char_array);
-//    Udp.endPacket();
+    //if ret not timeout, pass ret thru Udp...?
+    if(ret.indexOf("Timeout") == -1){
+      // send a reply, to the IP address and port that sent us the packet we received
+      if(lastRemoteIP || lastRemotePort)//is valid
+      {
+        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
+        Udp.beginPacket(lastRemoteIP, lastRemotePort);
+        Udp.write(ret_char_array);
+        Udp.endPacket();
+      }
+    }
+
   }
 #endif
  
@@ -115,7 +118,9 @@ void loop() {
     Serial.println(packetBuffer);
     Serial1.println(packetBuffer);
     
-
+    lastRemoteIP = Udp.remoteIP();
+    lastRemotePort = Udp.remotePort();
+    
     // send a reply, to the IP address and port that sent us the packet we received
     Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
     Udp.write(ReplyBuffer);
@@ -126,9 +131,21 @@ void loop() {
     //Receive Mode - Ask EasyLink API to check radio
     Serial1.println("AT+RX");
     delay(1000); 
-//    ret = Serial1.readString(); //flushes the serial1 buffer
 
-    //if ret not timeout, pass ret thru Udp...?
+//    ret = Serial1.readString(); 
+//    Serial.println(ret); //printout for debug on serial monitor
+//    
+//    //if ret not timeout, pass ret thru Udp...?
+//    if(ret.indexOf("Timeout") == -1){
+//      if(lastRemoteIP || lastRemotePort)//is valid
+//      {
+//        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
+//        Udp.beginPacket(lastRemoteIP, lastRemotePort);
+//        Udp.write(ret_char_array);
+//        Udp.endPacket();
+//      }
+//    }
+      
   }
 }
 
