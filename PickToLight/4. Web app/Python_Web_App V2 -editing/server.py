@@ -26,7 +26,7 @@ def GH1():
     with open('log.txt', 'a+') as f:
         f.writelines("AAX00010R255G000B255BB " + str(now) + "\n")
 
-    SQLdb.sendCommandDB("LED1_GREEN_ON", now)
+    SQLdb.sendCommandDB("AT+TX AAX00010R000G255B000BB", now)
 
     return "Success"
 
@@ -39,9 +39,7 @@ def GL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00010R000G000B000BB" + str(now) + "\n")
-        
-    SQLdb.sendCommandDB("LED1_GREEN_OFF", now)
-    
+
     return "Success"
 
 
@@ -53,8 +51,7 @@ def RH1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00010R125G000B000BB" + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("LED1_RED_ON", now)
+
     return "Success"
 
 
@@ -66,8 +63,7 @@ def RL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AAX00010R255G255B255BB " + str(now) + "\n")
-        
-    SQLdb.sendCommandDB("LED1_RED_OFF", now)
+
     return "Success"
 
 
@@ -79,8 +75,7 @@ def BH1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00010R000G000B255BB" + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("LED1_BLUE_ON", now)
+
     return "Success"
 
 
@@ -91,7 +86,7 @@ def BL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00010R000G000B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("LED1_BLUE_OFF", now)
+
     return "Success"
 
 @app.route('/2-GH')
@@ -102,8 +97,7 @@ def GH2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R000G255B000BB " + str(now) + "\n")
-        
-    SQLdb.sendCommandDB("LED2_GREEN_ON", now)
+
     return "Success"
 
 
@@ -115,7 +109,7 @@ def GL2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
-    SQLdb.sendCommandDB("LED2_GREEN_OFF", now)
+
     return "Success"
 
 
@@ -127,7 +121,7 @@ def RH2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R255G000B000BB " + str(now) + "\n")
-    SQLdb.sendCommandDB("LED2_RED_ON", now)
+
     return "Success"
 
 
@@ -139,7 +133,7 @@ def RL2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
-    SQLdb.sendCommandDB("LED2_RED_OFF", now)
+
     return "Success"
 
 
@@ -151,7 +145,7 @@ def BH2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R000G000B255BB " + str(now) + "\n")
-    SQLdb.sendCommandDB("LED2_BLUE_ON", now)
+
     return "Success"
 
 
@@ -162,8 +156,7 @@ def BL2():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00020R000G000B000BB " + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("LED2_BLUE_OFF", now)
+
     return "Success"
 
 @app.route('/1-SRH')
@@ -174,8 +167,7 @@ def SRH1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00040R255G000B000BB" + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("STRIP_RED_HIGH", now)
+
     return "Success"
 
 @app.route('/1-SRL')
@@ -185,7 +177,7 @@ def SRL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX00040R000G000B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("STRIP_RED_LOW", now)
+
     return "Success"
 
 @app.route('/1-SGH')
@@ -196,7 +188,7 @@ def SGH1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX01040R000G255B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("STRIP_GREEN_HIGH", now)
+
     return "Success"
 
 @app.route('/1-SGL')
@@ -206,7 +198,7 @@ def SGL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX01040R000G000B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("STRIP_GREEN_LOW", now)
+
     return "Success"
     
 @app.route('/1-SBH')
@@ -217,7 +209,7 @@ def SBH1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX02040R000G255B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("STRIP_BLUE_HIGH", now)
+
     return "Success"
 
 @app.route('/1-SBL')
@@ -227,7 +219,7 @@ def SBL1():
 
     with open('log.txt', 'a+') as f:
         f.writelines("AT+TX AAX02040R000G000B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("STRIP_BLUE_LOW", now)
+
     return "Success"
 
 
