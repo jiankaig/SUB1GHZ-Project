@@ -26,7 +26,7 @@ String txt = "";
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0002"
+#define BOARDID "0002" //Change this number for the board ID
 
 String BoardID = BOARDID; // change this according to desired device identification
 
