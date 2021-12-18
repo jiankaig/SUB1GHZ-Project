@@ -22,8 +22,8 @@
 #define SHOW_UART1_RX
 
 // your network name also called SSID
-char ssid[] = "Sub1Ghz";
-char password[] = "Seems12345";
+char ssid[] = "Voon";//"Sub1Ghz";
+char password[] ="Cmk93833227!"; // "Seems12345";
 
 unsigned int localPort = 2390;      // local port to listen on
 
@@ -122,12 +122,15 @@ void loop() {
     lastRemotePort = Udp.remotePort();
     
     // send a reply, to the IP address and port that sent us the packet we received
-    Udp.beginPacket(Udp.remoteIP(), Udp.remotePort());
+    Serial.println("Sending back to: ");  //Added on 18Dec 
+    Serial.println(Udp.remoteIP());
+    Serial.println(Udp.remotePort());
+    Udp.beginPacket(Udp.remoteIP(), 4550 ); //Udp.remotePort());
     Udp.write(ReplyBuffer);
     Udp.endPacket();
   }
   else{
-    //If not getting any UDP packets from application
+    //If not getting any UDP pacwwkets from application
     //Receive Mode - Ask EasyLink API to check radio
     Serial1.println("AT+RX");
     delay(1000); 
