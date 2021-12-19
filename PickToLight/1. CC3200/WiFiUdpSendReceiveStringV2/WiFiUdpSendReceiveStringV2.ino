@@ -19,11 +19,11 @@
 #include <SPI.h>
 #endif
 #include <WiFi.h>
-#define SHOW_UART1_RX
+//#define SHOW_UART1_RX
 
 // your network name also called SSID
-char ssid[] = "Voon";//"Sub1Ghz";
-char password[] ="Cmk93833227!"; // "Seems12345";
+char ssid[] = "Sub1Ghz";
+char password[] ="Seems12345";
 
 unsigned int localPort = 2390;      // local port to listen on
 
@@ -34,7 +34,7 @@ bool bReadUart = false;
 bool packetreceiving = false;
 WiFiUDP Udp;
 String ret;
-char  ret_char_array[] = "";       // a string to send back
+char  ret_char_array[32] = "";       // a string to send back
 
 void setup() {
   
@@ -84,17 +84,17 @@ void loop() {
     ret = Serial1.readString(); 
     Serial.println(ret); //printout for debug on serial monitor
 
-    //if ret not timeout, pass ret thru Udp...?
-    if(ret.indexOf("Timeout") == -1){
-      // send a reply, to the IP address and port that sent us the packet we received
-      if(lastRemoteIP || lastRemotePort)//is valid
-      {
-        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
-        Udp.beginPacket(lastRemoteIP, lastRemotePort);
-        Udp.write(ret_char_array);
-        Udp.endPacket();
-      }
-    }
+//    //if ret not timeout, pass ret thru Udp...?
+//    if(ret.indexOf("Timeout") == -1){
+//      // send a reply, to the IP address and port that sent us the packet we received
+//      if(lastRemoteIP || lastRemotePort)//is valid
+//      {
+//        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
+//        Udp.beginPacket(lastRemoteIP, lastRemotePort);
+//        Udp.write(ret_char_array);
+//        Udp.endPacket();
+//      }
+//    }
 
   }
 #endif
@@ -125,7 +125,7 @@ void loop() {
     Serial.println("Sending back to: ");  //Added on 18Dec 
     Serial.println(Udp.remoteIP());
     Serial.println(Udp.remotePort());
-    Udp.beginPacket(Udp.remoteIP(), 4550 ); //Udp.remotePort());
+    Udp.beginPacket(Udp.remoteIP(), 4550 ); //4550 / Udp.remotePort());
     Udp.write(ReplyBuffer);
     Udp.endPacket();
   }
@@ -135,19 +135,23 @@ void loop() {
     Serial1.println("AT+RX");
     delay(1000); 
 
-//    ret = Serial1.readString(); 
-//    Serial.println(ret); //printout for debug on serial monitor
-//    
-//    //if ret not timeout, pass ret thru Udp...?
-//    if(ret.indexOf("Timeout") == -1){
-//      if(lastRemoteIP || lastRemotePort)//is valid
-//      {
-//        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
-//        Udp.beginPacket(lastRemoteIP, lastRemotePort);
-//        Udp.write(ret_char_array);
-//        Udp.endPacket();
-//      }
-//    }
+    ret = Serial1.readString(); 
+    
+    
+    //if ret not timeout, pass ret thru Udp...?
+    if(ret.indexOf("Timeout") == -1){
+      Serial.println(ret); //printout for debug on serial monitor
+      if(lastRemoteIP || lastRemotePort)//is valid
+      {
+        Serial.println("no timeout, send back to last remote ip, port");
+        Serial.print("lastRemoteIP: ");
+        Serial.println(lastRemoteIP);
+        strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
+        Udp.beginPacket(lastRemoteIP, 4550); //lastRemoteIP, lastRemotePort
+        Udp.write(ret_char_array); 
+        Udp.endPacket();
+      }
+    }
       
   }
 }
@@ -174,5 +178,4 @@ void AT_init(){
   Serial.println("INITIALISING EasyLink AT API..");
   Serial1.println("AT+I 0001<CR>");
   Serial1.println("ATPRO=4000000<CR>");
-  Serial.println("INITIALISE DONE");
 }
