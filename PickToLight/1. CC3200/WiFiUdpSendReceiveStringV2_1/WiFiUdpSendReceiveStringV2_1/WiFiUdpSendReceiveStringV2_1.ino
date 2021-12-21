@@ -12,6 +12,10 @@
  modified 1 July 2014
  by Noah Luskey
 
+ Version:
+  2.0:  NIL
+  2.1:  added simpleGuiPort parameter for sending feedback message to client 
+        added return string cropping(line 133)
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -22,8 +26,8 @@
 //#define SHOW_UART1_RX
 
 // your network name also called SSID
-char ssid[] = "icad_2.4G";//"Sub1Ghz";
-char password[] = "67268629aa";//"Seems12345";
+char ssid[] = "Sub1Ghz";
+char password[] = "Seems12345";
 
 unsigned int localPort = 2390;      // local port to listen on
 unsigned int simpleGuiPort = 4550;      // server port to send back to
