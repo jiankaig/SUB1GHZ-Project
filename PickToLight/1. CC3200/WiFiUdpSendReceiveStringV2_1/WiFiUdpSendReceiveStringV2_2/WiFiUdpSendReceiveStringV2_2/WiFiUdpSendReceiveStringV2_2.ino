@@ -121,6 +121,11 @@ void loop() {
     Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
     Udp.write(ReplyBuffer);
     Udp.endPacket();
+
+    //resend via lastRemotePort
+    Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
+    Udp.write(ReplyBuffer); 
+    Udp.endPacket();
   }
   else{
     //If not getting any UDP pacwwkets from application
