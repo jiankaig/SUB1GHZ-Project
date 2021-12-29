@@ -98,7 +98,7 @@ void loop() {
   {
     //rxPacket.absTime = EasyLink_ms_To_RadioTime(1);
     reset_LED();
-    sendStatus();
+    sendStatus(strValue, '2');
     buttonState = HIGH;
   }
   
@@ -132,7 +132,10 @@ void loop() {
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
-    writeLEDfromStr(strValue);
+    int bLED_Command_Success;
+    bLED_Command_Success = writeLEDfromStr(strValue);
+    if(bLED_Command_Success == 1)
+      sendStatus(strValue, '1'); // sendStatus(strValue, '0'); 0 if timeout???
   }
 }
 
@@ -152,7 +155,7 @@ int writeLEDfromStr(String strValue)
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
-    strValue = "";
+//    strValue = "";
     
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
@@ -166,9 +169,9 @@ int writeLEDfromStr(String strValue)
     return -1;//error BoardID mismatch
 }
 
-void sendStatus() {
+void sendStatus(String strValue, char status_) {
   char data[32]; //128
-  String txt ="AAX00020R000G000B000BB0";
+  String txt = strValue + status_;
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
