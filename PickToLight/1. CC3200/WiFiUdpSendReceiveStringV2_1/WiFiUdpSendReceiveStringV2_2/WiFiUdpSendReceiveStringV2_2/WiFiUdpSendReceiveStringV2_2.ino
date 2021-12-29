@@ -29,7 +29,7 @@
 char ssid[] = "Sub1Ghz";
 char password[] = "Seems12345";
 
-unsigned int localPort = 2390;      // local port to listen on
+unsigned int localPort = 2390;      // local port to listen on //Packet Sender
 unsigned int simpleGuiPort = 4550;      // server port to send back to
 
 char packetBuffer[255]; //buffer to hold incoming packet

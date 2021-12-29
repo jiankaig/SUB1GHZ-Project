@@ -68,7 +68,7 @@ void setup() {
   printWifiStatus();
 
   Serial.println("\nWaiting for a connection from a client...");
-  Udp.begin(localPort);
+  Udp.begin(4550);
   Serial.println("connected.");
   
   AT_init(); //sends AT commands to Easylink API for initialising
@@ -111,10 +111,12 @@ void loop() {
     lastRemotePort = Udp.remotePort();
     
     // send a reply, to the IP address and port that sent us the packet we received
+
     Serial.println("Sending back to: ");  //Added on 18Dec 
     Serial.println(Udp.remoteIP());
     Serial.println(Udp.remotePort());
     Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
+
     Udp.write(ReplyBuffer);
     Udp.endPacket();
   }
