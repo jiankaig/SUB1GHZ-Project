@@ -127,9 +127,9 @@ void loop() {
     //Receive Mode - Ask EasyLink API to check radio
     Serial1.println("AT+RX");
     delay(1000); 
-
+    ret = Serial1.readString();
+    
       //trim unnecessary text
-//    ret = Serial1.readString();
 //    size_t strtPos = 10;
 //    size_t endPos = ret.indexOf("OK");    
 //    ret = ret.substring(strtPos, endPos); //trim "AT+RX RX: " and "OK"
