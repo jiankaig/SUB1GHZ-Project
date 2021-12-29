@@ -1,0 +1,234 @@
+<!DOCTYPE html><html><meta name= "viewport"    content="width=device-width, initial-scale=1" >
+<link rel="stylesheet"    href="{{ url_for('static',filename='css/w3.css') }}"   >
+<link rel="stylesheet" href="{{ url_for('static',filename='css/sidebar.css') }}">
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        td, th {
+            border: 1px solid #000000;
+            text-align: left;
+            padding: 8px;
+        }
+        .dot {
+              height: 25px;
+              width: 25px;
+              background-color: #FFA500;
+              border-radius: 50%;
+              display: inline-block;
+            }
+    </style>
+</head>
+<body> <!--  Start of body tag -->
+
+<div class="sidebar"  style="text-align:center"> <!-- SideBar tab-->
+    <h3 class="w3-bar-item" style="border-bottom: 2px solid black;text-align: center;">Product</h3>  <!--  Title of sideBar tab-->
+    <input  style="width:80%;" id="productBarcode"><button id="productScan">Send</button>
+    <div class="sidebar-footer">
+        <p id="udpDisplay"></p>
+    </div>
+</div>   <!--  End of SideBar tab -->
+
+<div class="content"  >              <!--  Contents beside the sidebar should be within this div-->
+
+<div class="w3-container w3-teal">                                   <!--  Header div line -->
+<h1 align=center><font>Pick To Light</font></h1>  <!--Header -->
+</div>                                                                    <!--  End of Header div-->
+
+<div class="w3-container"   >              <!--  Div for each device-->
+
+
+
+<h2 align=center id="productName"></h2>   <!--  Deivce header-->
+    <div id="product-part" style="text-align:center;display:none" >
+        <table id='product-partTable'>
+            <thead>
+                <tr>
+                    <th>Part ID</th>
+                    <th>Part Name</th>
+                    <th>Qty</th>
+                    <th>LED</th>
+                </tr>
+            </thead>
+            <tbody id="product-partTbody">
+            </tbody>
+        </table>
+                <button id="next" onclick="next()" style="float:right">Next</button>
+                <button id="retry" onclick="sendAgain()" disabled style="float:right">Retry</button>
+    </div>
+<br>
+     <!--  Submit button-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<h3>Command</h3>                                                      <!--  Command Header-->
+<input type="textarea" id="command"><br><br>                      <!--  Textarea-->
+<button onclick=commandFunction()> Submit </button>                   <!--  Submit button-->
+<hr style="height:2px;background-color:black "  >                      <!--  Line-->
+
+</div>                                                                <!--  End of Device 1 div-->
+                                           <!--  End of Content Div-->
+<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+
+<script type="text/javascript">                                                                            //  JavaScript-->
+
+    function commandFunction() {                                                                    //  commandFunction -->
+    var rgbValues = String(document.getElementById("command").value);                               //  Get inputs by user through the input ID-->
+    var id = rgbValues.slice(3,11)
+    id = parseInt(id)
+    alert(rgbValues);
+    $.ajax({                        //  Send over to flask
+    data : {
+              rgbValues:rgbValues,
+              deviceID: id
+            },
+    type : 'GET',
+    url : '/fullCmd'
+    })
+    }//  End of commandFunction-->
+
+    function hexToRgb(hex) {                                                                        //  Convert hex in color picker device 2 to rgb
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+
+    function sendAgain(){
+        var retryCommand = document.getElementById("retry").value
+        $.ajax({                        //  Send over to flask
+            url : '/retryCmd',
+            data : {
+              cmd :retryCommand
+            },
+            type : 'GET',
+            })
+    }
+
+    function next(){
+        if (confirm('Are you sure you want to skip?')) {
+            $.ajax({                        //  Send over to flask
+                url : '/nextCmd',
+                type : 'GET',
+                })
+        } else {
+            // Do nothing!
+        }
+
+    }
+
+
+    $(document).ready(function() {        // AJAX jquery
+     $("#productScan").click(function(){
+        var data = document.getElementById("productBarcode").value; //  Get barcode value
+
+        function getProduct(data) { //  AJAX function to get product Title
+          return $.ajax({
+            url: '/getProduct',
+            type : 'GET',
+            data : { product_ID: data } ,
+           });
+        };
+
+        function getParts(data) {   //  Ajax function to get part list based on product ID
+          return $.ajax({
+            url: '/getParts',
+            type : 'GET',
+            data : { product_ID: data } ,
+           });
+        };
+
+        async function test() { //  Async function so it will run in background
+          try {
+            const res = await getProduct(data); //  Await promise before continuing
+            if(res!="false"){   // barcode exists in the database
+                document.getElementById("productName").innerHTML = res;
+
+                const res2 = await getParts(data);  // Await promise for parts before continuing
+                const obj = JSON.parse(res2);
+
+                //  Create a table to display results
+
+                var tbody = document.getElementById("product-partTbody");
+                tbody.innerHTML = '';
+
+                document.getElementById('product-part').style.display=""
+
+                for(var i=0;i<Object.keys(obj).length;i++){
+                    console.log(obj[i])
+                    var tbodyRef = document.getElementById('product-part').getElementsByTagName('tbody')[0];
+                    var newRow = tbodyRef.insertRow();
+
+                    var cell1 = newRow.insertCell(0);
+                    var cell2 = newRow.insertCell(1);
+                    var cell3 = newRow.insertCell(2);
+                    var cell4 = newRow.insertCell(3);
+
+                    cell1.innerHTML = obj[i][0];
+                    cell2.innerHTML = obj[i][1];
+                    cell3.innerHTML = obj[i][2];
+                    cell4.innerHTML = "<span id='"+ obj[i][0]+"'class='dot'></span></td>"
+                }
+
+                //  End of creation of table
+
+            }else{
+                document.getElementById("productName").innerHTML = "Not available";
+                document.getElementById('product-part').style.display="none"
+            }
+          } catch(err) {
+            console.log(err);
+          }
+        }
+        test(); //  Call the async function
+     });
+  });
+    </script>
+         <script src="{{ url_for('static',filename='socket.io/socket.io.js') }}"></script>
+<script type="text/javascript">
+   // This for the socket to receive and append
+
+   console.log("http://" + document.domain + ":" + location.port + "/test");
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+// this is a callback that triggers when the "event" event is emitted by the server.
+
+        //  When received same cmd string with 1 at the back
+        socket.on('acknowledge', function(msg) {
+        console.log("Received message" + msg.data);
+        var data = msg.data
+        data = Number(data.slice(0,-1))
+        document.getElementById(data).style.backgroundColor="green"
+        document.getElementById('retry').disabled = true
+        //$('#'+data+'').append('<p>Received: ' + msg.data + '</p>');
+    });
+
+        //  When received same cmd string with 2 at the back
+        socket.on('buttonPressed', function(msg) {
+        console.log("Received message" + msg.data);
+        var data = msg.data
+        data = Number(data.slice(0,-1))
+        document.getElementById(data).style.backgroundColor="red"
+        //$('#udpDisplay').append('<p>Received: ' + msg.data + '</p>');
+    });
+
+        //  When received same cmd string with 4 at the back
+        socket.on('error', function(msg) {
+        console.log("Received message" + msg.data);
+        document.getElementById('retry').disabled = false
+        document.getElementById("retry").value = msg.data
+        $('#udpDisplay').append('<p>Received: Error ' + msg.data + '</p>');
+    });
+
+        // Random event for testing
+        socket.on('event', function(msg) {
+        console.log("Received message" + msg.data);
+        $('#udpDisplay').append('<p>Received: ' + msg.data + '</p>');
+    });
+</script>
+    </body>
