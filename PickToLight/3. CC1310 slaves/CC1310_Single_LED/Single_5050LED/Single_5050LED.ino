@@ -21,7 +21,7 @@ String txt = "";
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
-#define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
+#define RED 13     // pin 19 is always PWM capable according to LaunchPad standard
 #define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
@@ -71,9 +71,9 @@ void setup() {
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
- digitalWrite(RED, LOW);
- digitalWrite(GREEN, HIGH);
- digitalWrite(BLUE, HIGH);
+ digitalWrite(RED, HIGH);
+ digitalWrite(GREEN, LOW);
+ digitalWrite(BLUE, LOW);
   //Sub 1GHz setup..
   Serial.begin(9600);
   // begin defaults to EasyLink_Phy_50kbps2gfsk
