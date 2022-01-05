@@ -16,6 +16,9 @@
   2.0:  NIL
   2.1:  added simpleGuiPort parameter for sending feedback message to client 
         added return string cropping(line 133)
+  2.2: added preprocessor: DEBUG_MODE_SIM_GUI and DEBUG_MODE_PACKET_SENDER(default)
+       moved/corrected string cropping/trimming into condition
+       
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -23,7 +26,15 @@
 #include <SPI.h>
 #endif
 #include <WiFi.h>
+
+/////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
 //#define SHOW_UART1_RX
+//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
+
+#ifndef DEBUG_MODE_SIM_GUI
+#define DEBUG_MODE_PACKET_SENDER
+#endif
 
 // your network name also called SSID
 char ssid[] = "Sub1Ghz";
@@ -118,14 +129,21 @@ void loop() {
     Serial.println("Sending back to: ");  //Added on 18Dec 
     Serial.println(Udp.remoteIP());
     Serial.println(Udp.remotePort());
+    
+#ifdef DEBUG_MODE_SIM_GUI
+    Serial.println("DEBUG_MODE_SIM_GUI");
     Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
     Udp.write(ReplyBuffer);
     Udp.endPacket();
-
+#endif
+#ifdef DEBUG_MODE_PACKET_SENDER
+    Serial.println("DEBUG_MODE_PACKET_SENDER");
     //resend via lastRemotePort
     Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
     Udp.write(ReplyBuffer); 
     Udp.endPacket();
+#endif
+
   }
   else{
     //If not getting any UDP pacwwkets from application
@@ -134,28 +152,37 @@ void loop() {
     delay(1000); 
     ret = Serial1.readString();
     
-      //trim unnecessary text
-//    size_t strtPos = 10;
-//    size_t endPos = ret.indexOf("OK");    
-//    ret = ret.substring(strtPos, endPos); //trim "AT+RX RX: " and "OK"
-    
     //if ret not timeout, pass ret thru Udp...?
     if(ret.indexOf("Timeout") == -1){
       Serial.println(ret); //printout for debug on serial monitor
+      
+      //trim unnecessary text
+      size_t strtPos = 10; //trim "AT+RXRX: "
+      size_t endPos = ret.indexOf("OK");    
+      ret = ret.substring(strtPos, endPos); //trim "AT+RX RX: " and "OK"
+      
       if(lastRemoteIP || lastRemotePort)//is valid
       {
         Serial.println("no timeout, send back to last remote ip, port");
         Serial.print("lastRemoteIP: ");
         Serial.println(lastRemoteIP);
+//        memset(ret_char_array, 0, sizeof(ret_char_array)); // clear/empty ret_char_array
         strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
-        Udp.beginPacket(lastRemoteIP, simpleGuiPort); //lastRemoteIP, lastRemotePort
+
+#ifdef DEBUG_MODE_SIM_GUI
+        Serial.print("RET_MODE_SIM_GUI: ");
+        Serial.println(ret_char_array);
+        Udp.beginPacket(Udp.remoteIP(), simpleGuiPort); //lastRemoteIP, lastRemotePort
         Udp.write(ret_char_array); 
         Udp.endPacket();
-
+#endif
+#ifdef DEBUG_MODE_PACKET_SENDER
+        Serial.println("RET_MODE_PACKET_SENDER");
         //resend via lastRemotePort
         Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
         Udp.write(ret_char_array); 
         Udp.endPacket();
+#endif
       }
     }
       
@@ -181,7 +208,7 @@ void printWifiStatus() {
 }
 
 void AT_init(){
-  Serial.println("INITIALISING EasyLink AT API..");
+  Serial.println("INITIALISE EasyLink AT API");
   Serial1.println("AT+I 0001<CR>");
   Serial1.println("ATPRO=4000000<CR>");
 }
