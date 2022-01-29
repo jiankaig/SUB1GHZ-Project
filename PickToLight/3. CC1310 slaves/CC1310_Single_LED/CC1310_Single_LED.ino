@@ -119,14 +119,13 @@ void loop() {
     Serial.println(d); //value
     bReadDone = true;
     strValue = d;
-
+    
   } else {
-
-     Serial.println("Error receiving packet with status code: ");
-//    Serial.print(status);
-//      Serial.print(" (");
-//      Serial.print(myLink.getStatusString(status));
-//      Serial.println(")");
+//     Serial.println("Error receiving packet with status code: ");
+//     Serial.print(status);
+//     Serial.print(" (");
+//     Serial.print(myLink.getStatusString(status));
+//     Serial.println(")");
   }
 
  /* Start processing LED */
@@ -134,8 +133,8 @@ void loop() {
     bReadDone = false;
     int bLED_Command_Success;
     bLED_Command_Success = writeLEDfromStr(strValue);
-    if(bLED_Command_Success == 1)
-      sendStatus(strValue, '1'); // sendStatus(strValue, '0'); 0 if timeout???
+    delay(100); //slight delay, otherwise cc3200 cant seem to receive..
+    sendStatus(strValue, '1');
   }
 }
 
@@ -172,6 +171,7 @@ int writeLEDfromStr(String strValue)
 void sendStatus(String strValue, char status_) {
   char data[32]; //128
   String txt = strValue + status_;
+  
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  

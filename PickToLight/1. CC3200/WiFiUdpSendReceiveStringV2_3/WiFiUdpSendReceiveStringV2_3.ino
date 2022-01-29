@@ -18,7 +18,10 @@
         added return string cropping(line 133)
   2.2: added preprocessor: DEBUG_MODE_SIM_GUI and DEBUG_MODE_PACKET_SENDER(default)
        moved/corrected string cropping/trimming into condition
-       
+  2.3: - corrected return string trimming(remove entire "AT+TX..." from 
+         return string)
+       - added "AT+TX " prefix to the transmit command, i.e. client 
+         dont need to send message with "AT+TX"
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -28,6 +31,7 @@
 #include <WiFi.h>
 
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
+//#define DEBUG_
 //#define SHOW_UART1_RX
 //#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
@@ -120,7 +124,14 @@ void loop() {
     if (len > 0) packetBuffer[len] = 0;
     Serial.println("Contents:");
     Serial.println(packetBuffer);
-    Serial1.println(packetBuffer);
+    
+    char processed_pktBuf[30];
+    const char *TX_prefix = "AT+TX ";
+    const char *TX_msg = packetBuffer;
+    strcpy(processed_pktBuf,TX_prefix);
+    strcat(processed_pktBuf,TX_msg);
+    
+    Serial1.println(processed_pktBuf);
     
     lastRemoteIP = Udp.remoteIP();
     lastRemotePort = Udp.remotePort();
@@ -138,6 +149,10 @@ void loop() {
 #endif
 #ifdef DEBUG_MODE_PACKET_SENDER
     Serial.println("DEBUG_MODE_PACKET_SENDER");
+    Serial.print("ip: ");
+    Serial.println(lastRemoteIP);
+    Serial.print("port: ");
+    Serial.println(lastRemotePort);
     //resend via lastRemotePort
     Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
     Udp.write(ReplyBuffer); 
@@ -146,26 +161,42 @@ void loop() {
 
   }
   else{
-    //If not getting any UDP pacwwkets from application
-    //Receive Mode - Ask EasyLink API to check radio
+    //If not getting any UDP pacwwkets from application///////////////////////////////////////////
+    //Receive Mode - Ask EasyLink API to check radio//////////////////////////////////////////////
     Serial1.println("AT+RX");
     delay(1000); 
     ret = Serial1.readString();
     
     //if ret not timeout, pass ret thru Udp...?
     if(ret.indexOf("Timeout") == -1){
-      Serial.println(ret); //printout for debug on serial monitor
+#ifdef DEBUG_
+      Serial.print("FULL RETURN: ");
+      Serial.print(ret); //printout for debug on serial monitor
+      Serial.println("END of FULL RETURN: ");
+#endif
       
       //trim unnecessary text
-      size_t strtPos = 10; //trim "AT+RXRX: "
-      size_t endPos = ret.indexOf("OK");    
+      size_t strtPos = ret.indexOf("RX: ")+4;//trim "RX: " and entire "AT+TX..."(+4 is to offset)
+      size_t endPos = ret.indexOf("BB", strtPos)+3; //to trim away " OK"(+3 is to offset)
+#ifdef DEBUG_
+      Serial.print("strtPos, endPos: ");
+      Serial.print(strtPos);
+      Serial.print(",");
+      Serial.println(endPos); //printout for debug on serial monitor
+#endif
       ret = ret.substring(strtPos, endPos); //trim "AT+RX RX: " and "OK"
       
       if(lastRemoteIP || lastRemotePort)//is valid
       {
+#ifdef DEBUG_
         Serial.println("no timeout, send back to last remote ip, port");
         Serial.print("lastRemoteIP: ");
         Serial.println(lastRemoteIP);
+        Serial.print("lastRemotePort: ");
+        Serial.println(lastRemotePort);
+        Serial.print("ret: ");
+        Serial.println(ret);
+#endif
 //        memset(ret_char_array, 0, sizeof(ret_char_array)); // clear/empty ret_char_array
         strcpy(ret_char_array, ret.c_str()); //copy to char array for udp write
 
@@ -178,6 +209,12 @@ void loop() {
 #endif
 #ifdef DEBUG_MODE_PACKET_SENDER
         Serial.println("RET_MODE_PACKET_SENDER");
+#ifdef DEBUG_
+        Serial.print("ip: ");
+        Serial.println(lastRemoteIP);
+        Serial.print("port: ");
+        Serial.println(lastRemotePort);
+#endif
         //resend via lastRemotePort
         Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
         Udp.write(ret_char_array); 
