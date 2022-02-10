@@ -6,7 +6,7 @@ EasyLink_RxPacket rxPacket;
 #define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
 #define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
-#define buttonPin 11//PUSH1 // button pin PUSH1 //13
+
 #define delayTime 10 // delay between color changes, 10ms by default
 #define BOARDID "0002" //Change this number for the board ID
 
@@ -15,6 +15,9 @@ public:
     Led_Controller(EasyLink myLink);
     ~Led_Controller();
     void begin();
+    void reset_LED();
+    int writeLEDfromStr(String strValue);
+    
 private:    
     String BoardID = BOARDID; // change this according to desired device identification
     int redVal;

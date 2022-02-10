@@ -1,5 +1,5 @@
 /*
- Test_RGBPWM_v2 : CC10 Slave device application for single 5050 LED
+ CC1310_Single_LED : CC1310 Slave device application for single 5050 LED
 
  This program receives command from master CC10 device via EasyLink API. 
  Inteprets command into an input string for further processing of device ID
@@ -13,6 +13,7 @@
 #include "Led_Controller.h"
 #include "Button_Controller.h"
 #include "EasyLink.h"
+//const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 EasyLink myLink;
 Led_Controller LedHandler = Led_Controller(myLink);
 Button_Controller ButtonHandler = Button_Controller(myLink);
@@ -27,8 +28,7 @@ void setup() {
  // same pin in the same sketch.
  //INTIALISE as Red first //ALL TO HIGH, no colour
 
- pinMode(buttonPin, INPUT_PULLUP);  //Input as pullup
- attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
+ 
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
@@ -43,6 +43,11 @@ void setup() {
 
   // Set the destination address to 0xaa
   txPacket.dstAddr[0] = 0xaa;
+
+  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
+  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(150);
+  // Turn the receiver on immediately
+  rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
 }
 
 
@@ -51,13 +56,9 @@ void setup() {
 void loop() {
   
   ButtonHandler.UpdateButtonState();
-  
-  
-  // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
-  rxPacket.rxTimeout = EasyLink_ms_To_RadioTime(150);
-  // Turn the receiver on immediately
-  rxPacket.absTime = EasyLink_ms_To_RadioTime(0);
-  
+
+
+  //EasyLink check receive, Serial printout, update bReadDone and store to strValue
   EasyLink_Status status = myLink.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
@@ -78,45 +79,14 @@ void loop() {
 //      Serial.print(myLink.getStatusString(status));
 //      Serial.println(")");
   }
+//END of EasyLink check receive, Serial printout, update bReadDone and store to strValue
 
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
     int bLED_Command_Success;
-    bLED_Command_Success = writeLEDfromStr(strValue);
+    bLED_Command_Success = LedHandler.writeLEDfromStr(strValue);
     if(bLED_Command_Success == 1)
       sendStatus(strValue, '1'); // sendStatus(strValue, '0'); 0 if timeout???
   }
 }
-
-void reset_LED()
-{
-  digitalWrite(RED, HIGH);
-  digitalWrite(GREEN, HIGH);
-  digitalWrite(BLUE, HIGH);
-}
-
-int writeLEDfromStr(String strValue)
-{
-    String IdCode, redCode, greenCode, blueCode;
-    //split substring into RGB if relevant
-    // assumes that command is : AAX00010R000G255B000BB
-    IdCode = strValue.substring(3,7); //0001
-    redCode = strValue.substring(9,12); 
-    greenCode = strValue.substring(13,16);
-    blueCode = strValue.substring(17,20);
-//    strValue = "";
-    
-    //if ID matches this board ID, process LED\
-    //change LED colour based on command sent
-    if(IdCode == BoardID){
-      //analogWrite( RED, redInt );
-      analogWrite( RED, 255-redCode.toInt() );
-      analogWrite( GREEN, 255-greenCode.toInt() );
-      analogWrite( BLUE, 255-blueCode.toInt() );
-      return 1;//success
-    }
-    return -1;//error BoardID mismatch
-}
-
-

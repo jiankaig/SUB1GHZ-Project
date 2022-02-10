@@ -1,5 +1,6 @@
 #include "EasyLink.h"
 EasyLink_TxPacket txPacket;
+#define buttonPin 11//PUSH1 // button pin PUSH1 //13
 
 class Button_Controller{
 
@@ -22,5 +23,6 @@ private:
     long debounceDelay = 50;
     bool state_Send = false;
     char d[32]; //128
-};
 
+    EasyLink _myLink;
+};
