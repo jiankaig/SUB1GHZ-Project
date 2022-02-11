@@ -1,7 +1,7 @@
 /*
  CC1310_Single_LED : CC1310 Slave device application for single 5050 LED
 
- This program receives command from master CC10 device via EasyLink API. 
+ This program receives command from master CC1310 device via EasyLink API. 
  Inteprets command into an input string for further processing of device ID
  and RGB values. 
 
@@ -13,10 +13,12 @@
 #include "Led_Controller.h"
 #include "Button_Controller.h"
 #include "EasyLink.h"
-//const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 EasyLink myLink;
-Led_Controller LedHandler = Led_Controller(myLink);
-Button_Controller ButtonHandler = Button_Controller(myLink);
+EasyLink_TxPacket txPacket;
+EasyLink_RxPacket rxPacket;
+
+Led_Controller LedHandler = Led_Controller(myLink, rxPacket);
+Button_Controller ButtonHandler = Button_Controller(myLink, txPacket);
 
 char data_[32]; //128
 /* This is our setup function. We want to set our LED pins as OUTPUT.
@@ -89,4 +91,26 @@ void loop() {
     if(bLED_Command_Success == 1)
       sendStatus(strValue, '1'); // sendStatus(strValue, '0'); 0 if timeout???
   }
+}
+
+void sendStatus(String strValue, char status_) {
+  char data[32]; //128
+  String txt = strValue + status_;
+  txt.toCharArray(data, sizeof(data));
+  memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
+ 
+  txPacket.len = sizeof(data); // Set the length of the packet
+  txPacket.absTime = EasyLink_ms_To_RadioTime(0); // Transmit immediately
+
+  EasyLink_Status status = _myLink.transmit(&txPacket); //check trasmit status
+
+  if (status == EasyLink_Status_Success) {
+    Serial.print("TX: ");
+    Serial.println(data);
+    //digitalWrite(buttonPin, LOW);
+  }
+  else {
+    Serial.print("TX Error code: ");
+  }
+//  delay(1000);
 }
