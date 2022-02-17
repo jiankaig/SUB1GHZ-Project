@@ -1,4 +1,7 @@
-#include "EasyLink.h"
+#include <String>
+#include <String.h>
+#include <WString.h>
+#include <Arduino.h>
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
 #define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
@@ -10,8 +13,6 @@
 
 class Led_Controller{
 public:
-    Led_Controller(EasyLink myLink, EasyLink_RxPacket rxPacket);
-    ~Led_Controller();
     void begin();
     void reset_LED();
     int writeLEDfromStr(String strValue);

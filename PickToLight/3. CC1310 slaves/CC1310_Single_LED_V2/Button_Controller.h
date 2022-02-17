@@ -1,14 +1,17 @@
-#include "EasyLink.h"
+#include <String>
+#include <String.h>
+#include <WString.h>
+#include <Arduino.h>
+#define byte uint8_t
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 
 class Button_Controller{
 
 public:
-    Button_Controller(EasyLink myLink, EasyLink_TxPacket txPacket);
-    ~Button_Controller();
+    Button_Controller();
     void begin();
     void blink();
-    void UpdateButtonState();
+    bool UpdateButtonState();
     
 private:
     String txt = "";
@@ -22,7 +25,5 @@ private:
     long debounceDelay = 50;
     bool state_Send = false;
     char d[32]; //128
-
-    EasyLink _myLink;
-    EasyLink_TxPacket _txPacket;
+    
 };
