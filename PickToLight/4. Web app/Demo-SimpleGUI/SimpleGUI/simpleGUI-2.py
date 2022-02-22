@@ -8,7 +8,8 @@ import socket
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
-ip_Addr = '192.168.1.16'  # Must set ip of PC
+ip_Addr = '192.168.18.12' #'192.168.1.16'  # Must set ip of PC
+
 port = 4550  # Same port declare in cc3200 UDP receiver
 opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address = (ip_Addr, port)
