@@ -23,7 +23,11 @@
          return string)
        - added "AT+TX " prefix to the transmit command, i.e. client 
          dont need to send message with "AT+TX"
-  2,4: - implemented state machine to replace if else situation of transmitting/receiving
+  2.4: - implemented state machine to replace if else situation of transmitting/receiving
+       - added new condition for led command length
+       - added new condition to stop listening to easylink after 5 timeouts
+       - minor changes to debugging msg via serial print
+       - serial1 set Timeout(deafult is 1sec)
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -65,12 +69,17 @@ char  ret_char_array[32] = "";       // a string to send back
 #define STATE_FEEDBACK_UDP 3 // when not timeout
 int programState = STATE_CHECK_UDP;
 int STATE_CHECK_EASYLINK_count = 0;
+#define LED_COMMAND_LENGTH 22
+#define TIMEOUT_MS 200 //1000
+#define STR_TIMEOUT_25MHZ "800000" //"4000000"
+
 void setup() {
   
   //Initialize serial and wait for port to open:
   Serial.begin(9600);
   Serial1.begin(115200);
-
+  Serial1.setTimeout(TIMEOUT_MS);
+  
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to Network named: ");
   // print the network name (SSID);
@@ -116,15 +125,17 @@ void loop() {
   }
 #endif
  int packetSize;
+ 
  switch(programState){
    case STATE_CHECK_UDP:
     // if there's data available, read a packet
-#ifdef DEBUG_
-    Serial.println("STATE_CHECK_UDP");
-#endif
+//#ifdef DEBUG_
+//    Serial.println("STATE_CHECK_UDP");
+//#endif
     packetSize = Udp.parsePacket();
     if (packetSize)
     {
+      Serial.print("\n");
       Serial.print("Received packet of size ");
       Serial.println(packetSize);
       Serial.print("From ");
@@ -169,10 +180,17 @@ void loop() {
       Serial.println(lastRemotePort);
       //resend via lastRemotePort
       Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
-  //    Udp.write(ReplyBuffer); 
+      Udp.write(ReplyBuffer); 
       Udp.endPacket();
 #endif
-    programState = STATE_CHECK_EASYLINK;
+    if(packetSize == LED_COMMAND_LENGTH){
+      programState = STATE_CHECK_EASYLINK;
+    }
+    else{
+      Serial.print("invalid led command, length is ");
+      Serial.print(packetSize);
+      Serial.println("instead of 22..");
+    }
   }
    break;
    case STATE_CHECK_EASYLINK:
@@ -183,7 +201,7 @@ void loop() {
 #endif
     STATE_CHECK_EASYLINK_count += 1;
     Serial1.println("AT+RX");
-    delay(1000); 
+    delay(TIMEOUT_MS); 
     ret = Serial1.readString();
     
     //if ret not timeout, pass ret thru Udp...?
@@ -191,10 +209,10 @@ void loop() {
       programState = STATE_FEEDBACK_UDP;
     }
     if(STATE_CHECK_EASYLINK_count > 5){
-#ifdef DEBUG_
+//#ifdef DEBUG_
       Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
       Serial.println("do not to share common power source for master and slave nodes!");
-#endif
+//#endif
       STATE_CHECK_EASYLINK_count = 0;
       programState = STATE_CHECK_UDP;
     }
@@ -252,6 +270,7 @@ void loop() {
         Udp.write(ret_char_array); 
         Udp.endPacket();
 #endif
+      Udp.flush(); //not really flushing/doing much
       programState = STATE_CHECK_UDP;
       }
    break;
@@ -283,5 +302,8 @@ void printWifiStatus() {
 void AT_init(){
   Serial.println("INITIALISE EasyLink AT API");
   Serial1.println("AT+I 0001<CR>");
-  Serial1.println("ATPRO=4000000<CR>");
+  Serial1.print("ATPRO=");
+  Serial1.print(STR_TIMEOUT_25MHZ); //"4000000"
+  Serial1.println("<CR>");
+//  Serial1.println("ATPRO=4000000<CR>");
 }
