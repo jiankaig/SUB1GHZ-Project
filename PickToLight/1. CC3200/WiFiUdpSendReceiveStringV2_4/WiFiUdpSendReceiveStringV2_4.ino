@@ -33,9 +33,9 @@
 #include <WiFi.h>
 
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
-//#define DEBUG_
+#define DEBUG_
 //#define SHOW_UART1_RX
-//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
 
 #ifndef DEBUG_MODE_SIM_GUI
@@ -46,8 +46,8 @@
 char ssid[] = "Sub1Ghz";
 char password[] = "Seems12345";
 
-unsigned int localPort = 2390;      // local port to listen on //Packet Sender
-unsigned int simpleGuiPort = 4550;      // server port to send back to
+unsigned int localPort = 55056;//2390;      // local port to listen on //Packet Sender
+unsigned int simpleGuiPort = 55007; //4550;      // server port to send back to
 
 char packetBuffer[255]; //buffer to hold incoming packet
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
@@ -64,7 +64,7 @@ char  ret_char_array[32] = "";       // a string to send back
 #define STATE_CHECK_EASYLINK 2
 #define STATE_FEEDBACK_UDP 3 // when not timeout
 int programState = STATE_CHECK_UDP;
-
+int STATE_CHECK_EASYLINK_count = 0;
 void setup() {
   
   //Initialize serial and wait for port to open:
@@ -119,6 +119,9 @@ void loop() {
  switch(programState){
    case STATE_CHECK_UDP:
     // if there's data available, read a packet
+#ifdef DEBUG_
+    Serial.println("STATE_CHECK_UDP");
+#endif
     packetSize = Udp.parsePacket();
     if (packetSize)
     {
@@ -148,15 +151,15 @@ void loop() {
       lastRemotePort = Udp.remotePort();
       
       // send a reply, to the IP address and port that sent us the packet we received
-      Serial.println("Sending back to: ");  //Added on 18Dec 
+      Serial.println("last remote ip & port: ");  //Added on 18Dec 
       Serial.println(Udp.remoteIP());
       Serial.println(Udp.remotePort());
       
 #ifdef DEBUG_MODE_SIM_GUI
       Serial.println("DEBUG_MODE_SIM_GUI");
-      Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
-      Udp.write(ReplyBuffer);
-      Udp.endPacket();
+//      Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
+//      Udp.write(ReplyBuffer);
+//      Udp.endPacket();
 #endif
 #ifdef DEBUG_MODE_PACKET_SENDER
       Serial.println("DEBUG_MODE_PACKET_SENDER");
@@ -166,7 +169,7 @@ void loop() {
       Serial.println(lastRemotePort);
       //resend via lastRemotePort
       Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
-      Udp.write(ReplyBuffer); 
+  //    Udp.write(ReplyBuffer); 
       Udp.endPacket();
 #endif
     programState = STATE_CHECK_EASYLINK;
@@ -175,6 +178,10 @@ void loop() {
    case STATE_CHECK_EASYLINK:
     //If not getting any UDP pacwwkets from application///////////////////////////////////////////
     //Receive Mode - Ask EasyLink API to check radio//////////////////////////////////////////////
+#ifdef DEBUG_
+    Serial.println("STATE_CHECK_EASYLINK");
+#endif
+    STATE_CHECK_EASYLINK_count += 1;
     Serial1.println("AT+RX");
     delay(1000); 
     ret = Serial1.readString();
@@ -183,9 +190,15 @@ void loop() {
     if(ret.indexOf("Timeout") == -1){
       programState = STATE_FEEDBACK_UDP;
     }
+    if(STATE_CHECK_EASYLINK_count > 5){
+      Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
+      STATE_CHECK_EASYLINK_count = 0;
+      programState = STATE_CHECK_UDP;
+    }
    break;
    case STATE_FEEDBACK_UDP:
 #ifdef DEBUG_
+      Serial.println("STATE_FEEDBACK_UDP");
       Serial.print("FULL RETURN: ");
       Serial.print(ret); //printout for debug on serial monitor
       Serial.println("END of FULL RETURN: ");
