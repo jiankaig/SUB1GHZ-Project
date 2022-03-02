@@ -33,7 +33,7 @@
 #include <WiFi.h>
 
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
-#define DEBUG_
+//#define DEBUG_
 //#define SHOW_UART1_RX
 #define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
@@ -191,7 +191,10 @@ void loop() {
       programState = STATE_FEEDBACK_UDP;
     }
     if(STATE_CHECK_EASYLINK_count > 5){
+#ifdef DEBUG_
       Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
+      Serial.println("do not to share common power source for master and slave nodes!");
+#endif
       STATE_CHECK_EASYLINK_count = 0;
       programState = STATE_CHECK_UDP;
     }
