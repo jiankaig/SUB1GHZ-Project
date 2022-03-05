@@ -41,6 +41,8 @@ void setup() {
   Serial.begin(9600);
   easylinkHandler.begin();
 
+  //button handler intterupt setting
+  attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
 }
 
 
@@ -65,4 +67,9 @@ void loop() {
     if(bLED_Command_Success == 1)
       easylinkHandler.sendStatusWithFeedback(strValue, '1'); // sendStatus(strValue, '0'); 0 if timeout???
   }
+}
+
+void blink() {
+//  state = !state;
+  ButtonHandler.blink();
 }
