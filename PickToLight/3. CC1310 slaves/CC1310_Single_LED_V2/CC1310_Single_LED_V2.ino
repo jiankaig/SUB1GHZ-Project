@@ -14,6 +14,8 @@
 #include "Button_Controller.h"
 #include "EasyLink_Controller.h"
 
+#define BOARDID "0003" // change this according to desired device identification
+
 Led_Controller LedHandler = Led_Controller();
 Button_Controller ButtonHandler = Button_Controller();
 EasyLink_Controller easylinkHandler = EasyLink_Controller();
@@ -43,6 +45,9 @@ void setup() {
 
   //button handler intterupt setting
   attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
+
+  //set board id
+  LedHandler.setBoardId(BOARDID);
 }
 
 

@@ -9,16 +9,16 @@
 #define BLUE 12 // may need to change this for your LaunchPad
 
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0002" //Change this number for the board ID
 
 class Led_Controller{
 public:
     void begin();
     void reset_LED();
     int writeLEDfromStr(String strValue);
+    void setBoardId(String boardid);
     
 private:    
-    String BoardID = BOARDID; // change this according to desired device identification
+    String BoardID;
     int redVal;
     int greenVal;
     int blueVal;

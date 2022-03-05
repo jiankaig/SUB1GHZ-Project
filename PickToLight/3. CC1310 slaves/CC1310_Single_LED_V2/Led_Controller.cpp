@@ -29,3 +29,6 @@ int Led_Controller::writeLEDfromStr(String strValue)
     }
     return -1;//error BoardID mismatch
 }
+void Led_Controller::setBoardId(String boardid){
+  BoardID = boardid;
+}
