@@ -131,10 +131,11 @@ void loop() {
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
-    int bLED_Command_Success;
+    int bLED_Command_Success=0;
     bLED_Command_Success = writeLEDfromStr(strValue);
     delay(100); //slight delay, otherwise cc3200 cant seem to receive..
-    sendStatus(strValue, '1');
+    if(bLED_Command_Success ==1)
+      sendStatus(strValue, '1');
   }
 }
 
