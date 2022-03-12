@@ -111,6 +111,9 @@ void loop() {
   
   if (status == EasyLink_Status_Success) {
     //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
+    memset(d, 0, sizeof(d)); // to clear?
+    Serial.print("d check clear: ");
+    Serial.println(d);
     memcpy(&d, &rxPacket.payload, sizeof(d));
     Serial.print("Packet received with lenght ");
     Serial.print(rxPacket.len);
@@ -118,6 +121,10 @@ void loop() {
     
     Serial.println(d); //value
     bReadDone = true;
+    Serial.print("strValue = d: ");
+    Serial.print(strValue);
+    Serial.print(" = ");
+    Serial.println(d);
     strValue = d;
     
   } else {
@@ -134,7 +141,14 @@ void loop() {
     int bLED_Command_Success;
     bLED_Command_Success = writeLEDfromStr(strValue);
     delay(100); //slight delay, otherwise cc3200 cant seem to receive..
+<<<<<<< Updated upstream
     sendStatus(strValue, '1');
+=======
+    if(bLED_Command_Success ==1)
+      sendStatus(strValue, '1');
+    else
+      Serial.println("error led command failure");
+>>>>>>> Stashed changes
   }
 }
 
@@ -154,7 +168,7 @@ int writeLEDfromStr(String strValue)
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
-//    strValue = "";
+    strValue = ""; //clear?
     
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
@@ -181,6 +195,8 @@ void sendStatus(String strValue, char status_) {
   EasyLink_Status status = myLink.transmit(&txPacket); //check trasmit status
 
   if (status == EasyLink_Status_Success) {
+    Serial.print("strValue:");
+    Serial.println(strValue);
     Serial.print("TX: ");
     Serial.println(data);
     //digitalWrite(buttonPin, LOW);
