@@ -17,7 +17,7 @@ EasyLink_RxPacket rxPacket;
 EasyLink_TxPacket txPacket;
 EasyLink myLink;
 String txt = "";
-
+//#define DEBUG
 
 // Let's use #define to rename our pins from numbers to readable variables
 // This is good practice when writing code so it is less confusing to read
@@ -45,6 +45,8 @@ String greenCode;
 String blueCode;
 String strValue = "";
 bool bReadDone = false;
+int bLED_Command_Success=0;
+#define LED_COMMAND_LENGTH 22
 
 //const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 uint16_t value;
@@ -111,20 +113,32 @@ void loop() {
   
   if (status == EasyLink_Status_Success) {
     //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
-    memset(d, 0, sizeof(d)); // to clear?
-    Serial.print("d check clear: ");
+#ifdef DEBUG    
+    Serial.print("strValue: ");
+    Serial.print(strValue);
+    Serial.print("\t");
+    Serial.print("d1 check clear: ");
     Serial.println(d);
+#endif
+    memset(d, 0, sizeof(d)); // to clear?
+#ifdef DEBUG    
+    Serial.print("d2 check clear: ");
+    Serial.println(d);
+#endif
     memcpy(&d, &rxPacket.payload, sizeof(d));
+    memset(&rxPacket.payload, 0, sizeof(rxPacket.payload));
     Serial.print("Packet received with lenght ");
     Serial.print(rxPacket.len);
     Serial.print(" and value ");
-    
     Serial.println(d); //value
+//    Serial.println((char*)rxPacket.payload); //value
     bReadDone = true;
+#ifdef DEBUG
     Serial.print("strValue = d: ");
     Serial.print(strValue);
     Serial.print(" = ");
     Serial.println(d);
+#endif
     strValue = d;
     
   } else {
@@ -138,17 +152,18 @@ void loop() {
  /* Start processing LED */
   if (bReadDone){
     bReadDone = false;
-    int bLED_Command_Success;
     bLED_Command_Success = writeLEDfromStr(strValue);
     delay(100); //slight delay, otherwise cc3200 cant seem to receive..
-<<<<<<< Updated upstream
-    sendStatus(strValue, '1');
-=======
-    if(bLED_Command_Success ==1)
+    if(bLED_Command_Success ==1){
+      bLED_Command_Success=0;
       sendStatus(strValue, '1');
+    }
+      
+//#ifdef DEBUG
     else
       Serial.println("error led command failure");
->>>>>>> Stashed changes
+//#endif
+    strValue = "";  
   }
 }
 
@@ -168,24 +183,24 @@ int writeLEDfromStr(String strValue)
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
-    strValue = ""; //clear?
     
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
-    if(IdCode == BoardID){
+    if(IdCode == BoardID && strValue.length() == LED_COMMAND_LENGTH){
       //analogWrite( RED, redInt );
       analogWrite( RED, 255-redCode.toInt() );
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
       return 1;//success
     }
-    return -1;//error BoardID mismatch
+    return 4;//error BoardID mismatch
 }
 
 void sendStatus(String strValue, char status_) {
   char data[32]; //128
   String txt = strValue + status_;
   
+  memset(data, 0, sizeof(data)); // to clear?
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
