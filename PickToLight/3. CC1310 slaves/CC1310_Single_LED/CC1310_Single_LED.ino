@@ -1,5 +1,5 @@
 /*
- Test_RGBPWM_v2 : CC10 Slave device application for single 5050 LED
+ CC1310_Single_LED : CC1310 Slave device application for single 5050 LED
 
  This program receives command from master CC10 device via EasyLink API. 
  Inteprets command into an input string for further processing of device ID
@@ -16,29 +16,22 @@
 EasyLink_RxPacket rxPacket;
 EasyLink_TxPacket txPacket;
 EasyLink myLink;
-String txt = "";
 //#define DEBUG
 
-// Let's use #define to rename our pins from numbers to readable variables
-// This is good practice when writing code so it is less confusing to read
+/******************Configurations***********************************************/
 #define RED 13 // pin 19 is always PWM capable according to LaunchPad standard
 #define GREEN 19 // may need to change this for your LaunchPad
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0002" //Change this number for the board ID
+#define BOARDID "0003" //Change this number for the board ID
 
-String BoardID = BOARDID; // change this according to desired device identification
-
-// Here we can introduce some global variables. These variables have a type
-// (int) and a name. We can use the variables in any function that comes after
-// Global variables are useful because we can save the state of a variable to
-// use in later operations and functions.
+/******************Global Variables*********************************************/
+String BoardID = BOARDID; // desired device identification
+String txt = "";
 int redVal;
 int greenVal;
 int blueVal;
-
-//RGD LED Command syntax as follows: XXXXRXXXGXXXB AAX00010R000G255B000BB
 String IdCode;
 String redCode;
 String greenCode;
@@ -47,9 +40,8 @@ String strValue = "";
 bool bReadDone = false;
 int bLED_Command_Success=0;
 #define LED_COMMAND_LENGTH 22
-
-//const byte buttonPin = 11;// PUSH2; Number of pushbutton pin
 uint16_t value;
+char buf[32]; //128
 
 //For Button and debounce variables
 volatile byte buttonState = LOW;
@@ -58,16 +50,11 @@ long lastDebounceTime = 0;
 long debounceDelay = 50;
 volatile byte state = HIGH;
 bool state_Send = false;
-char d[32]; //128
-/* This is our setup function. We want to set our LED pins as OUTPUT.
- * We can also set them to HIGH at the beginning.
- */
-void setup() {
- // We don't have to use pinMode() when using analogWrite() but it doesn't
- // hurt to use it, especially if we want to call digitalWrite() for the
- // same pin in the same sketch.
- //INTIALISE as Red first //ALL TO HIGH, no colour
 
+/****************** Setup ***********************************************/
+void setup() {
+ //INTIALISE as Red first..
+ //if ALL SET TO HIGH, no colour
  pinMode(buttonPin, INPUT_PULLUP);  //Input as pullup
  attachInterrupt(digitalPinToInterrupt(buttonPin), blink, CHANGE);
  pinMode(RED, OUTPUT);
@@ -86,14 +73,7 @@ void setup() {
   txPacket.dstAddr[0] = 0xaa;
 }
 
-//interurpt state change 
-void blink() {
-  state = !state;
-}
-/* In the loop function we will...
- */
-
-//String d = "";
+/****************** Loop ***********************************************/
 void loop() {
   //buttonState = digitalRead(buttonPin);  //read ack
   if(state == LOW)
@@ -112,41 +92,35 @@ void loop() {
   EasyLink_Status status = myLink.receive(&rxPacket);
   
   if (status == EasyLink_Status_Success) {
-    //memcpy(&value, &rxPacket.payload, sizeof(uint16_t));
 #ifdef DEBUG    
     Serial.print("strValue: ");
     Serial.print(strValue);
     Serial.print("\t");
     Serial.print("d1 check clear: ");
-    Serial.println(d);
+    Serial.println(buf);
+#else
+    delay(100); //slight delay, otherwise cc3200 cant seem to receive..
 #endif
-    memset(d, 0, sizeof(d)); // to clear?
+    memset(buf, 0, sizeof(buf)); // to clear buffer
 #ifdef DEBUG    
     Serial.print("d2 check clear: ");
-    Serial.println(d);
+    Serial.println(buf);
 #endif
-    memcpy(&d, &rxPacket.payload, sizeof(d));
+    memcpy(&buf, &rxPacket.payload, sizeof(buf));
     memset(&rxPacket.payload, 0, sizeof(rxPacket.payload));
     Serial.print("Packet received with lenght ");
     Serial.print(rxPacket.len);
     Serial.print(" and value ");
-    Serial.println(d); //value
-//    Serial.println((char*)rxPacket.payload); //value
+    Serial.println((char*)rxPacket.payload); //value
     bReadDone = true;
 #ifdef DEBUG
-    Serial.print("strValue = d: ");
+    Serial.print("strValue = buf: ");
     Serial.print(strValue);
     Serial.print(" = ");
-    Serial.println(d);
+    Serial.println(buf);
 #endif
-    strValue = d;
+    strValue = buf;
     
-  } else {
-//     Serial.println("Error receiving packet with status code: ");
-//     Serial.print(status);
-//     Serial.print(" (");
-//     Serial.print(myLink.getStatusString(status));
-//     Serial.println(")");
   }
 
  /* Start processing LED */
@@ -193,14 +167,13 @@ int writeLEDfromStr(String strValue)
       analogWrite( BLUE, 255-blueCode.toInt() );
       return 1;//success
     }
-    return 4;//error BoardID mismatch
+    return -1;//error BoardID mismatch
 }
 
 void sendStatus(String strValue, char status_) {
   char data[32]; //128
   String txt = strValue + status_;
   
-  memset(data, 0, sizeof(data)); // to clear?
   txt.toCharArray(data, sizeof(data));
   memcpy(&txPacket.payload, &data, sizeof(data)); // Copy the String value into the txPacket payload
  
@@ -213,11 +186,14 @@ void sendStatus(String strValue, char status_) {
     Serial.print("strValue:");
     Serial.println(strValue);
     Serial.print("TX: ");
-    Serial.println(data);
-    //digitalWrite(buttonPin, LOW);
+    Serial.println((char*)txPacket.payload); // same as data
   }
   else {
     Serial.print("TX Error code: ");
   }
-//  delay(1000);
+}
+
+//interurpt state change 
+void blink() {
+  state = !state;
 }
