@@ -25,6 +25,7 @@ void EasyLink_Controller::begin(){
 bool EasyLink_Controller::receive(char (&data)[32]){
   //EasyLink check receive, Serial printout, update bReadDone and store to strValue
   EasyLink_Status status = _myLink.receive(&_rxPacket);
+  memset(data, 0, sizeof(data));
   
   if (status == EasyLink_Status_Success) {
     memcpy(&data, &_rxPacket.payload, sizeof(data));
