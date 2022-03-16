@@ -44,12 +44,8 @@ uint16_t value;
 char buf[32]; //128
 
 //For Button and debounce variables
-volatile byte buttonState = LOW;
-int lastButtonState = LOW;
-long lastDebounceTime = 0;
-long debounceDelay = 50;
 volatile byte state = HIGH;
-bool state_Send = false;
+bool bFeedbackEnable = false;
 
 /****************** Setup ***********************************************/
 void setup() {
@@ -75,13 +71,16 @@ void setup() {
 
 /****************** Loop ***********************************************/
 void loop() {
-  //buttonState = digitalRead(buttonPin);  //read ack
   if(state == LOW)
   {
-    //rxPacket.absTime = EasyLink_ms_To_RadioTime(1);
+    Serial.println("button..");
     reset_LED();
-    sendStatus(strValue, '2');
-    buttonState = HIGH;
+    if(bFeedbackEnable){
+      bFeedbackEnable = false;
+      sendStatus(strValue, '2');
+      strValue = "";
+    }
+    state = !state;
   }
   
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
@@ -131,10 +130,11 @@ void loop() {
     if(bLED_Command_Success ==1){
       bLED_Command_Success=0;
       sendStatus(strValue, '1');
+      bFeedbackEnable = true;
     }
     else
       Serial.println("error: invalid led command");
-    strValue = "";  
+//    strValue = "";  //if clear then button feedback wont know
   }
 }
 
@@ -192,5 +192,6 @@ void sendStatus(String strValue, char status_) {
 
 //interurpt state change 
 void blink() {
+  Serial.println("blink!");
   state = !state;
 }
