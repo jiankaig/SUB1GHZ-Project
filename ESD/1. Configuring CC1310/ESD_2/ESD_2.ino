@@ -45,24 +45,28 @@ void detectStatus() {
   Serial.println(P1);
   Serial.print("P2: ");
   Serial.println(P2);
-  Serial.println(); 
 
   if (P1 == 1 && P2 >= p_value) {
     stat = "1"; // PASS
+    Serial.println("PASS"); 
   }
   if (P1 >= p_value && P2 == 1) {
     stat = "2"; // NO CONNECT
+    Serial.println("NO CONNECT"); 
   }
   if (P2 > 20 && P1 >= p_value) {
     stat = "3"; // FAIL
+    Serial.println("FAIL"); 
   }
   if (P1 < off_value && P2 < off_value) {
     stat = "4"; // POWER OFF
+    Serial.println("POWER OFF"); 
   }
 }
 
 void sendStatus() {
   if (prevStat != stat) {
+    Serial.println("SEND STATUS!");
     value = tagName + stat;
     char d[128];                              // declare string 
     value.toCharArray(d, sizeof(d));
