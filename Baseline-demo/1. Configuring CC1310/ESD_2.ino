@@ -7,8 +7,13 @@ const int threshold = 250;
 int P1 = 0;
 int P2 = 0;
 
+<<<<<<< Updated upstream:Baseline-demo/1. Configuring CC1310/ESD_2.ino
 const int p_value = 51;
 const int off_value = 3;
+=======
+const int p_value = 25;//47;
+const int off_value = 5;
+>>>>>>> Stashed changes:ESD/1. Configuring CC1310/ESD_2/ESD_2.ino
 
 String stat;
 String prevStat;
@@ -35,8 +40,13 @@ void loop() {
 void detectStatus() {
   for (byte i = 0; i < 50; i++) {
     P1 = P1 + analogRead(A0);
+<<<<<<< Updated upstream:Baseline-demo/1. Configuring CC1310/ESD_2.ino
     P2 = P2 + analogRead(A1);
     delay(50);
+=======
+    P2 = P2 + analogRead(A1);                   
+    delay(40); //50 ms delay
+>>>>>>> Stashed changes:ESD/1. Configuring CC1310/ESD_2/ESD_2.ino
   }
 
   P1 = P1 / 1000;
@@ -47,6 +57,7 @@ void detectStatus() {
   Serial.println(P2);
   Serial.println();
 
+<<<<<<< Updated upstream:Baseline-demo/1. Configuring CC1310/ESD_2.ino
   if (P1 == 1 && P2 == p_value) {
     stat = "1"; // PASS
   }
@@ -55,9 +66,19 @@ void detectStatus() {
   }
   if (P2 > 20 && P1 == p_value) {
     stat = "3"; // FAIL
+=======
+  if (P1 == 1 && P2 >= p_value) {
+    stat = "1"; // PASS 1 ; You are safe
+  }
+//  if (P1 >= p_value && P2 == 1) {
+//    stat = "2"; // NO CONNECT 2 Please connect the ESD cable
+//  }
+  if (P1==51 && P2==51){ //(P2 > 20 && P1 >= p_value) {
+    stat = "3"; // FAIL 2 Please connect and wear the ESD band
+>>>>>>> Stashed changes:ESD/1. Configuring CC1310/ESD_2/ESD_2.ino
   }
   if (P1 < off_value && P2 < off_value) {
-    stat = "4"; // POWER OFF
+    stat = "Power Off"; // POWER OFF 3
   }
 }
 
