@@ -9,10 +9,11 @@ from time import sleep
 import random
 from opcua import ua, Server
 
-ip_address = "http://192.168.172.167/80"
+ip_address = "http://192.168.18.8" 
+#change on top line to fit webserver ip address
 strip_html = "<[^<]+?>"
 
-db_server = "192.168.172.246"
+db_server = "192.168.18.6"
 database = 'Web_App'
 username = 'sa'
 password = "123"
@@ -21,7 +22,9 @@ pESD_1_value=""
 
 if __name__ == "__main__":
     server = Server()
-    server.set_endpoint("opc.tcp://192.168.172.246:4840")
+    server.set_endpoint("opc.tcp://192.168.18.5:4840")
+    #Change above line here to fit your computer ip address
+    #"opc.tcp://192.168.18.5:4840"
 
     # setup our own namespace, not really necessary but should as spec
     uri = "http://examples.freeopcua.github.io"
