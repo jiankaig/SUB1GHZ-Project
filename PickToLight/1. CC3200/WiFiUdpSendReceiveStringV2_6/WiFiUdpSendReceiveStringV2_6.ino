@@ -37,7 +37,7 @@
 #include <WiFi.h>
 
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
-#define DEBUG_
+//#define DEBUG_
 //#define SHOW_UART1_RX
 //#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
@@ -68,12 +68,12 @@ bool bButtonFB; //boolean to manage if button feedback has been received
 #define STATE_CHECK_UDP 1
 #define STATE_CHECK_EASYLINK 2
 #define STATE_FEEDBACK_UDP 3 // when not timeout
-#define STATE_CHECK_BFB 4
 int programState = STATE_CHECK_UDP;
 int STATE_CHECK_EASYLINK_count = 0;
 #define LED_COMMAND_LENGTH 22
-#define TIMEOUT_MS 200 //1000
-#define STR_TIMEOUT_25MHZ "800000" //"4000000"
+#define TIMEOUT_MS 215//200 //1000 //for serial1 timeout and delay after at+rx
+#define STR_TIMEOUT_25MHZ "800000" //"4000000" //for timeout of ar+rx
+#define STATE_CHECK_EASYLINK_REPEAT 3
 
 void setup() {
   
@@ -128,184 +128,162 @@ void loop() {
 #endif
  int packetSize;
  
- switch(programState){
-   case STATE_CHECK_UDP:
-   {
-      // if there's data available, read a packet
-  //#ifdef DEBUG_
-  //    Serial.println("STATE_CHECK_UDP");
-  //#endif
-      packetSize = Udp.parsePacket();
-      if (packetSize)
-      {
-        Serial.print("\n");
-        Serial.print("Received packet of size ");
-        Serial.println(packetSize);
-        Serial.print("From ");
-        IPAddress remoteIp = Udp.remoteIP();
-        Serial.print(remoteIp);
-        Serial.print(", port ");
-        Serial.println(Udp.remotePort());
+  switch(programState){
+    case STATE_CHECK_UDP:
+    {
+        // if there's data available, read a packet
+        packetSize = Udp.parsePacket();
+//        #ifdef DEBUG_
+//            Serial.print("STATE_CHECK_UDP, packetSize:");
+//            Serial.print(packetSize);
+//            Serial.print("  bButtonFB: ");
+//            Serial.println(bButtonFB);
+//        #endif
+        if (packetSize)
+        {
+          Serial.print("\n");
+          Serial.print("Received packet of size ");
+          Serial.println(packetSize);
+          Serial.print("From ");
+          IPAddress remoteIp = Udp.remoteIP();
+          Serial.print(remoteIp);
+          Serial.print(", port ");
+          Serial.println(Udp.remotePort());
+      
+          // read the packet into packetBufffer
+          int len = Udp.read(packetBuffer, 255);
+          if (len > 0) packetBuffer[len] = 0;
+          Serial.println("Contents:");
+          Serial.println(packetBuffer);
+          
+          char processed_pktBuf[30];
+          const char *TX_prefix = "AT+TX ";
+          const char *TX_msg = packetBuffer;
+          strcpy(processed_pktBuf,TX_prefix);
+          strcat(processed_pktBuf,TX_msg);
+          
+          Serial1.println(processed_pktBuf);
+          
+          lastRemoteIP = Udp.remoteIP();
+          lastRemotePort = Udp.remotePort();
+          
+          // send a reply, to the IP address and port that sent us the packet we received
+          Serial.println("last remote ip & port: ");  //Added on 18Dec 
+          Serial.println(Udp.remoteIP());
+          Serial.println(Udp.remotePort());
+          
+    #ifdef DEBUG_MODE_SIM_GUI
+          Serial.println("DEBUG_MODE_SIM_GUI");
+    #ifdef DEBUG_
+          Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
+          Udp.write(ReplyBuffer);
+          Udp.endPacket();
+    #endif
+    #endif
     
-        // read the packet into packetBufffer
-        int len = Udp.read(packetBuffer, 255);
-        if (len > 0) packetBuffer[len] = 0;
-        Serial.println("Contents:");
-        Serial.println(packetBuffer);
-        
-        char processed_pktBuf[30];
-        const char *TX_prefix = "AT+TX ";
-        const char *TX_msg = packetBuffer;
-        strcpy(processed_pktBuf,TX_prefix);
-        strcat(processed_pktBuf,TX_msg);
-        
-        Serial1.println(processed_pktBuf);
-        
-        lastRemoteIP = Udp.remoteIP();
-        lastRemotePort = Udp.remotePort();
-        
-        // send a reply, to the IP address and port that sent us the packet we received
-        Serial.println("last remote ip & port: ");  //Added on 18Dec 
-        Serial.println(Udp.remoteIP());
-        Serial.println(Udp.remotePort());
-        
-  #ifdef DEBUG_MODE_SIM_GUI
-        Serial.println("DEBUG_MODE_SIM_GUI");
-  #ifdef DEBUG_
-        Udp.beginPacket(Udp.remoteIP(), simpleGuiPort ); //Udp.remoteIP(), Udp.remotePort()
-        Udp.write(ReplyBuffer);
-        Udp.endPacket();
-  #endif
-  #endif
-  
-  #ifdef DEBUG_MODE_PACKET_SENDER
-        Serial.println("DEBUG_MODE_PACKET_SENDER");
-        Serial.print("ip: ");
-        Serial.println(lastRemoteIP);
-        Serial.print("port: ");
-        Serial.println(lastRemotePort);
-        //resend via lastRemotePort
-        Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
-        Udp.write(ReplyBuffer); 
-        Udp.endPacket();
-  #endif
+    #ifdef DEBUG_MODE_PACKET_SENDER
+          Serial.println("DEBUG_MODE_PACKET_SENDER");
+          Serial.print("ip: ");
+          Serial.println(lastRemoteIP);
+          Serial.print("port: ");
+          Serial.println(lastRemotePort);
+          //resend via lastRemotePort
+          Udp.beginPacket(lastRemoteIP, lastRemotePort); //lastRemoteIP, lastRemotePort
+          Udp.write(ReplyBuffer); 
+          Udp.endPacket();
+    #endif
+      }
       if(packetSize == LED_COMMAND_LENGTH || bButtonFB == true){
-        if(packetSize == LED_COMMAND_LENGTH ){
-          // Enable Half-Duplex communication mode..
-          Serial.println("bButtonFB = true");
-          bButtonFB = true; // for checking for button feedback
-        }
-      
-        programState = STATE_CHECK_EASYLINK;
-      }
-      else{
-        Serial.print("invalid led command, length is ");
-        Serial.print(packetSize);
-        Serial.println("instead of 22..");
-      }
-    }
-      
-     break;
-   }
-   case STATE_CHECK_EASYLINK:
-   {
-    //If not getting any UDP pacwwkets from application///////////////////////////////////////////
-    //Receive Mode - Ask EasyLink API to check radio//////////////////////////////////////////////
-#ifdef DEBUG_
-    Serial.println("STATE_CHECK_EASYLINK");
-#endif
-    // base case..
-    if(STATE_CHECK_EASYLINK_count > 5 ){
-      Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
-      STATE_CHECK_EASYLINK_count = 0;
-      programState = STATE_CHECK_UDP;
-    }
-    
-    Serial1.println("AT+RX");
-    delay(TIMEOUT_MS); 
-    ret = Serial1.readString();
-    Serial.print("STATE_CHECK_EASYLINK ret: ");
-    Serial.print(ret);
-    Serial.println("END of ret");
-    
-    //if ret not timeout, pass ret thru Udp...?
-    if(ret.indexOf("Timeout") == -1){
-//      STATE_CHECK_EASYLINK_count = 0;
-      //if return is button feedback, change to simplex mode
-      if(ret.indexOf("BB2") > 0 ){
-        Serial.println("bButtonFB = false");
-        bButtonFB = false;
-        programState = STATE_FEEDBACK_UDP;
-      }
-      else if(ret.indexOf("BB1") > 0 ){
-        STATE_CHECK_EASYLINK_count = 0;
-        programState = STATE_FEEDBACK_UDP;
-      } 
-    }
-    else
-      STATE_CHECK_EASYLINK_count += 1;
-    
-   break;
-   }
-   
-   case STATE_FEEDBACK_UDP:
-   {
-#ifdef DEBUG_
-      Serial.println("STATE_FEEDBACK_UDP");
-      Serial.print("FULL RETURN: ");
-      Serial.print(ret); //printout for debug on serial monitor
-      Serial.println("END of FULL RETURN: ");
-#endif
-
-      //trim unesscessary text in return string
-      trimReturnString(ret);
-      
-      if(lastRemoteIP || lastRemotePort)//is valid
-      {
-#ifdef DEBUG_
-        Serial.println("no timeout, send back to last remote ip, port");
-        Serial.print("lastRemoteIP: ");
-        Serial.println(lastRemoteIP);
-        Serial.print("lastRemotePort: ");
-        Serial.println(lastRemotePort);
-        Serial.print("ret: ");
-        Serial.println(ret);
-#endif
-//        memset(ret_char_array, 0, sizeof(ret_char_array)); // clear/empty ret_char_array
-        sendUdpToClient(ret);
+          if(packetSize == LED_COMMAND_LENGTH ){
+            // Enable Half-Duplex communication mode..
+            Serial.println("bButtonFB = true");
+            bButtonFB = true; // for checking for button feedback
+          }
         
-        Udp.flush(); //not really flushing/doing much
+          programState = STATE_CHECK_EASYLINK;
+      }
+//      else{
+//        Serial.print("invalid led command, length is ");
+//        Serial.print(packetSize);
+//      }
+        
+       break;
+     }
+     case STATE_CHECK_EASYLINK:
+     {
+      //If not getting any UDP pacwwkets from application///////////////////////////////////////////
+      //Receive Mode - Ask EasyLink API to check radio//////////////////////////////////////////////
+  #ifdef DEBUG_
+      Serial.println("STATE_CHECK_EASYLINK");
+  #endif
+      // base case..
+      if(STATE_CHECK_EASYLINK_count > STATE_CHECK_EASYLINK_REPEAT ){
+        Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
+        STATE_CHECK_EASYLINK_count = 0;
         programState = STATE_CHECK_UDP;
-        }
-   break;
-   }
-   case STATE_CHECK_BFB:
-   {
-      //check easylink channel via receive cmd, for button feedback. 
-      //alternate between this state and check udp state, until button feedback is receive then stay at check udp state
+        break;
+      }
+      
       Serial1.println("AT+RX");
       delay(TIMEOUT_MS); 
       ret = Serial1.readString();
-      Serial.print("STATE_CHECK_BFB ret: ");
-      Serial.println(ret);
-      //if ret has buttonFB, pass ret thru Udp...?
-      if(ret.indexOf("BB2") > 0 ){
-        Serial.println("bButtonFB = false");
-        bButtonFB = false;
+      #ifdef DEBUG_
+      Serial.print("STATE_CHECK_EASYLINK ret: ");
+      Serial.print(ret);
+      Serial.println("END of ret");
+      #endif
 
-        //send a feedback via udp to client
+      //if ret not timeout, pass ret thru Udp...?
+      if(ret.charAt(27) != '5') //ret.indexOf("Timeout") == -1 is O(N)
+      {
+        //if return is button feedback, change to simplex mode
+        if(ret.indexOf("BB2") > 0 ){
+          Serial.println("bButtonFB = false");
+          bButtonFB = false;
+          programState = STATE_FEEDBACK_UDP;
+        }
+        else if(ret.indexOf("BB1") > 0 ){
+          STATE_CHECK_EASYLINK_count = 0;
+          programState = STATE_FEEDBACK_UDP;
+        } 
+      }
+      else
+        STATE_CHECK_EASYLINK_count += 1;
+      break;
+     }
+     
+     case STATE_FEEDBACK_UDP:
+     {
+  #ifdef DEBUG_
+        Serial.println("STATE_FEEDBACK_UDP");
+        Serial.print("FULL RETURN: ");
+        Serial.print(ret); //printout for debug on serial monitor
+        Serial.println("END of FULL RETURN: ");
+  #endif
+  
+        //trim unesscessary text in return string
         trimReturnString(ret);
+        
         if(lastRemoteIP || lastRemotePort)//is valid
         {
+  #ifdef DEBUG_
+          Serial.println("no timeout, send back to last remote ip, port");
+          Serial.print("lastRemoteIP: ");
+          Serial.println(lastRemoteIP);
+          Serial.print("lastRemotePort: ");
+          Serial.println(lastRemotePort);
+          Serial.print("ret: ");
+          Serial.println(ret);
+  #endif
+  //        memset(ret_char_array, 0, sizeof(ret_char_array)); // clear/empty ret_char_array
           sendUdpToClient(ret);
+          
+          Udp.flush(); //not really flushing/doing much
+          programState = STATE_CHECK_UDP;
         }
-      }
-      programState = STATE_CHECK_UDP;  
-      break;
-   }  
-//   default:
-//   break;
- } 
+        break;
+     }
+   } 
 }
 
 
