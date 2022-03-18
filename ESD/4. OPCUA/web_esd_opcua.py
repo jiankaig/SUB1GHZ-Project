@@ -9,7 +9,8 @@ from time import sleep
 import random
 from opcua import ua, Server
 
-ip_address = "http://192.168.18.8" 
+ip_address = "http://192.168.18.16" 
+#192.168.18.16
 #change on top line to fit webserver ip address //192.168.43.84 for YT
 strip_html = "<[^<]+?>"
 
