@@ -10,13 +10,14 @@ import random
 from opcua import ua, Server
 
 ip_address = "http://192.168.18.8" 
-#change on top line to fit webserver ip address
+#change on top line to fit webserver ip address //192.168.43.84 for YT
 strip_html = "<[^<]+?>"
 
-db_server = "192.168.18.6"
+db_server = "192.168.18.5" 
+#change on top 
 database = 'Web_App'
 username = 'sa'
-password = "123"
+password = "12345"
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
 
