@@ -37,6 +37,7 @@ String redCode;
 String greenCode;
 String blueCode;
 String strValue = "";
+String strValue_copy = ""; // so not overwrited for button feedback
 bool bReadDone = false;
 int bLED_Command_Success=0;
 #define LED_COMMAND_LENGTH 22
@@ -50,6 +51,9 @@ long lastDebounceTime = 0;
 long debounceDelay = 50;
 volatile byte state = HIGH;
 bool state_Send = false;
+
+#define BURST_COUNT 5
+#define BURST_DELAY 50
 
 /****************** Setup ***********************************************/
 void setup() {
@@ -80,8 +84,21 @@ void loop() {
   {
     //rxPacket.absTime = EasyLink_ms_To_RadioTime(1);
     reset_LED();
+<<<<<<< Updated upstream
     sendStatus(strValue, '2');
     buttonState = HIGH;
+=======
+    if(bFeedbackEnable){
+      bFeedbackEnable = false;
+      for(int i=0;i<BURST_COUNT;i++){
+        sendStatus(strValue_copy, '2');
+        delay(BURST_DELAY);
+      }
+      
+      strValue = "";
+    }
+    state = !state;
+>>>>>>> Stashed changes
   }
   
   // rxTimeout is in Radio time and needs to be converted from miliseconds to Radio Time
@@ -131,6 +148,8 @@ void loop() {
     if(bLED_Command_Success ==1){
       bLED_Command_Success=0;
       sendStatus(strValue, '1');
+      strValue_copy = strValue; //store strValue such that it wont be overwritten
+      bFeedbackEnable = true;
     }
       
 //#ifdef DEBUG
