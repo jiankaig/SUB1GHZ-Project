@@ -198,8 +198,10 @@ void loop() {
         Serial.println("instead of 22..");
       }
     }
-    else if(bButtonFB == true)
+    else if(bButtonFB == true){
+      Serial.println("bButtonFB = true");
       programState = STATE_CHECK_BFB;
+    }
       
      break;
    }
@@ -297,9 +299,11 @@ void loop() {
         Serial1.println("AT+RX");
         delay(TIMEOUT_MS); 
         ret = Serial1.readString();
-        
+        Serial.print("STATE_CHECK_BFB ret: ");
+        Serial.println(ret);
         //if ret has buttonFB, pass ret thru Udp...?
         if(ret.indexOf("BB2") > 0 ){
+          Serial.println("bButtonFB = false");
           bButtonFB = false;
         }
         programState = STATE_CHECK_UDP;
