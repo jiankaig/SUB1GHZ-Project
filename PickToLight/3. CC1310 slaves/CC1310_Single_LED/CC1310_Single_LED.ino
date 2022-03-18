@@ -37,6 +37,7 @@ String redCode;
 String greenCode;
 String blueCode;
 String strValue = "";
+String strValue_copy = ""; // so not overwrited for button feedback
 bool bReadDone = false;
 int bLED_Command_Success=0;
 #define LED_COMMAND_LENGTH 22
@@ -46,6 +47,9 @@ char buf[32]; //128
 //For Button and debounce variables
 volatile byte state = HIGH;
 bool bFeedbackEnable = false;
+
+#define BURST_COUNT 5
+#define BURST_DELAY 50
 
 /****************** Setup ***********************************************/
 void setup() {
@@ -77,7 +81,11 @@ void loop() {
     reset_LED();
     if(bFeedbackEnable){
       bFeedbackEnable = false;
-      sendStatus(strValue, '2');
+      for(int i=0;i<BURST_COUNT;i++){
+        sendStatus(strValue_copy, '2');
+        delay(BURST_DELAY);
+      }
+      
       strValue = "";
     }
     state = !state;
@@ -130,6 +138,7 @@ void loop() {
     if(bLED_Command_Success ==1){
       bLED_Command_Success=0;
       sendStatus(strValue, '1');
+      strValue_copy = strValue; //store strValue such that it wont be overwritten
       bFeedbackEnable = true;
     }
     else
