@@ -2,8 +2,8 @@
 #include <WiFiClient.h>
 #include <WiFiServer.h>
 
-char ssid[] = "Pixel_9059"; // your network name also called SSID
-char password[] = "Watermelon123"; // your network password
+char ssid[] = "Sub1Ghz"; // your network name also called SSID
+char password[] = "Seems12345"; // your network password
 int keyIndex = 0; // your network key Index number (needed only for WEP)
 
 WiFiServer server(80);
