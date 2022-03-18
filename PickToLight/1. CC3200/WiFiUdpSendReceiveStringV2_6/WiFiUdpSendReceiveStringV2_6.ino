@@ -39,7 +39,7 @@
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
 #define DEBUG_
 //#define SHOW_UART1_RX
-#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
 
 #ifndef DEBUG_MODE_SIM_GUI
@@ -189,7 +189,13 @@ void loop() {
         Udp.write(ReplyBuffer); 
         Udp.endPacket();
   #endif
-      if(packetSize == LED_COMMAND_LENGTH){
+      if(packetSize == LED_COMMAND_LENGTH || bButtonFB == true){
+        if(packetSize == LED_COMMAND_LENGTH ){
+          // Enable Half-Duplex communication mode..
+          Serial.println("bButtonFB = true");
+          bButtonFB = true; // for checking for button feedback
+        }
+      
         programState = STATE_CHECK_EASYLINK;
       }
       else{
@@ -197,10 +203,6 @@ void loop() {
         Serial.print(packetSize);
         Serial.println("instead of 22..");
       }
-    }
-    else if(bButtonFB == true){
-      Serial.println("bButtonFB = true");
-      programState = STATE_CHECK_BFB;
     }
       
      break;
@@ -212,21 +214,37 @@ void loop() {
 #ifdef DEBUG_
     Serial.println("STATE_CHECK_EASYLINK");
 #endif
-    STATE_CHECK_EASYLINK_count += 1;
-//    Serial1.setTimeout(TIMEOUT_MS);
-    Serial1.println("AT+RX");
-    delay(TIMEOUT_MS); 
-    ret = Serial1.readString();
-    
-    //if ret not timeout, pass ret thru Udp...?
-    if(ret.indexOf("Timeout") == -1){
-      programState = STATE_FEEDBACK_UDP;
-    }
-    if(STATE_CHECK_EASYLINK_count > 5){
+    // base case..
+    if(STATE_CHECK_EASYLINK_count > 5 ){
       Serial.println("Exit receive mode, no feedback received...go back to listening for udp..");
       STATE_CHECK_EASYLINK_count = 0;
       programState = STATE_CHECK_UDP;
     }
+    
+    Serial1.println("AT+RX");
+    delay(TIMEOUT_MS); 
+    ret = Serial1.readString();
+    Serial.print("STATE_CHECK_EASYLINK ret: ");
+    Serial.print(ret);
+    Serial.println("END of ret");
+    
+    //if ret not timeout, pass ret thru Udp...?
+    if(ret.indexOf("Timeout") == -1){
+//      STATE_CHECK_EASYLINK_count = 0;
+      //if return is button feedback, change to simplex mode
+      if(ret.indexOf("BB2") > 0 ){
+        Serial.println("bButtonFB = false");
+        bButtonFB = false;
+        programState = STATE_FEEDBACK_UDP;
+      }
+      else if(ret.indexOf("BB1") > 0 ){
+        STATE_CHECK_EASYLINK_count = 0;
+        programState = STATE_FEEDBACK_UDP;
+      } 
+    }
+    else
+      STATE_CHECK_EASYLINK_count += 1;
+    
    break;
    }
    
@@ -257,9 +275,8 @@ void loop() {
         sendUdpToClient(ret);
         
         Udp.flush(); //not really flushing/doing much
-        programState = STATE_CHECK_BFB;//STATE_CHECK_UDP;
-        bButtonFB = true; // for checking for button feedback
-      }
+        programState = STATE_CHECK_UDP;
+        }
    break;
    }
    case STATE_CHECK_BFB:
@@ -316,6 +333,10 @@ void AT_init(){
   Serial1.print(STR_TIMEOUT_25MHZ); //"4000000"
   Serial1.println("<CR>");
 //  Serial1.println("ATPRO=4000000<CR>");
+
+  // to flush the returns
+  Serial1.println("AT+RX"); 
+  Serial1.readString();
 }
 
 void sendUdpToClient(String ret){
