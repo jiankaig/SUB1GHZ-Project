@@ -21,6 +21,7 @@ username = 'sa'
 password = "12345"
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
+x = 'AA'
 
 if __name__ == "__main__":
     server = Server()
@@ -50,6 +51,9 @@ if __name__ == "__main__":
         
         ESD_1_tag = stripped[4:26]
         ESD_1_value = int(stripped[26:27])
+
+        if x in chr(ESD_1_value):
+            sys.stdout.flush()
 
         if pESD_1_value != ESD_1_value:
             currentDateTime = dt.now()

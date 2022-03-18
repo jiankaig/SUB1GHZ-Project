@@ -54,7 +54,8 @@ void loop() {
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
-        if (c == '\n' && currentLineIsBlank) {
+        if (c == '\n' || c=='BB1' || c== 'BB2' && currentLineIsBlank)  //c == '\n' && currentLineIsBlank
+        {
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
@@ -76,6 +77,7 @@ void loop() {
           client.println("</html>");
           break;
         }
+        
         if (c == '\n') {
           // you're starting a new line
           currentLineIsBlank = true;
