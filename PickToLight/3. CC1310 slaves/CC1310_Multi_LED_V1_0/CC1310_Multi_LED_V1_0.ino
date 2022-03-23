@@ -24,6 +24,7 @@
 #define delayTime 10 // delay between color changes, 10ms by default
 #define BOARDID "0003" //Change this number for the board ID
 #define PIXELS 3 // number of pixels along led strip
+#define FIRST_STRIP_PIXEL 0 // for e.g. if you got 3 single led nodes, set this value to 3(4th pixel onwards is led strip)
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
 String strValue = "";
@@ -44,7 +45,7 @@ bool bFeedbackEnable = false;
 EasyLink_RxPacket rxPacket;
 EasyLink_TxPacket txPacket;
 typedef WS2801_Controller::Color Color; // alias for Color struct
-WS2801_Controller strip = WS2801_Controller(PIXELS);
+WS2801_Controller strip = WS2801_Controller(PIXELS, FIRST_STRIP_PIXEL);
 EasyLink myLink;
 
 /****************** Setup ***********************************************/

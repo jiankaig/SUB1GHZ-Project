@@ -5,7 +5,7 @@
 
 class WS2801_Controller{
     public:
-    WS2801_Controller(int pixels);
+    WS2801_Controller(int pixels, int fPixel);
     ~WS2801_Controller();
     struct Color{
       public:
@@ -27,6 +27,7 @@ class WS2801_Controller{
     private:
         int RainbowState = 0;
         int pixels_;
+        int firstPixel;
         Color Red, Green, Blue, Yellow, Rainbow, White;
         Color pixelColor[MAX_PIXELS]; //store pixel color data
 //        std::vector<Color> pixelColor;
