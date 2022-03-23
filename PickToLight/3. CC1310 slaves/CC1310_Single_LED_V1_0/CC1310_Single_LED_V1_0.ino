@@ -13,6 +13,7 @@
 
 //Sub 1GHz setup..
 #include "EasyLink.h"
+#include "pitch.h"
 EasyLink_RxPacket rxPacket;
 EasyLink_TxPacket txPacket;
 EasyLink myLink;
@@ -42,6 +43,7 @@ bool bFeedbackEnable = false;
 
 #define BURST_COUNT 5
 #define BURST_DELAY 50
+const int buzzer = 37; //buzzer to arduino pin 37
 
 /****************** Setup ***********************************************/
 void setup() {
@@ -52,9 +54,9 @@ void setup() {
  pinMode(RED, OUTPUT);
  pinMode(GREEN, OUTPUT);
  pinMode(BLUE, OUTPUT);
- digitalWrite(RED, LOW);
+ digitalWrite(RED, HIGH);
  digitalWrite(GREEN, HIGH);
- digitalWrite(BLUE, HIGH);
+ digitalWrite(BLUE, LOW);
   //Sub 1GHz setup..
   Serial.begin(9600);
   // begin defaults to EasyLink_Phy_50kbps2gfsk
@@ -63,6 +65,10 @@ void setup() {
 
   // Set the destination address to 0xaa
   txPacket.dstAddr[0] = 0xaa;
+
+  //setup buzzer
+  pinMode(buzzer, OUTPUT); // Set buzzer - pin 37 as an output
+  beepBuzzer();
 }
 
 /****************** Loop ***********************************************/
@@ -138,7 +144,6 @@ void loop() {
 //    strValue = "";  //if clear then button feedback wont know
   }
 }
-
 void reset_LED()
 {
   digitalWrite(RED, HIGH);
@@ -163,6 +168,7 @@ int writeLEDfromStr(String strValue)
       analogWrite( RED, 255-redCode.toInt() );
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
+      beepBuzzer();
       return 1;//success
     }
     return -1;//error BoardID mismatch
@@ -195,4 +201,25 @@ void sendStatus(String strValue, char status_) {
 void blink() {
   Serial.println("blink!");
   state = !state;
+}
+
+void beepBuzzer(){
+  Serial.println("BEEP");
+  for (int thisNote = 0; thisNote<(sizeof(melody)/sizeof(int)); thisNote++) {
+
+    // to calculate the note duration, take one second 
+    // divided by the note type.
+    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    // Had to down tempo to 100/150 
+    int noteDuration = 1500/noteDurations[thisNote];
+    tone(buzzer, melody[thisNote],noteDuration);
+    Serial.print("melody[thisNote]: ");
+    Serial.print(melody[thisNote]);
+    Serial.print("\tnoteDuration: ");
+    Serial.println(noteDuration);
+    int pauseBetweenNotes = noteDuration + 50;      //delay between pulse
+    delay(pauseBetweenNotes);
+    
+    noTone(buzzer);                // stop the tone playing
+  }
 }
