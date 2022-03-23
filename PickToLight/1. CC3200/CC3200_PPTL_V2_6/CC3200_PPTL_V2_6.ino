@@ -28,6 +28,9 @@
        - added new condition to stop listening to easylink after 5 timeouts
        - minor changes to debugging msg via serial print
        - serial1 set Timeout(deafult is 1sec)
+  2.6: - revamped of FSM with bButtonFB to enable "Half Duplex" communication
+       - changed ret.indexOf("Timeout") to ret.charAt(27) to improve processing speed
+       
  */
 
 #ifndef __CC3200R1M1RGC__
