@@ -13,9 +13,7 @@
 
 //Sub 1GHz setup..
 #include "EasyLink.h"
-EasyLink_RxPacket rxPacket;
-EasyLink_TxPacket txPacket;
-EasyLink myLink;
+#include "WS2801_Controller.h"
 //#define DEBUG
 
 /******************Configurations***********************************************/
@@ -25,7 +23,7 @@ EasyLink myLink;
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
 #define BOARDID "0003" //Change this number for the board ID
-
+#define PIXELS 3 // number of pixels along led strip
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
 String strValue = "";
@@ -42,6 +40,12 @@ bool bFeedbackEnable = false;
 
 #define BURST_COUNT 5
 #define BURST_DELAY 50
+
+EasyLink_RxPacket rxPacket;
+EasyLink_TxPacket txPacket;
+typedef WS2801_Controller::Color Color; // alias for Color struct
+WS2801_Controller strip = WS2801_Controller(PIXELS);
+EasyLink myLink;
 
 /****************** Setup ***********************************************/
 void setup() {
@@ -63,6 +67,9 @@ void setup() {
 
   // Set the destination address to 0xaa
   txPacket.dstAddr[0] = 0xaa;
+
+  //init led strip controller
+  strip.begin(); // LEDs should be all off at start
 }
 
 /****************** Loop ***********************************************/
@@ -127,6 +134,7 @@ void loop() {
     bReadDone = false;
     bLED_Command_Success = writeLEDfromStr(strValue);
     delay(100); //slight delay, otherwise cc3200 cant seem to receive..
+    strip.show(); // For LED strip, send all data in one go thru SPI
     if(bLED_Command_Success ==1){
       bLED_Command_Success=0;
       sendStatus(strValue, '1');
@@ -163,6 +171,7 @@ int writeLEDfromStr(String strValue)
       analogWrite( RED, 255-redCode.toInt() );
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
+      strip.setPixelColor(Color{redCode.toInt(),greenCode.toInt(), blueCode.toInt()}, IdCode.toInt());
       return 1;//success
     }
     return -1;//error BoardID mismatch
