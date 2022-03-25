@@ -1,10 +1,10 @@
 import pyodbc
 
 
-server = 'localhost'
+server = '192.168.18.5'
 database = 'Web_App'
 username = 'sa'
-password = '123'
+password = '12345'
 
 conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = conn.cursor()

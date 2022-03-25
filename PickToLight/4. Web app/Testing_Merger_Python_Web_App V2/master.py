@@ -17,17 +17,17 @@ import threading
 
 
 
-ip_address = "http://192.168.18.8"
+ip_address = "http://192.168.18.16"
 #192.168.18.16
 #change on top line to fit webserver ip address //192.168.43.84 for YT
 strip_html = "<[^<]+?>"
 
-db_server = "192.168.18.6"
+db_server = "192.168.18.5"
 #"192.168.18.5" YT
 #change on top
 database = 'Web_App'
 username = 'sa'
-password = '123' #'12345' for yt
+password = '12345' #'12345' for yt '123' for ND
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
 x = 'AA'
@@ -284,7 +284,7 @@ if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)).start()
     threading.Thread(target=UDP_Receiver.recv).start()
     server = Server()
-    server.set_endpoint("opc.tcp://192.168.18.6:4840")
+    server.set_endpoint("opc.tcp://192.168.18.5:4840")
     # Change above line here to fit your computer ip address
     # "opc.tcp://192.168.18.5:4840"
 

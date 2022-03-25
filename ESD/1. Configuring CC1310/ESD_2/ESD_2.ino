@@ -8,7 +8,7 @@ int P1 = 0;
 int P2 = 0;
 
 const int p_value = 20; //47
-const int off_value = 10;//
+const int off_value = 15;//
 
 String stat;
 String prevStat;

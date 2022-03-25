@@ -1,11 +1,11 @@
 import socket
 
-ip_Addr = "192.168.18.4" #  Must set to address of cc3200
+ip_Addr = "192.168.18.16" #  Must set to address of cc3200
 port = 55056              #  Same port declare in cc3200 UDP receiver
 
 opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-ip_Addr = input("Enter IP address of CC3200: \n")
+#ip_Addr = input("Enter IP address of CC3200: \n")
 
 
 def udpSender(command):
