@@ -7,6 +7,10 @@ import threading
 
 app = Flask(__name__)
 
+def parseLedCommand(boardId, red, green, blue):
+    ledCommandString =  "AAX" + str(boardId).zfill(4) + "R" + str(red).zfill(3) + "G" + str(green).zfill(3) + "B" + str(blue).zfill(3) + "BB"
+    return ledCommandString
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -16,94 +20,18 @@ def index():
 def device2():
     return render_template('device2.html')
 
-@app.route('/2-GH')
-def GH2():
-
-    UDP_Sender.udpSender("AAX00020R000G255B000BB") #edit here hard code
-
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R255G000B255BB " + str(now) + "\n")
-
-    SQLdb.sendCommandDB("LED2_GREEN_ON", now)
-
-    return "Success"
-
-
-@app.route('/2-GL')
-def GL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
-
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AAX00010R000G000B000BB" + str(now) + "\n")
-        
-    SQLdb.sendCommandDB("LED2_GREEN_OFF", now)
-    
-    return "Success"
-
-
-@app.route('/2-RH')
-def RH2():
-    UDP_Sender.udpSender("AAX00020R125G000B000BB")
-
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R125G000B000BB" + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("LED2_RED_ON", now)
-    return "Success"
-
-
-@app.route('/2-RL')
-def RL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB")
-
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AAX00020R255G255B255BB " + str(now) + "\n")
-        
-    SQLdb.sendCommandDB("LED2_RED_OFF", now)
-    return "Success"
-
-
-@app.route('/2-BH')
-def BH2():
-    UDP_Sender.udpSender("AAX00020R000G000B255BB") 
-
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AAX00010R000G000B255BB" + str(now) + "\n")
-    
-    SQLdb.sendCommandDB("LED2_BLUE_ON", now)
-    return "Success"
-
-
-@app.route('/2-BL')
-def BL2():
-    UDP_Sender.udpSender("AAX00020R000G000B000BB") 
-    now = datetime.datetime.now()
-
-    with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX00020R000G000B000BB" + str(now) + "\n")
-    SQLdb.sendCommandDB("LED2_BLUE_OFF", now)
-    return "Success"
-
 @app.route('/3-GH')
 def GH3():
-    UDP_Sender.udpSender("AT+TX AAX00030R000G255B000BB")
+    msg = parseLedCommand(3,0,255,0)
+    UDP_Sender.udpSender(msg) #edit here hard code
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00030R000G255B000BB " + str(now) + "\n")
-        
+        f.writelines(msg + str(now) + "\n")
+
     SQLdb.sendCommandDB("LED3_GREEN_ON", now)
+
     return "Success"
 
 
@@ -114,19 +42,22 @@ def GL3():
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00030R000G000B000BB " + str(now) + "\n")
+        f.writelines("AAX00010R000G000B000BB" + str(now) + "\n")
+        
     SQLdb.sendCommandDB("LED3_GREEN_OFF", now)
+    
     return "Success"
 
 
 @app.route('/3-RH')
 def RH3():
-    UDP_Sender.udpSender("AAX00030R255G000B000BB")
+    UDP_Sender.udpSender("AAX00030R135G000B000BB")
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00030R255G000B000BB " + str(now) + "\n")
+        f.writelines("AAX00030R135G000B000BB" + str(now) + "\n")
+    
     SQLdb.sendCommandDB("LED3_RED_ON", now)
     return "Success"
 
@@ -138,95 +69,168 @@ def RL3():
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00030R000G000B000BB " + str(now) + "\n")
+        f.writelines("AAX00030R355G355B355BB " + str(now) + "\n")
+        
     SQLdb.sendCommandDB("LED3_RED_OFF", now)
     return "Success"
 
 
 @app.route('/3-BH')
 def BH3():
-    UDP_Sender.udpSender("AAX00030R000G000B255BB")
+    UDP_Sender.udpSender("AAX00030R000G000B355BB") 
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX00030R000G000B255BB " + str(now) + "\n")
+        f.writelines("AAX00010R000G000B255BB" + str(now) + "\n")
+    
     SQLdb.sendCommandDB("LED3_BLUE_ON", now)
     return "Success"
 
 
 @app.route('/3-BL')
 def BL3():
-    UDP_Sender.udpSender("AAX00030R000G000B000BB")
+    UDP_Sender.udpSender("AAX00030R000G000B000BB") 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AAX00030R000G000B000BB " + str(now) + "\n")
+        f.writelines("AAX00030R000G000B000BB" + str(now) + "\n")
+    SQLdb.sendCommandDB("LED3_BLUE_OFF", now)
+    return "Success"
+
+@app.route('/4-GH')
+def GH4():
+    UDP_Sender.udpSender("AAX00040R000G255B000BB")
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R000G255B000BB " + str(now) + "\n")
+        
+    SQLdb.sendCommandDB("LED4_GREEN_ON", now)
+    return "Success"
+
+
+@app.route('/4-GL')
+def GL4():
+    UDP_Sender.udpSender("AAX00040R000G000B000BB")
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R000G000B000BB " + str(now) + "\n")
+    SQLdb.sendCommandDB("LED4_GREEN_OFF", now)
+    return "Success"
+
+
+@app.route('/4-RH')
+def RH4():
+    UDP_Sender.udpSender("AAX00040R255G000B000BB")
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R255G000B000BB " + str(now) + "\n")
+    SQLdb.sendCommandDB("LED4_RED_ON", now)
+    return "Success"
+
+
+@app.route('/4-RL')
+def RL4():
+    UDP_Sender.udpSender("AAX00040R000G000B000BB")
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R000G000B000BB " + str(now) + "\n")
+    SQLdb.sendCommandDB("LED4_RED_OFF", now)
+    return "Success"
+
+
+@app.route('/4-BH')
+def BH4():
+    UDP_Sender.udpSender("AAX00040R000G000B255BB")
+
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R000G000B255BB" + str(now) + "\n")
+    SQLdb.sendCommandDB("LED3_BLUE_ON", now)
+    return "Success"
+
+
+@app.route('/3-BL')
+def BL4():
+    UDP_Sender.udpSender("AAX00040R000G000B000BB")
+    now = datetime.datetime.now()
+
+    with open('log.txt', 'a+') as f:
+        f.writelines("AAX00040R000G000B000BB" + str(now) + "\n")
     
     SQLdb.sendCommandDB("LED3_BLUE_OFF", now)
     return "Success"
 
 @app.route('/1-SRH')
 def SRH1():
-    UDP_Sender.udpSender("AT+TX AAX00040R255G000B000BB") 
+    UDP_Sender.udpSender("AAX00050R255G000B000BB") 
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX00040R255G000B000BB" + str(now) + "\n")
+        f.writelines("AAX00050R255G000B000BB" + str(now) + "\n")
     
     SQLdb.sendCommandDB("STRIP_RED_HIGH", now)
     return "Success"
 
 @app.route('/1-SRL')
 def SRL1():
-    UDP_Sender.udpSender("AT+TX AAX00040R000G000B000BB") 
+    UDP_Sender.udpSender("AAX00050R000G000B000BB") 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX00040R000G000B000BB" + str(now) + "\n")
+        f.writelines("AAX00050R000G000B000BB" + str(now) + "\n")
     SQLdb.sendCommandDB("STRIP_RED_LOW", now)
     return "Success"
 
 @app.route('/1-SGH')
 def SGH1():
-    UDP_Sender.udpSender("AT+TX AAX01040R000G255B000BB") 
+    UDP_Sender.udpSender("AAX00060R000G225B000BB") 
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX01040R000G255B000BB" + str(now) + "\n")
+        f.writelines("AAX00060R000G255B000BB" + str(now) + "\n")
     SQLdb.sendCommandDB("STRIP_GREEN_HIGH", now)
     return "Success"
 
 @app.route('/1-SGL')
 def SGL1():
-    UDP_Sender.udpSender("AT+TX AAX01040R000G000B000BB") 
+    UDP_Sender.udpSender("AAX00060R000G000B000BB") 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX01040R000G000B000BB" + str(now) + "\n")
+        f.writelines("AAX00060R000G000B000BB" + str(now) + "\n")
     SQLdb.sendCommandDB("STRIP_GREEN_LOW", now)
     return "Success"
     
 @app.route('/1-SBH')
 def SBH1():
-    UDP_Sender.udpSender("AT+TX AAX02040R000G000B255BB") 
+    UDP_Sender.udpSender("AAX00070R000G000B255BB") 
 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX02040R000G255B000BB" + str(now) + "\n")
+        f.writelines("AAX00070R000G255B000BB" + str(now) + "\n")
     SQLdb.sendCommandDB("STRIP_BLUE_HIGH", now)
     return "Success"
 
 @app.route('/1-SBL')
 def SBL1():
-    UDP_Sender.udpSender("AT+TX AAX02040R000G000B000BB") 
+    UDP_Sender.udpSender("AAX00070R000G000B000BB") 
     now = datetime.datetime.now()
 
     with open('log.txt', 'a+') as f:
-        f.writelines("AT+TX AAX02040R000G000B000BB" + str(now) + "\n")
+        f.writelines("AAX00070R000G000B000BB" + str(now) + "\n")
     SQLdb.sendCommandDB("STRIP_BLUE_LOW", now)
     return "Success"
 

@@ -7,8 +7,8 @@ const int threshold = 250;
 int P1 = 0;
 int P2 = 0;
 
-const int p_value = 47;
-const int off_value = 3;
+const int p_value = 20; //47
+const int off_value = 10;//
 
 String stat;
 String prevStat;

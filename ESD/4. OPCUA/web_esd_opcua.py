@@ -9,23 +9,24 @@ from time import sleep
 import random
 from opcua import ua, Server
 
-ip_address = "http://192.168.18.16" 
+ip_address = "http://192.168.18.8" 
 #192.168.18.16
 #change on top line to fit webserver ip address //192.168.43.84 for YT
 strip_html = "<[^<]+?>"
 
-db_server = "192.168.18.5" 
+db_server = "192.168.18.6"
+#"192.168.18.5" YT
 #change on top 
 database = 'Web_App'
 username = 'sa'
-password = "12345"
+password = '123' #'12345' for yt
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
 x = 'AA'
 
 if __name__ == "__main__":
     server = Server()
-    server.set_endpoint("opc.tcp://192.168.18.5:4840")
+    server.set_endpoint("opc.tcp://192.168.18.6:4840")
     #Change above line here to fit your computer ip address
     #"opc.tcp://192.168.18.5:4840"
 
