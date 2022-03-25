@@ -43,7 +43,11 @@ if __name__ == "__main__":
     myobj = objects.add_object(idx, "MyObject")
     myvar = myobj.add_variable(idx, "ESD_1", 0)
     myvar.set_writable() # Set MyVariable to be writable by clients
-
+    # testing led to opcua
+    myled = objects.add_object(idx, "MyObject")
+    myvar1 = myled.add_variable(idx, "LED_1", 1)
+    myvar1.set_writable()
+    
     while(1):
         resp = req.get(ip_address)
         content = resp.text
