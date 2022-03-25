@@ -22,9 +22,8 @@
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0003" //Change this number for the board ID
+#define BOARDID "0004" //Change this number for the board ID
 #define PIXELS 3 // number of pixels along led strip
-#define FIRST_STRIP_PIXEL 0 // for e.g. if you got 3 single led nodes, set this value to 3(4th pixel onwards is led strip)
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
 String strValue = "";
@@ -34,6 +33,7 @@ int bLED_Command_Success=0;
 #define LED_COMMAND_LENGTH 22
 uint16_t value;
 char buf[32]; //128
+#define FIRST_STRIP_PIXEL BOARDID[3]-'0' //board id in int format
 
 //For Button and debounce variables
 volatile byte state = HIGH;
@@ -164,6 +164,8 @@ int writeLEDfromStr(String strValue)
     redCode = strValue.substring(9,12); 
     greenCode = strValue.substring(13,16);
     blueCode = strValue.substring(17,20);
+    int intIdCode = IdCode.toInt();
+    int intBoardID = BoardID.toInt();
     
     //if ID matches this board ID, process LED\
     //change LED colour based on command sent
@@ -172,7 +174,15 @@ int writeLEDfromStr(String strValue)
       analogWrite( RED, 255-redCode.toInt() );
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
-      strip.setPixelColor(Color{redCode.toInt(),greenCode.toInt(), blueCode.toInt()}, IdCode.toInt());
+      Serial.println("set single led!");
+      return 1;//success
+    }
+    else if(intIdCode > intBoardID && intIdCode <= intBoardID+PIXELS){
+      //set led strip
+      Serial.println("set led strip!");
+      Serial.print("intIdCode: ");
+      Serial.println(intIdCode);
+      strip.setPixelColor(Color{redCode.toInt(),greenCode.toInt(), blueCode.toInt()}, intIdCode);
       return 1;//success
     }
     return -1;//error BoardID mismatch
