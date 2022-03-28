@@ -21,7 +21,7 @@ def recv():
         print(data.decode('utf-8'))
         now = datetime.datetime.now()
         SQLdb.sendMessageDB(data, now)
-        if data:
-             print(data.decode('utf-8'))
-             opened_socket.sendto("Success".encode('utf-8'),addr)
+        # if data:
+        #     print(data.decode('utf-8'))
+        #     opened_socket.sendto("Success".encode('utf-8'),addr)
 
