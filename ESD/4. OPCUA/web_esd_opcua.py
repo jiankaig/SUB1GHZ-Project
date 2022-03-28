@@ -11,8 +11,10 @@ from opcua import ua, Server
 import enum
 
 class COMMAND_TYPE(enum.Enum):
+    NO_TYPE = 0
     ESD_COMMAND = 1
     LED_COMMAND = 2
+CommandType = COMMAND_TYPE.NO_TYPE
 
 def parseCommand(CommandType):
     if(CommandType == COMMAND_TYPE.ESD_COMMAND):
@@ -115,8 +117,7 @@ if __name__ == "__main__":
         elif(stripped[0:2] == "AA"):
             CommandType = COMMAND_TYPE.LED_COMMAND
 
-        if(CommandType == COMMAND_TYPE.ESD_COMMAND):
-            parseCommand(CommandType)
+        parseCommand(CommandType)
     
 server.stop()
     
