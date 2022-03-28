@@ -49,6 +49,10 @@ if __name__ == "__main__":
         content = resp.text
         stripped = re.sub(strip_html, '', content)
         
+        print("content: {}".format(content))
+        print("stripped: {}".format(stripped))
+        print("stripped[0:10]: {}".format(stripped[0:10]))
+
         ESD_1_tag = stripped[4:26]
         ESD_1_value = int(stripped[26:27])
 
