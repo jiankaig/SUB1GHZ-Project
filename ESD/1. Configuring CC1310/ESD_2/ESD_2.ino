@@ -2,18 +2,23 @@
 
 EasyLink_TxPacket txPacket;
 EasyLink myLink;
-
+#define GREEN_LED 40
+#define RED_LED 39
+bool led_toggle = 0;
 const int threshold = 250;
 int P1 = 0;
 int P2 = 0;
 
-const int p_value = 47;
-const int off_value = 3;
+//const int p_value = 47; //
+int p_value=0;
+//const int off_value = 3;
 
 String stat;
 String prevStat;
 String tagName = "L9_SMT_ESD_1_Op1_Stat ";
 String value;
+#define calibrate_cycle 100 //take average of how many cycles..
+#define p_val_offset 75 // choose value from 0 to 100
 
 void setup() {
   Serial.begin(9600);
@@ -22,6 +27,29 @@ void setup() {
 
   // Set the destination address to 0xaa
   txPacket.dstAddr[0] = 0xaa;
+
+  //Calibration algo, Start/Reset device at "NO CONNECT" or "FAIL" state
+  pinMode(GREEN_LED, OUTPUT);     
+  Serial.print("calibrate p-value..");
+  for(int i=0;i<calibrate_cycle;i++){
+      p_value += analogRead(A0);
+      p_value += analogRead(A1);
+      Serial.print(i);
+      Serial.print(": A0, A1: ");
+      Serial.print(analogRead(A0));
+      Serial.print(", ");
+      Serial.println(analogRead(A1));
+      led_toggle = !led_toggle;
+      digitalWrite(RED_LED, led_toggle);
+  }
+  Serial.print("percent offset: ");
+  Serial.println((100.0-p_val_offset)/100.0);
+  p_value /= (40*calibrate_cycle); 
+  p_value *= ((100.0-p_val_offset)/100.0);
+  Serial.print("p_value calibrated to: ");
+  Serial.println(p_value);
+  digitalWrite(RED_LED, LOW);  
+  //end of calibration p-value
 }
 
 void loop() {
@@ -42,23 +70,23 @@ void detectStatus() {
   P1 = P1 / 1000;
   P2 = P2 / 1000;
   Serial.print("P1: ");             //testing the analog signal from ESD
-  Serial.println(P1);
-  Serial.print("P2: ");
+  Serial.print(P1);
+  Serial.print("\tP2: ");
   Serial.println(P2);
 
   if (P1 == 1 && P2 >= p_value) {
     stat = "1"; // PASS
     Serial.println("PASS"); 
   }
-  if (P1 >= p_value && P2 == 1) {
+  if (P1 >= p_value && P2 >= p_value) {
     stat = "2"; // NO CONNECT
     Serial.println("NO CONNECT"); 
   }
-  if (P2 > 20 && P1 >= p_value) {
+  if (P2 > p_value && P1 >= p_value) {
     stat = "3"; // FAIL
     Serial.println("FAIL"); 
   }
-  if (P1 < off_value && P2 < off_value) {
+  if (P1 < p_value && P2 < p_value) {
     stat = "4"; // POWER OFF
     Serial.println("POWER OFF"); 
   }
