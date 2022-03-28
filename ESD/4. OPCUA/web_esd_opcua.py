@@ -16,16 +16,17 @@ class COMMAND_TYPE(enum.Enum):
     LED_COMMAND = 2
 CommandType = COMMAND_TYPE.NO_TYPE
 
-ip_address = "http://192.168.18.16" 
+ip_address = "http://192.168.18.16/80" 
 #192.168.18.16
 #change on top line to fit webserver ip address //192.168.43.84 for YT
 strip_html = "<[^<]+?>"
 
-db_server = "192.168.18.5" 
+db_server = "192.168.18.5"
+#"192.168.18.5" YT
 #change on top 
 database = 'Web_App'
 username = 'sa'
-password = "12345"
+password = '12345' #'12345' for yt
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
 ESD_1_value=""
