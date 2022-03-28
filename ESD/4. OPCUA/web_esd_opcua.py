@@ -29,8 +29,8 @@ password = "12345"
 driver = "{ODBC Driver 17 for SQL Server}"
 pESD_1_value=""
 ESD_1_value=""
-pintRGB_concat=0
-intRGB_concat=0
+pintRGB_concat=""
+intRGB_concat=""
 
 if __name__ == "__main__":
     server = Server()
@@ -51,12 +51,24 @@ if __name__ == "__main__":
     # populating our address space
     myobj = objects.add_object(idx, "MyObject")
     myvar = myobj.add_variable(idx, "ESD_1", 0)
-    myvar.set_writable() # Set MyVariable to be writable by clients
-    # populating address space for led
+    myvar.set_writable() # Set MyVarialbe to be writable by clients
+    # populating address space for Board
+    myobj1 = objects.add_object(idx, "MyObject1")
+    myvar1 = myobj1.add_variable(idx, "BOARD_NO", 0)
+    myvar1.set_writable() # set myvar1 to be writable by client
+    #For LEDs
     myobj2 = objects.add_object(idx, "MyObject2")
-    myvar2 = myobj2.add_variable(idx, "LED_1", 0)
+    myvar2 = myobj2.add_variable(idx, "LED_R", 0)
     myvar2.set_writable() # set myvar2 to be writable by client
-        
+
+    myobj3 = objects.add_object(idx, "MyObject3")
+    myvar3 = myobj3.add_variable(idx, "LED_G", 0)
+    myvar3.set_writable() # set myvar3 to be writable by client
+
+    myobj4 = objects.add_object(idx, "MyObject4")
+    myvar4 = myobj4.add_variable(idx, "LED_B", 0)
+    myvar4.set_writable() # set myvar4 to be writable by client
+    
     while(1):
         resp = req.get(ip_address)
         content = resp.text
@@ -76,12 +88,12 @@ if __name__ == "__main__":
             ESD_1_tag = stripped[4:26]
             ESD_1_value = int(stripped[26:27])
         elif(CommandType == COMMAND_TYPE.LED_COMMAND):
-            LED_Location = int(stripped[3:7])
-            LED_Picker = int(stripped[7:8])
-            LED_RED = int(stripped[9:12])
-            LED_GREEN = int(stripped[13:16])
-            LED_BLUE = int(stripped[17:20])
-            intRGB_concat = int(stripped[9:12]+stripped[13:16]+stripped[17:20])
+            LED_Location = int(stripped[7:11])
+            LED_Picker = int(stripped[11:12])
+            LED_RED = int(stripped[13:16]) #13:16
+            LED_GREEN = int(stripped[17:20]) #17:20
+            LED_BLUE = int(stripped[21:24]) #21:24
+            intRGB_concat = str(stripped[13:16]+stripped[17:20]+stripped[21:24]).zfill(9)
             # print("intRGB_concat: {}".format(intRGB_concat))
 
         if pESD_1_value != ESD_1_value:
@@ -113,13 +125,16 @@ if __name__ == "__main__":
             date = currentDateTime.strftime("%Y-%m-%d")
             time = currentDateTime.strftime("%H:%M:%S")
 
-            myvar2.set_value(intRGB_concat)
+            myvar1.set_value(LED_Location)
+            myvar2.set_value(LED_RED)
+            myvar3.set_value(LED_GREEN)
+            myvar4.set_value(LED_BLUE)
             
             sys.stdout.flush()
             
             with pyodbc.connect('DRIVER='+driver+';SERVER='+db_server+";PORT=1433;DATABASE="+database+";UID="+username+";PWD="+password) as conn:
                 with conn.cursor() as cursor:
-                    query = "INSERT INTO dbo.LedLog (LED_Location, LED_Picker, LED_RED, LED_GREEN, LED_BLUE, LogDate, LogTime, intRGB_concat) VALUES (?,?,?,?,?,?,?,?)"
+                    query = "INSERT INTO dbo.LedLog1 (LED_Location, LED_Picker, LED_RED, LED_GREEN, LED_BLUE, LogDate, LogTime, intRGB_concat) VALUES (?,?,?,?,?,?,?,?)"
                     val = [LED_Location, LED_Picker, LED_RED, LED_GREEN, LED_BLUE , date, time, intRGB_concat]
                     cursor.execute(query, val)
                     conn.commit()
