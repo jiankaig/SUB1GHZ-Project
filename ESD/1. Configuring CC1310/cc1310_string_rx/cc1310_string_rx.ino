@@ -21,7 +21,9 @@ void loop() {
   EasyLink_Status status = myLink.receive(&rxPacket); // check receive status
   
   if (status == EasyLink_Status_Success) {
+    
     memcpy(&d, &rxPacket.payload, sizeof(d));
+    memset(&rxPacket.payload, 0, sizeof(rxPacket.payload));
     //Serial.print("len: ");
     //Serial.print(rxPacket.len);
     //Serial.print(", RX: ");
