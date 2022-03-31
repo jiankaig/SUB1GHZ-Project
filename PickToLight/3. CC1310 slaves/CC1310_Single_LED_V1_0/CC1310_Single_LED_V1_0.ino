@@ -75,10 +75,11 @@ void setup() {
 
 /****************** Loop ***********************************************/
 void loop() {
-//  beepBuzzerByFlag(buzzerFlag);
+  beepBuzzerByFlag(buzzerFlag);
   if(state == LOW)
   {
     Serial.println("button..");
+    buzzerFlag =true;
     reset_LED();
     if(bFeedbackEnable){
       bFeedbackEnable = false;
@@ -172,6 +173,7 @@ int writeLEDfromStr(String strValue)
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
       beepBuzzer();
+//      buzzerFlag =true;
       return 1;//success
     }
     return -1;//error BoardID mismatch
@@ -227,8 +229,8 @@ void beepBuzzer(){
   }
 }
 void beepBuzzerByFlag(bool &Flag){
-  Serial.println("BEEP");
   if(Flag){
+      Serial.println("BEEP");
       if(thisNote>=(sizeof(melody)/sizeof(int))){
         thisNote=0;
         Flag=false;
