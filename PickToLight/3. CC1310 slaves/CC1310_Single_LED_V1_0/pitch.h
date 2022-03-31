@@ -94,46 +94,46 @@
 
 // notes in the melody:
 int melody[] = {
-  NOTE_F2, NOTE_C6, NOTE_B5, NOTE_G5, NOTE_A5, NOTE_E1, NOTE_B1, NOTE_E1, NOTE_B1, NOTE_E1, NOTE_B1, 
+  NOTE_F2, NOTE_C6, NOTE_B5, NOTE_G5, NOTE_A5//, NOTE_E1, NOTE_B1, NOTE_E1, NOTE_B1, NOTE_E1, NOTE_B1, 
    
    
-  NOTE_G6, NOTE_F6, NOTE_DS6, NOTE_C6, NOTE_AS5, NOTE_C6, NOTE_AS5, NOTE_GS5, NOTE_G5, NOTE_GS5, 
-  NOTE_G5, NOTE_F5, NOTE_DS5, NOTE_F5, NOTE_AS4, NOTE_C5, NOTE_DS5, NOTE_F5,
-  
-  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_F5,
-  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_GS5, NOTE_F5,
-
-// Repeat once   
-  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_F5,
-  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_GS5, NOTE_F5,
-
-  NOTE_C6, NOTE_NOTONE, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_NOTONE, NOTE_DS6, NOTE_NOTONE,
-  NOTE_G5, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_NOTONE, NOTE_D6, NOTE_DS6,
-  
-  NOTE_C6, NOTE_NOTONE, NOTE_C6, NOTE_NOTONE, NOTE_DS6, NOTE_F6
+//  NOTE_G6, NOTE_F6, NOTE_DS6, NOTE_C6, NOTE_AS5, NOTE_C6, NOTE_AS5, NOTE_GS5, NOTE_G5, NOTE_GS5, 
+//  NOTE_G5, NOTE_F5, NOTE_DS5, NOTE_F5, NOTE_AS4, NOTE_C5, NOTE_DS5, NOTE_F5,
+//  
+//  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_F5,
+//  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_GS5, NOTE_F5,
+//
+//// Repeat once   
+//  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_F5,
+//  NOTE_C6, NOTE_NOTONE, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_GS5, NOTE_F5,
+//
+//  NOTE_C6, NOTE_NOTONE, NOTE_C6, NOTE_D6, NOTE_DS6, NOTE_NOTONE, NOTE_DS6, NOTE_NOTONE,
+//  NOTE_G5, NOTE_AS5, NOTE_C6, NOTE_D6, NOTE_NOTONE, NOTE_D6, NOTE_DS6,
+//  
+//  NOTE_C6, NOTE_NOTONE, NOTE_C6, NOTE_NOTONE, NOTE_DS6, NOTE_F6
   
   
 };
    
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
 int noteDurations[] = {
-2, 2, 2, 2,1, 2, 2, 2, 2, 2, 1,  // 11 start screen  notes
+2, 2, 2, 2,1//, 2, 2, 2, 2, 2, 1,  // 11 start screen  notes
 
 
 
-16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  // 20  notes
-16, 16, 16, 16, 16, 16, 16, 2,           // for both lines   
-
-16, 16, 16, 8, 16, 2, 2,                  // 7
-16, 16, 16, 8, 16, 2, 2,                  // 7
-
-// Repeat once
-16, 16, 16, 8, 16, 2, 2,                  // 7
-16, 16, 16, 8, 16, 2, 2,                  // 7
-
-16, 16, 4, 4, 16, 16, 16, 8,             // 8
-16, 16, 16, 16, 16, 4, 4,                  // 7
-
-16, 16, 16, 16, 16, 4                     // 6 
+//16, 16, 16, 16, 16, 16, 16, 16, 16, 16,  // 20  notes
+//16, 16, 16, 16, 16, 16, 16, 2,           // for both lines   
+//
+//16, 16, 16, 8, 16, 2, 2,                  // 7
+//16, 16, 16, 8, 16, 2, 2,                  // 7
+//
+//// Repeat once
+//16, 16, 16, 8, 16, 2, 2,                  // 7
+//16, 16, 16, 8, 16, 2, 2,                  // 7
+//
+//16, 16, 4, 4, 16, 16, 16, 8,             // 8
+//16, 16, 16, 16, 16, 4, 4,                  // 7
+//
+//16, 16, 16, 16, 16, 4                     // 6 
 
 };
