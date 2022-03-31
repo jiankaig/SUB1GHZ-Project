@@ -44,7 +44,8 @@ bool bFeedbackEnable = false;
 #define BURST_COUNT 5
 #define BURST_DELAY 50
 const int buzzer = 37; //buzzer to arduino pin 37
-
+int thisNote=0
+bool buzzerFlag=false;
 /****************** Setup ***********************************************/
 void setup() {
  //INTIALISE as Red first..
@@ -68,7 +69,8 @@ void setup() {
 
   //setup buzzer
   pinMode(buzzer, OUTPUT); // Set buzzer - pin 37 as an output
-  beepBuzzer();
+//  beepBuzzer();
+  beepBuzzerByFlag(true);
 }
 
 /****************** Loop ***********************************************/
@@ -205,6 +207,37 @@ void blink() {
 
 void beepBuzzer(){
   Serial.println("BEEP");
+  for (int thisNote = 0; thisNote<(sizeof(melody)/sizeof(int)); thisNote++) {
+
+    // to calculate the note duration, take one second 
+    // divided by the note type.
+    //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    // Had to down tempo to 100/150 
+    int noteDuration = 1500/noteDurations[thisNote];
+    tone(buzzer, melody[thisNote],noteDuration);
+    Serial.print("melody[thisNote]: ");
+    Serial.print(melody[thisNote]);
+    Serial.print("\tnoteDuration: ");
+    Serial.println(noteDuration);
+    int pauseBetweenNotes = noteDuration + 50;      //delay between pulse
+    delay(pauseBetweenNotes);
+    
+    noTone(buzzer);                // stop the tone playing
+  }
+}
+void beepBuzzerByFlag(bool Flag){
+  Serial.println("BEEP");
+  if(Flag){
+      if(thisNote>=(sizeof(melody)/sizeof(int))){
+        thisNote=0;
+        Flag=false;
+      }
+      thisNote++;
+      int noteDuration = 1500/noteDurations[thisNote];
+      tone(buzzer, melody[thisNote],noteDuration);
+      delay(pauseBetweenNotes);
+      noTone(buzzer);                // stop the tone playing
+  }
   for (int thisNote = 0; thisNote<(sizeof(melody)/sizeof(int)); thisNote++) {
 
     // to calculate the note duration, take one second 
