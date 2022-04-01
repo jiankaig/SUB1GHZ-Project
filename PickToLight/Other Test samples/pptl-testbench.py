@@ -76,7 +76,7 @@ if __name__ == "__main__":
     t = testValues()
     noOfBoards = 10
     delay = 5
-    testCase = 3
+    testCase = 2
     # testCase = input("select test case: ")
     ### test bench ###
     if(testCase == 0):
