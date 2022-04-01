@@ -25,7 +25,7 @@ EasyLink myLink;
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0003" //Change this number for the board ID
+#define BOARDID "0004" //Change this number for the board ID
 
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
@@ -69,17 +69,17 @@ void setup() {
 
   //setup buzzer
   pinMode(buzzer, OUTPUT); // Set buzzer - pin 37 as an output
-//  beepBuzzer();
-//  beepBuzzerByFlag(true);
+//  beepBuzzer(); // buzzer does work from here
+//  beepBuzzerByFlag(true); // buzzer does work from here
 }
 
 /****************** Loop ***********************************************/
 void loop() {
-  beepBuzzerByFlag(buzzerFlag);
+  beepBuzzerByFlag(buzzerFlag); // buzzer only works before receiving any led command 
   if(state == LOW)
   {
     Serial.println("button..");
-    buzzerFlag =true;
+    buzzerFlag =true; // buzzer only works before receiving any led command
     reset_LED();
     if(bFeedbackEnable){
       bFeedbackEnable = false;
@@ -138,6 +138,8 @@ void loop() {
     bLED_Command_Success = writeLEDfromStr(strValue);
     delay(100); //slight delay, otherwise cc3200 cant seem to receive..
     if(bLED_Command_Success ==1){
+      beepBuzzer(); // does not sound off
+//      buzzerFlag =true; // does not sound off
       bLED_Command_Success=0;
       sendStatus(strValue, '1');
       strValue_copy = strValue; //store strValue such that it wont be overwritten
@@ -172,8 +174,6 @@ int writeLEDfromStr(String strValue)
       analogWrite( RED, 255-redCode.toInt() );
       analogWrite( GREEN, 255-greenCode.toInt() );
       analogWrite( BLUE, 255-blueCode.toInt() );
-      beepBuzzer();
-//      buzzerFlag =true;
       return 1;//success
     }
     return -1;//error BoardID mismatch
@@ -230,7 +230,7 @@ void beepBuzzer(){
 }
 void beepBuzzerByFlag(bool &Flag){
   if(Flag){
-      Serial.println("BEEP");
+      Serial.println("BEEP by flag");
       if(thisNote>=(sizeof(melody)/sizeof(int))){
         thisNote=0;
         Flag=false;
