@@ -25,7 +25,7 @@ EasyLink myLink;
 #define BLUE 12 // may need to change this for your LaunchPad
 #define buttonPin 11//PUSH1 // button pin PUSH1 //13
 #define delayTime 10 // delay between color changes, 10ms by default
-#define BOARDID "0004" //Change this number for the board ID
+#define BOARDID "0006" //Change this number for the board ID
 
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
