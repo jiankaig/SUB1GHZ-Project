@@ -30,6 +30,7 @@
        - serial1 set Timeout(deafult is 1sec)
   2.6: - revamped of FSM with bButtonFB to enable "Half Duplex" communication
        - changed ret.indexOf("Timeout") to ret.charAt(27) to improve processing speed
+  2.7: - added "AT" command filter, thereby allowing AT command to parse without "AT+TX" prefix
        
  */
 
@@ -164,7 +165,7 @@ void loop() {
           const char *TX_msg = packetBuffer;
           // if packetBuffer begins with AT...then dont...
           if(packetBuffer[0] == 'A' && packetBuffer[1] == 'T'){
-            Serial.print("COMMAND is AT!!")
+            Serial.print("COMMAND is AT!!");
             strcpy(processed_pktBuf,TX_msg);
           }
           else{
