@@ -46,9 +46,12 @@ def clearAllBoards(total):
         sendUdpCommand(command)
     
 if __name__ == "__main__":
+    # initialisations
     t = testValues()
     noOfBoards = 4
     delay = 1
+
+    # test bench
     color = t.Red
     sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
     # clearAllBoards(noOfBoards)
