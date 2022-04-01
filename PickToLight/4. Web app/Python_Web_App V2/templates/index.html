@@ -42,42 +42,58 @@
 <h2 align=center> Pick to light Demo</h2>   <!--  Deivce header-->
 
 
-<table>
-    <tr>
-      <th>Parts</th>
-      <th>Color Picker</th>
-      <th>LED Lights</th>
-    </tr>
-    <tr>
-      <td>Buzzer</td>
-      <td><input type="color" id="1" name="1" class="tableColor"><!--  Color Picker--></td>
-      <td style="text-align:center" ><span class="dot"></span></td>
-    </tr>
-    <tr>
-      <td>Battery</td>
-      <td><input type="color" name="2" id="2" class="tableColor"><!--  Color Picker--></td>
-      <td style="text-align:center"><span class="dot"></span></td>
-    </tr>
-    <tr>
-      <td>LED</td>
-      <td><input type="color" name="3" id="3" class="tableColor" ><!--  Color Picker--></td>
-      <td style="text-align:center"><span class="dot"></span></td>
-    </tr>
-    <tr>
-      <td>PCB</td>
-      <td><input type="color" name="4" id="4" class="tableColor" ><!--  Color Picker--></td>
-      <td style="text-align:center"><span class="dot"></span></td>
-    </tr>
-    <tr>
-      <td>Regulator</td>
-      <td><input type="color" name="5" id="5" class="tableColor" ><!--  Color Picker--></td>
-      <td style="text-align:center"><span class="dot"></span></td>
-    </tr>
-</table>
-<br>
-<button id="submitTable">Submit</button>
-<br>
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
 
+<h3>LED #0</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./0-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./0-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+
+<h3>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./0-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./0-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./0-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./0-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+
+<h3>LED #1</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./1-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./1-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./1-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./1-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./1-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./1-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+<h3>LED #2</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./2-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./2-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./2-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./2-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./2-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./2-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
 
 
@@ -98,12 +114,12 @@
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
 
 
-<h3>LED #3</h3>Red:                                           <!--  RED LED Header-->
+
+<h3>LED #4</h3>Red:                                           <!--  RED LED Header-->
 <button onclick="location.href='./4-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
 <button onclick="location.href='./4-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
 
-
-<h3>
+<br>
 </h3>Green:                                         <!--  GREEN LED Header-->
 <button onclick="location.href='./4-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
 <button onclick="location.href='./4-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
@@ -115,21 +131,141 @@
 <button onclick="location.href='./4-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
 
-<!--  FOR LED STRIP -->
 
-<h3>WS2801 LED STRIP</h3>1st LED:                                            <!--  LED STRIP Header-->
-<button onclick="location.href='./1-SRH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
-<button onclick="location.href='./1-SRL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<h3>LED #5</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./5-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./5-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
 
-</h3>2nd LED:                                            <!--  LED STRIP Header-->
-<button onclick="location.href='./1-SGH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
-<button onclick="location.href='./1-SGL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./5-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./5-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
 
-</h3>3rd LED:                                            <!--  LED STRIP Header-->
-<button onclick="location.href='./1-SBH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
-<button onclick="location.href='./1-SBL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./5-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./5-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
 <hr style="height:2px;background-color:black"   >                      <!--  Line-->
 
+
+<h3>LED #6</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./6-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./6-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./6-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./6-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./6-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./6-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+<h3>LED #7</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./7-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./7-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./7-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./7-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./7-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./7-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+
+<h3>LED #8</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./8-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./8-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./8-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./8-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./8-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./8-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+
+
+<h3>LED #9</h3>Red:                                           <!--  RED LED Header-->
+<button onclick="location.href='./9-RH'"  >HIGH</button>       <!--  High Button for RED LED-->
+<button onclick="location.href='./9-RL'"  >LOW</button><br>    <!--  High Button for RED LED-->
+
+<br>
+</h3>Green:                                         <!--  GREEN LED Header-->
+<button onclick="location.href='./9-GH'"   >HIGH</button>     <!--  High Button for GREEN LED-->
+<button onclick="location.href='./9-GL'"   >LOW</button><br>  <!--  Low Button for GREEN LED-->
+
+
+<h3>
+</h3>Blue:                                            <!--  LED STRIP Header-->
+<button onclick="location.href='./9-BH'"   >HIGH</button>        <!--  High Button for YELLOW LED-->
+<button onclick="location.href='./9-BL'"  >LOW</button><br>     <!--  Low Button for YELLOW LED-->
+<hr style="height:2px;background-color:black"   >                      <!--  Line-->
+
+<!-- <h3>LED #3</h3>Red:                                           <!--  RED LED Header--> -->
+<!-- <button value="3-RH" onclick="buttonClick(this.value)"  >HIGH</button>       <!--  High Button for RED LED--> -->
+<!-- <button value="3-RL" onclick="buttonClick(this.value)"  >LOW</button><br>    <!--  High Button for RED LED--> -->
+
+<!-- <br> -->
+<!-- </h3>Green:                                         <!--  GREEN LED Header--> -->
+<!-- <button value="3-GH" onclick="buttonClick(this.value)"  >HIGH</button>     <!--  High Button for GREEN LED--> -->
+<!-- <button value="3-GL" onclick="buttonClick(this.value)"  >LOW</button><br>  <!--  Low Button for GREEN LED--> -->
+
+
+<!-- <h3> -->
+<!-- </h3>Blue:                                            <!--  LED STRIP Header--> -->
+<!-- <button value="3-BH" onclick="buttonClick(this.value)"  >HIGH</button>        <!--  High Button for YELLOW LED--> -->
+<!-- <button value="3-BL" onclick="buttonClick(this.value)"  >LOW</button><br>     <!--  Low Button for YELLOW LED--> -->
+<!-- <hr style="height:2px;background-color:black"   >                      <!--  Line--> -->
+
+
+<!-- <h3>LED #3</h3>Red:                                           <!--  RED LED Header--> -->
+<!-- <button value="4-RH" onclick="buttonClick(this.value)" >HIGH</button>       <!--  High Button for RED LED--> -->
+<!-- <button value="4-RL" onclick="buttonClick(this.value)" >LOW</button><br>    <!--  High Button for RED LED--> -->
+
+
+<!-- <h3> -->
+<!-- </h3>Green:                                         <!--  GREEN LED Header--> -->
+<!-- <button value="4-GH" onclick="buttonClick(this.value)"  >HIGH</button>     <!--  High Button for GREEN LED--> -->
+<!-- <button value="4-GL"  onclick="buttonClick(this.value)" >LOW</button><br>  <!--  Low Button for GREEN LED--> -->
+
+
+<!-- <h3> -->
+<!-- </h3>Blue:                                            <!--  LED STRIP Header--> -->
+<!-- <button value="4-BH" onclick="buttonClick(this.value)"  >HIGH</button>        <!--  High Button for YELLOW LED--> -->
+<!-- <button value="4-BL" onclick="buttonClick(this.value)" >LOW</button><br>     <!--  Low Button for YELLOW LED--> -->
+<!-- <hr style="height:2px;background-color:black"   >                      <!--  Line--> -->
+
+<!-- <!--  FOR LED STRIP --> -->
+
+<!-- <h3>WS2801 LED STRIP</h3>1st LED:                                            <!--  LED STRIP Header--> -->
+<!-- <button value="1-SRH" onclick="buttonClick(this.value)"  >HIGH</button>        <!--  High Button for YELLOW LED--> -->
+<!-- <button value="1-SRL" onclick="buttonClick(this.value)" >LOW</button><br>     <!--  Low Button for YELLOW LED--> -->
+
+<!-- </h3>2nd LED:                                            <!--  LED STRIP Header--> -->
+<!-- <button value="1-SGH" onclick="buttonClick(this.value)"  >HIGH</button>        <!--  High Button for YELLOW LED--> -->
+<!-- <button value="1-SGL" onclick="buttonClick(this.value)" >LOW</button><br>     <!--  Low Button for YELLOW LED--> -->
+
+<!-- </h3>3rd LED:                                            <!--  LED STRIP Header--> -->
+<!-- <button value="1-SBH" onclick="buttonClick(this.value)"  >HIGH</button>        <!--  High Button for YELLOW LED--> -->
+<!-- <button value="1-SBL" onclick="buttonClick(this.value)" >LOW</button><br>     <!--  Low Button for YELLOW LED--> -->
+<!-- <hr style="height:2px;background-color:black"   >                      <!--  Line--> -->
 
 
 <!-- <h3>RGB</h3>Output:                                                   <!--  Color Picker Header-->
@@ -160,8 +296,22 @@
                                            <!--  End of Content Div-->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<script type="text/javascript">                                                                            //  JavaScript-->
+<script type="text/javascript">          
+                                                                  //  JavaScript-->
 
+// new function
+function buttonClick(value) {     
+  alert(value)                                                               //  
+  $.ajax({                        //  Send over to flask
+  url : '/'+value,
+  type : 'POST',
+  success: function(data) {
+         if(data == "Success"){
+           alert("Success!")
+         }
+      }
+  })   
+}
 function individualBtnLED(element){                                                               //  This gets the value of the buttons pressed
   alert(element.value);
   $.ajax({
