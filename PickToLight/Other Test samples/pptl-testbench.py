@@ -74,11 +74,12 @@ def clearAllBoards(total):
 if __name__ == "__main__":
     # initialisations
     t = testValues()
-    noOfBoards = 10
-    delay = 5
-    testCase = 2
+    noOfBoards = 3 # 10
+    delay = 1
+    testCase = 4
     # testCase = input("select test case: ")
     ### test bench ###
+    print("Start testCase {}...".format(testCase))
     if(testCase == 0):
             color = t.Red
             sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
@@ -113,6 +114,22 @@ if __name__ == "__main__":
         uppBrdLimit = 2
         index = input("Enter Board Id to test, from {} to {}: ".format(lwrBrdLimit, uppBrdLimit))
         print("starting test case 3...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(index, delay)
+        print("end of test case 3...with board ({})".format(index))
+    elif(testCase == 4):
+        noOfBoards = 2
+        delay = 2
+        index = 1
+        print("start test case 4...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(index, delay)
+        index = 2
+        print("con't test case 4...with board ({})".format(index))
         strIndex = str(index)
         print("AT+I 0"+strIndex+"<CR>")
         sendUdpCommand("AT+I 0"+strIndex+"<CR>")
