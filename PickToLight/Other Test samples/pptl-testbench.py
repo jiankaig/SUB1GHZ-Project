@@ -1,7 +1,5 @@
 import socket
-import time
-
-# time.sleep(3) # Sleep for 3 seconds
+import time # time.sleep(3) # Sleep for 3 seconds
 ip_Addr = "192.168.18.8" #  Must set to address of cc3200
 port = 55056 
 class Color:
@@ -30,16 +28,13 @@ def sendUdpCommand(command):
 
 def sendToAllBoards(total, r, g, b, delay):
     for i in range(total):
-        command = parseLedCommand(i+1, r, g, b)
+        command = parseLedCommand(i, r, g, b)
         try:
             sendUdpCommand(command)
-            print("sending {} to board {}\n".format(command, i+1))
+            print("sending {} to board {}".format(command, i))
         except:
             print("error: something happened" )
-    # time.sleep(delay) #  delay in seconds
-    # for i in range(total):
-    #     command = parseLedCommand(i+1, 0, 0, 0)
-    #     sendUdpCommand(command)
+    print("\n")
 
 def sendToBoard(i, r, g, b):
     command = parseLedCommand(i, r, g, b)
@@ -48,24 +43,7 @@ def sendToBoard(i, r, g, b):
         print("sending {} to board {}\n".format(command, i))
     except:
         print("error: something happened" )
-
-def clearAllBoards(total):
-    print("clear all..")
-    for i in range(total):
-        command = parseLedCommand(i+1, 0, 0, 0)
-        sendUdpCommand(command)
-    
-if __name__ == "__main__":
-    # initialisations
-    t = testValues()
-    noOfBoards = 6
-    delay = 1
-
-    ### test bench ###
-    # sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
-    # clearAllBoards(noOfBoards)
-    delay = 3
-    index = 6
+def sendToBoardCycleColours(index, delay):
     color = t.Red
     sendToBoard(index, color.r,color.g,color.b)
     time.sleep(delay)
@@ -81,7 +59,48 @@ if __name__ == "__main__":
     color = t.White
     sendToBoard(index, color.r,color.g,color.b)
     time.sleep(delay)
-    
+
     color = t.NoColour
     sendToBoard(index, color.r,color.g,color.b)
 
+def clearAllBoards(total):
+    print("clear all..")
+    for i in range(total):
+        command = parseLedCommand(i+1, 0, 0, 0)
+        sendUdpCommand(command)
+    
+if __name__ == "__main__":
+    # initialisations
+    t = testValues()
+    noOfBoards = 10
+    delay = 10
+    testCase = 1
+    ### test bench ###
+    if(testCase ==0):
+            color = t.Red
+            sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
+            clearAllBoards(noOfBoards)
+    elif(testCase ==1):
+            index = 3
+            sendToBoardCycleColours(index, delay)
+    elif(testCase ==2):
+            print("All to Red")
+            c = t.Red
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay) #give time for latency response
+
+            print("All to Greeen")
+            c = t.Green
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
+
+            print("All to Blue")
+            c = t.Blue
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
+
+            print("All to NoColour")
+            c = t.NoColour
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
+    

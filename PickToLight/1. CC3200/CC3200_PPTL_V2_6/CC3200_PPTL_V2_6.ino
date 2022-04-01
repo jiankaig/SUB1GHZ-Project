@@ -162,8 +162,15 @@ void loop() {
           char processed_pktBuf[30];
           const char *TX_prefix = "AT+TX ";
           const char *TX_msg = packetBuffer;
-          strcpy(processed_pktBuf,TX_prefix);
-          strcat(processed_pktBuf,TX_msg);
+          // if packetBuffer begins with AT...then dont...
+          if(packetBuffer[0] == 'A' && packetBuffer[1] == 'T'){
+            Serial.print("COMMAND is AT!!")
+            strcpy(processed_pktBuf,TX_msg);
+          }
+          else{
+            strcpy(processed_pktBuf,TX_prefix);
+            strcat(processed_pktBuf,TX_msg);
+          }
           
           Serial1.println(processed_pktBuf);
           
