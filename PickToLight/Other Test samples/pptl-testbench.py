@@ -24,7 +24,8 @@ def Print(command):
 
 def sendUdpCommand(command):
     opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    opened_socket.sendto(command, (ip_Addr, port))
+    byte_message = bytes(command, "utf-8")
+    opened_socket.sendto(byte_message, (ip_Addr, port))
 
 def sendToAllBoards(total, r, g, b, delay):
     for i in range(total):
@@ -43,6 +44,7 @@ def sendToBoard(i, r, g, b):
         print("sending {} to board {}\n".format(command, i))
     except:
         print("error: something happened" )
+
 def sendToBoardCycleColours(index, delay):
     color = t.Red
     sendToBoard(index, color.r,color.g,color.b)
@@ -73,17 +75,18 @@ if __name__ == "__main__":
     # initialisations
     t = testValues()
     noOfBoards = 10
-    delay = 10
-    testCase = 1
+    delay = 5
+    testCase = 3
+    # testCase = input("select test case: ")
     ### test bench ###
-    if(testCase ==0):
+    if(testCase == 0):
             color = t.Red
             sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
             clearAllBoards(noOfBoards)
-    elif(testCase ==1):
+    elif(testCase == 1):
             index = 3
             sendToBoardCycleColours(index, delay)
-    elif(testCase ==2):
+    elif(testCase == 2):
             print("All to Red")
             c = t.Red
             sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
@@ -103,4 +106,17 @@ if __name__ == "__main__":
             c = t.NoColour
             sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
             time.sleep(delay)
+    elif(testCase == 3):
+        noOfBoards = 3
+        delay = 5
+        lwrBrdLimit = 1 
+        uppBrdLimit = 2
+        index = input("Enter Board Id to test, from {} to {}: ".format(lwrBrdLimit, uppBrdLimit))
+        print("starting test case 3...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(index, delay)
+        print("end of test case 3...with board ({})".format(index))
+
     
