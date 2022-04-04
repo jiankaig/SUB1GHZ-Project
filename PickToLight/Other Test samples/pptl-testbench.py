@@ -1,13 +1,24 @@
 import time # time.sleep(3) # Sleep for 3 seconds
 from pptl_helper import parseLedCommand, sendUdpCommand, sendToAllBoards, sendToBoardCycleColours, clearAllBoards
 from pptl_helper import testValues
+import argparse as ap
 
 if __name__ == "__main__":
+    parser = ap.ArgumentParser(description='PPTL Test Bench.. ')
+    parser.add_argument('-t', default=0, type=int,
+                        help='selects testcase from 0 to...')
+    parser.add_argument('-d', default=0, type=int,
+                        help='set delay in seconds.')
+    parser.add_argument('-n', default=9, type=int,
+                        help='set noOfBoards.')
+
+    args = parser.parse_args()
+    
     # initialisations
     t = testValues()
-    noOfBoards = 9 # 10
-    delay = 1
-    testCase = 5
+    noOfBoards = args.n
+    delay = args.d
+    testCase = args.t
     # testCase = input("select test case: ")
     ### test bench ###
     print("Start testCase {}...".format(testCase))
@@ -51,6 +62,7 @@ if __name__ == "__main__":
         sendToBoardCycleColours(t, index, delay)
         print("end of test case 3...with board ({})".format(index))
     elif(testCase == 4):
+        # protocol test; only board 1 and 2 
         noOfBoards = 2
         delay = 2
         index = 1
