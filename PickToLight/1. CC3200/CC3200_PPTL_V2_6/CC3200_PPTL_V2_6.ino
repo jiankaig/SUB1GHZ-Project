@@ -43,7 +43,7 @@
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
 //#define DEBUG_
 //#define SHOW_UART1_RX
-#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
 
 #ifndef DEBUG_MODE_SIM_GUI
