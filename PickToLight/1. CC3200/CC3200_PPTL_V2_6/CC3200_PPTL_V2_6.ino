@@ -43,7 +43,7 @@
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
 //#define DEBUG_
 //#define SHOW_UART1_RX
-//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
 
 #ifndef DEBUG_MODE_SIM_GUI
@@ -87,7 +87,7 @@ void setup() {
   Serial1.begin(115200);
   Serial1.setTimeout(TIMEOUT_MS);
   pinMode(RED_LED, OUTPUT);
-  digitalWrite(RED_LED, LOW);//off first
+  digitalWrite(RED_LED, HIGH);//on first
   
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to Network named: ");
@@ -116,7 +116,7 @@ void setup() {
   Serial.println("\nWaiting for a connection from a client...");
   Udp.begin(localPort);
   Serial.println("connected.");
-  digitalWrite(RED_LED, HIGH);//on
+  digitalWrite(RED_LED, LOW);//off to signal no issue
   
   AT_init(); //sends AT commands to Easylink API for initialising
 }
