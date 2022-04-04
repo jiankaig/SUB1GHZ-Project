@@ -5,19 +5,19 @@ from pptl_helper import testValues
 if __name__ == "__main__":
     # initialisations
     t = testValues()
-    noOfBoards = 3 # 10
+    noOfBoards = 9 # 10
     delay = 1
-    testCase = 4
+    testCase = 5
     # testCase = input("select test case: ")
     ### test bench ###
     print("Start testCase {}...".format(testCase))
     if(testCase == 0):
-            color = t.Red
+            color = t.Green
             sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
             clearAllBoards(noOfBoards)
     elif(testCase == 1):
-            index = 3
-            sendToBoardCycleColours(index, delay)
+            index = 6
+            sendToBoardCycleColours(t, index, delay)
     elif(testCase == 2):
             print("All to Red")
             c = t.Red
@@ -39,8 +39,8 @@ if __name__ == "__main__":
             sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
             time.sleep(delay)
     elif(testCase == 3):
-        noOfBoards = 3
-        delay = 5
+        noOfBoards = 9
+        delay = 2
         lwrBrdLimit = 1 
         uppBrdLimit = 2
         index = input("Enter Board Id to test, from {} to {}: ".format(lwrBrdLimit, uppBrdLimit))
@@ -66,5 +66,7 @@ if __name__ == "__main__":
         sendUdpCommand("AT+I 0"+strIndex+"<CR>")
         sendToBoardCycleColours(t, index, delay)
         print("end of test case 3...with board ({})".format(index))
-
-    
+    elif(testCase == 5):
+        # led strip test
+        for i in range(5,9):
+            sendToBoardCycleColours(t, i, delay)
