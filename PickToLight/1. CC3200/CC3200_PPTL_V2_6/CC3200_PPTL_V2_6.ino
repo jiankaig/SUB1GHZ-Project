@@ -30,8 +30,8 @@
        - serial1 set Timeout(deafult is 1sec)
   2.6: - revamped of FSM with bButtonFB to enable "Half Duplex" communication
        - changed ret.indexOf("Timeout") to ret.charAt(27) to improve processing speed
-  2.7: - added "AT" command filter, thereby allowing AT command to parse without "AT+TX" prefix
-  2.8: - added RED_LED for wifi connection     
+       - added "AT" command filter, thereby allowing AT command to parse without "AT+TX" prefix
+       - added RED_LED for wifi connection     
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -75,8 +75,7 @@ bool bButtonFB; //boolean to manage if button feedback has been received
 int programState = STATE_CHECK_UDP;
 int STATE_CHECK_EASYLINK_count = 0;
 #define LED_COMMAND_LENGTH 22
-#define TIMEOUT_MS 215//200 //1000 //for serial1 timeout and delay after at+rx
-#define STR_TIMEOUT_25MHZ "800000" //"4000000" //for timeout of ar+rx
+#define TIMEOUT_MS 200 //600 //for serial1 and Rx timeout  
 #define STATE_CHECK_EASYLINK_REPEAT 3
 #define RED_LED 29
 
@@ -320,12 +319,12 @@ void printWifiStatus() {
 }
 
 void AT_init(){
+  String strTimeout25Mhz = String(TIMEOUT_MS*4000);
   Serial.println("INITIALISE EasyLink AT API");
   Serial1.println("AT+I 0001<CR>");
   Serial1.print("ATPRO=");
-  Serial1.print(STR_TIMEOUT_25MHZ); //"4000000"
+  Serial1.print(strTimeout25Mhz); //"4000000"
   Serial1.println("<CR>");
-//  Serial1.println("ATPRO=4000000<CR>");
 
   // to flush the returns
   Serial1.println("AT+RX"); 
