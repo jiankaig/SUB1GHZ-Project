@@ -1,0 +1,19 @@
+<h3>WELCOME SEEMS PEEPS</h3>
+<textarea class="bcode" name="barcode"></textarea>
+<span class="action"></span>
+<button type="button" onclick="submitFun()"style="height:50px;width:50px">Submit</button> 
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type="text/javascript">     
+function submitFun(){
+var _this = $('.bcode').val();
+
+if(_this=="SEEMS"){
+	window.location.replace("./index.html");
+        }
+
+}
+</script>

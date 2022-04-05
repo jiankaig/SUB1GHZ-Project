@@ -1,7 +1,7 @@
 import pyodbc
 
 
-server = 'localhost'
+server = '192.168.18.5'
 database = 'Web_App'
 username = 'sa'
 password = '12345'

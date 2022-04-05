@@ -68,11 +68,11 @@ void loop() {
           if (Serial1.available() > 0) {
             data = Serial1.readString();
           }
-
-          Serial.print(data);
+          Serial.print("data: ");
+          Serial.println(data);
           if (data != 0)
             client.println(data);
-
+          data = "";
           client.println("<br />");
           client.println("</html>");
           break;
