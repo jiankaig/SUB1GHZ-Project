@@ -39,7 +39,7 @@ def RH0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/0-RL')
 def RL0():
@@ -49,7 +49,7 @@ def RL0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -63,7 +63,7 @@ def GH0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/0-GL') #For Slave 1 Green Low
 def GL0():
@@ -73,7 +73,7 @@ def GL0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -86,7 +86,7 @@ def BH0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -98,7 +98,7 @@ def BL0():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED0_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -139,7 +139,7 @@ def RH1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/1-RL')
 def RL1():
@@ -149,7 +149,7 @@ def RL1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -162,7 +162,8 @@ def BH1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_BLUE_ON", now)
-    return render_template('index.html')
+    return "Success"
+
 
 
 @app.route('/1-BL')
@@ -173,7 +174,7 @@ def BL1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_BLUE_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 2#
@@ -189,7 +190,7 @@ def GH2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/2-GL') #For Slave 2 Green Low
 def GL2():
@@ -199,7 +200,7 @@ def GL2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #R#
@@ -212,7 +213,7 @@ def RH2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/2-RL')
 def RL2():
@@ -222,7 +223,7 @@ def RL2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 
 @app.route('/2-BH')
@@ -233,7 +234,7 @@ def BH2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -245,7 +246,7 @@ def BL2():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED2_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 3#
@@ -262,7 +263,7 @@ def RH3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/3-RL')
 def RL3():
@@ -272,7 +273,7 @@ def RL3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -286,7 +287,7 @@ def GH3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/3-GL') #For Slave 1 Green Low
 def GL3():
@@ -296,7 +297,7 @@ def GL3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -309,7 +310,7 @@ def BH3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -321,7 +322,7 @@ def BL3():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED3_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 4#
@@ -338,7 +339,7 @@ def RH4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/4-RL')
 def RL4():
@@ -348,7 +349,7 @@ def RL4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -362,7 +363,7 @@ def GH4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/4-GL') #For Slave 1 Green Low
 def GL4():
@@ -372,7 +373,7 @@ def GL4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -385,7 +386,7 @@ def BH4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -397,7 +398,7 @@ def BL4():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED4_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 5#
@@ -414,7 +415,7 @@ def RH5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/5-RL')
 def RL5():
@@ -424,7 +425,7 @@ def RL5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -438,7 +439,7 @@ def GH5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/5-GL') #For Slave 1 Green Low
 def GL5():
@@ -448,7 +449,7 @@ def GL5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -461,7 +462,7 @@ def BH5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -473,7 +474,7 @@ def BL5():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED5_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 6#
@@ -490,7 +491,7 @@ def RH6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/6-RL')
 def RL6():
@@ -500,7 +501,7 @@ def RL6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -514,7 +515,7 @@ def GH6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/6-GL') #For Slave 1 Green Low
 def GL6():
@@ -524,7 +525,7 @@ def GL6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -537,7 +538,7 @@ def BH6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -549,7 +550,7 @@ def BL6():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED6_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 #########
 #Slave 7#
@@ -566,7 +567,7 @@ def RH7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/7-RL')
 def RL7():
@@ -576,7 +577,7 @@ def RL7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -590,7 +591,7 @@ def GH7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/7-GL') 
 def GL7():
@@ -600,7 +601,7 @@ def GL7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -613,7 +614,7 @@ def BH7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -625,7 +626,7 @@ def BL7():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED7_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 
 #########
@@ -643,7 +644,7 @@ def RH8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/8-RL')
 def RL8():
@@ -653,7 +654,7 @@ def RL8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -667,7 +668,7 @@ def GH8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/8-GL') 
 def GL8():
@@ -677,7 +678,7 @@ def GL8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -690,7 +691,7 @@ def BH8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -702,7 +703,7 @@ def BL8():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED8_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 
 #########
@@ -720,7 +721,7 @@ def RH9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_RED_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/9-RL')
 def RL9():
@@ -730,7 +731,7 @@ def RL9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_RED_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #G#
@@ -744,7 +745,7 @@ def GH9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_GREEN_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 @app.route('/9-GL') 
 def GL9():
@@ -754,7 +755,7 @@ def GL9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_GREEN_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
                 ###
                 #B#
@@ -767,7 +768,7 @@ def BH9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_BLue_ON", now)
-    return render_template('index.html')
+    return "Success"
 
 
 
@@ -779,7 +780,7 @@ def BL9():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED9_BLue_OFF", now)
-    return render_template('index.html')
+    return "Success"
 
 
 @app.route('/rgbVal',methods=['POST'])
@@ -793,7 +794,7 @@ def rbgPost():
             f.writelines(val + " " + str(now)+"\n")
         SQLdb.sendCommandDB(val, now)
 
-    return render_template('index.html')
+    return "success"
 
 
 if __name__ == '__main__':
