@@ -1,5 +1,9 @@
 import asyncio
 import sys
+from datetime import datetime
+now = datetime.now()
+dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+print("date and time =", dt_string)
 ipaddr = '192.168.18.7' #'127.0.0.1'
 port = 55007 #9999
 async def get_steam_reader(pipe) -> asyncio.StreamReader:
@@ -15,7 +19,7 @@ class EchoServerProtocol:
 
     def datagram_received(self, data, addr):
         message = data.decode()
-        print('Received %r from %s' % (message, addr))
+        print(f'{dt_string} Received %r from %s' % (message, addr))
         # print('Send %r to %s' % (message, addr))
         # self.transport.sendto(data, addr)
     def connection_lost(data, addr):

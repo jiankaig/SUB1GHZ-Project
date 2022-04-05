@@ -11,6 +11,8 @@ if __name__ == "__main__":
                         help='set delay in seconds.')
     parser.add_argument('-n', default=9, type=int,
                         help='set noOfBoards.')
+    parser.add_argument('-i', default=0, type=int,
+                        help='set index.')
 
     args = parser.parse_args()
     
@@ -19,6 +21,7 @@ if __name__ == "__main__":
     noOfBoards = args.n
     delay = args.d
     testCase = args.t
+    index = args.i
     # testCase = input("select test case: ")
     ### test bench ###
     print("Start testCase {}...".format(testCase))
@@ -27,7 +30,6 @@ if __name__ == "__main__":
             sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
             clearAllBoards(noOfBoards)
     elif(testCase == 1):
-            index = 6
             sendToBoardCycleColours(t, index, delay)
     elif(testCase == 2):
             print("All to Red")
