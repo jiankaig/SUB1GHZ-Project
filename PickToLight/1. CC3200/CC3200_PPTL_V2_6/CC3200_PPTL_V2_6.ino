@@ -30,7 +30,8 @@
        - serial1 set Timeout(deafult is 1sec)
   2.6: - revamped of FSM with bButtonFB to enable "Half Duplex" communication
        - changed ret.indexOf("Timeout") to ret.charAt(27) to improve processing speed
-       
+  2.7: - added "AT" command filter, thereby allowing AT command to parse without "AT+TX" prefix
+  2.8: - added RED_LED for wifi connection     
  */
 
 #ifndef __CC3200R1M1RGC__
@@ -42,7 +43,7 @@
 /////////////////////////PREPROCESSOR DEFINATIONS//////////////////////////////
 //#define DEBUG_
 //#define SHOW_UART1_RX
-//#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
+#define DEBUG_MODE_SIM_GUI //if using simple gui to debug
 ///////////////////END OF PREPROCESSOR DEFINATIONS/////////////////////////////
 
 #ifndef DEBUG_MODE_SIM_GUI
@@ -77,6 +78,7 @@ int STATE_CHECK_EASYLINK_count = 0;
 #define TIMEOUT_MS 215//200 //1000 //for serial1 timeout and delay after at+rx
 #define STR_TIMEOUT_25MHZ "800000" //"4000000" //for timeout of ar+rx
 #define STATE_CHECK_EASYLINK_REPEAT 3
+#define RED_LED 29
 
 void setup() {
   
@@ -84,6 +86,8 @@ void setup() {
   Serial.begin(9600);
   Serial1.begin(115200);
   Serial1.setTimeout(TIMEOUT_MS);
+  pinMode(RED_LED, OUTPUT);
+  digitalWrite(RED_LED, HIGH);//on first
   
   // attempt to connect to Wifi network:
   Serial.print("Attempting to connect to Network named: ");
@@ -112,6 +116,7 @@ void setup() {
   Serial.println("\nWaiting for a connection from a client...");
   Udp.begin(localPort);
   Serial.println("connected.");
+  digitalWrite(RED_LED, LOW);//off to signal no issue
   
   AT_init(); //sends AT commands to Easylink API for initialising
 }
@@ -162,8 +167,15 @@ void loop() {
           char processed_pktBuf[30];
           const char *TX_prefix = "AT+TX ";
           const char *TX_msg = packetBuffer;
-          strcpy(processed_pktBuf,TX_prefix);
-          strcat(processed_pktBuf,TX_msg);
+          // if packetBuffer begins with AT...then dont...
+          if(packetBuffer[0] == 'A' && packetBuffer[1] == 'T'){
+            Serial.print("COMMAND is AT!!");
+            strcpy(processed_pktBuf,TX_msg);
+          }
+          else{
+            strcpy(processed_pktBuf,TX_prefix);
+            strcat(processed_pktBuf,TX_msg);
+          }
           
           Serial1.println(processed_pktBuf);
           

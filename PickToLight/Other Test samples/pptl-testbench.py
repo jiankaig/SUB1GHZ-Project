@@ -1,87 +1,86 @@
-import socket
-import time
+import time # time.sleep(3) # Sleep for 3 seconds
+from pptl_helper import parseLedCommand, sendUdpCommand, sendToAllBoards, sendToBoardCycleColours, clearAllBoards
+from pptl_helper import testValues
+import argparse as ap
 
-# time.sleep(3) # Sleep for 3 seconds
-ip_Addr = "192.168.18.8" #  Must set to address of cc3200
-port = 55056 
-class Color:
-    def __init__(self, red, green, blue):
-        self.r = red
-        self.g = green
-        self.b = blue
-
-class testValues:
-    Red = Color(255,0,0)
-    Green = Color(0,255,0)
-    Blue = Color(0,0,255)
-    White = Color(255,255,255)
-    NoColour = Color(0,0,0)
-
-def parseLedCommand(boardId, red, green, blue):
-    ledCommandString =  "AAX" + str(boardId).zfill(4) + "0R" + str(red).zfill(3) + "G" + str(green).zfill(3) + "B" + str(blue).zfill(3) + "BB"
-    return ledCommandString
-
-def Print(command):
-    print("ip_Addr: {}\nport: {}\ncommand: {}\n".format(ip_Addr, port,command) )
-
-def sendUdpCommand(command):
-    opened_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    opened_socket.sendto(command, (ip_Addr, port))
-
-def sendToAllBoards(total, r, g, b, delay):
-    for i in range(total):
-        command = parseLedCommand(i+1, r, g, b)
-        try:
-            sendUdpCommand(command)
-            print("sending {} to board {}\n".format(command, i+1))
-        except:
-            print("error: something happened" )
-    # time.sleep(delay) #  delay in seconds
-    # for i in range(total):
-    #     command = parseLedCommand(i+1, 0, 0, 0)
-    #     sendUdpCommand(command)
-
-def sendToBoard(i, r, g, b):
-    command = parseLedCommand(i, r, g, b)
-    try:
-        sendUdpCommand(command)
-        print("sending {} to board {}\n".format(command, i))
-    except:
-        print("error: something happened" )
-
-def clearAllBoards(total):
-    print("clear all..")
-    for i in range(total):
-        command = parseLedCommand(i+1, 0, 0, 0)
-        sendUdpCommand(command)
-    
 if __name__ == "__main__":
+    parser = ap.ArgumentParser(description='PPTL Test Bench.. ')
+    parser.add_argument('-t', default=0, type=int,
+                        help='selects testcase from 0 to...')
+    parser.add_argument('-d', default=0, type=int,
+                        help='set delay in seconds.')
+    parser.add_argument('-n', default=9, type=int,
+                        help='set noOfBoards.')
+    parser.add_argument('-i', default=0, type=int,
+                        help='set index.')
+
+    args = parser.parse_args()
+    
     # initialisations
     t = testValues()
-    noOfBoards = 6
-    delay = 1
-
+    noOfBoards = args.n
+    delay = args.d
+    testCase = args.t
+    index = args.i
+    # testCase = input("select test case: ")
     ### test bench ###
-    # sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
-    # clearAllBoards(noOfBoards)
-    delay = 3
-    index = 6
-    color = t.Red
-    sendToBoard(index, color.r,color.g,color.b)
-    time.sleep(delay)
+    print("Start testCase {}...".format(testCase))
+    if(testCase == 0):
+            color = t.Green
+            sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
+            clearAllBoards(noOfBoards)
+    elif(testCase == 1):
+            sendToBoardCycleColours(t, index, delay)
+    elif(testCase == 2):
+            print("All to Red")
+            c = t.Red
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay) #give time for latency response
 
-    color = t.Green
-    sendToBoard(index, color.r,color.g,color.b)
-    time.sleep(delay)
+            print("All to Greeen")
+            c = t.Green
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
 
-    color = t.Blue
-    sendToBoard(index, color.r,color.g,color.b)
-    time.sleep(delay)
+            print("All to Blue")
+            c = t.Blue
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
 
-    color = t.White
-    sendToBoard(index, color.r,color.g,color.b)
-    time.sleep(delay)
-    
-    color = t.NoColour
-    sendToBoard(index, color.r,color.g,color.b)
-
+            print("All to NoColour")
+            c = t.NoColour
+            sendToAllBoards(noOfBoards, c.r, c.g, c.b, delay)
+            time.sleep(delay)
+    elif(testCase == 3):
+        noOfBoards = 9
+        delay = 2
+        lwrBrdLimit = 1 
+        uppBrdLimit = 2
+        index = input("Enter Board Id to test, from {} to {}: ".format(lwrBrdLimit, uppBrdLimit))
+        print("starting test case 3...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(t, index, delay)
+        print("end of test case 3...with board ({})".format(index))
+    elif(testCase == 4):
+        # protocol test; only board 1 and 2 
+        noOfBoards = 2
+        delay = 2
+        index = 1
+        print("start test case 4...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(t, index, delay)
+        index = 2
+        print("con't test case 4...with board ({})".format(index))
+        strIndex = str(index)
+        print("AT+I 0"+strIndex+"<CR>")
+        sendUdpCommand("AT+I 0"+strIndex+"<CR>")
+        sendToBoardCycleColours(t, index, delay)
+        print("end of test case 3...with board ({})".format(index))
+    elif(testCase == 5):
+        # led strip test
+        for i in range(5,9):
+            sendToBoardCycleColours(t, i, delay)
