@@ -95,7 +95,7 @@ if __name__ == "__main__":
             LED_BLUE = int(stripped[21:24]) #21:24
             intRGB_concat = str(stripped[13:16]+stripped[17:20]+stripped[21:24]).zfill(9)
             # print("intRGB_concat: {}".format(intRGB_concat))
-        #CommandType = COMMAND_TYPE.NO_TYPE
+        CommandType = COMMAND_TYPE.NO_TYPE
         
         if pESD_1_value != ESD_1_value:
             currentDateTime = dt.now()
