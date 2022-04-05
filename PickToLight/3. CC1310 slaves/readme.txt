@@ -1,6 +1,10 @@
-CC1310_LED_Strip/Test_LED_Strip - includes command filtering for led strip
+CC1310_LED_Buzzer_V0 - unstable version that has issues with controling buzzer.
 
-CC1310_Single_LED - Stable version 
+CC1310_LED_Strip - example for usage of led strip controller
+		 - includes command filtering for led strip
 
-CC1310_Single_LED/Test_RGBPWM_v2_2 - (Unstable) code for slave device to receive RGB command from master, webserver, UDP packetSender.
-A single RGB changes based on command received, with button to reset and send back signal 
+CC1310_Multi_LED_V1_0 - Stable version with led strip control
+
+CC1310_Single_LED_V1_0 - Stable version 
+
+
