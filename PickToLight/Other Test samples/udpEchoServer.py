@@ -7,7 +7,7 @@ localtz=pytz.timezone('Asia/Singapore')
 now = localtz.localize(now)
 dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 print("date and time =", dt_string)
-ipaddr = '192.168.18.6'#'192.168.18.7' #'127.0.0.1'
+ipaddr = '192.168.18.7' #'127.0.0.1'
 port = 55007 #9999
 async def get_steam_reader(pipe) -> asyncio.StreamReader:
     loop = asyncio.get_event_loop()
