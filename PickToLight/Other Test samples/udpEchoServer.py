@@ -1,6 +1,7 @@
 import asyncio
 import sys
-
+ipaddr = '192.168.18.7' #'127.0.0.1'
+port = 55007 #9999
 async def get_steam_reader(pipe) -> asyncio.StreamReader:
     loop = asyncio.get_event_loop()
     reader = asyncio.StreamReader(loop=loop)
@@ -31,8 +32,7 @@ async def main():
     # client requests.
     transport, protocol = await loop.create_datagram_endpoint(
         lambda: EchoServerProtocol(),
-        # local_addr=('192.168.18.7', 55007))
-        local_addr=('127.0.0.1', 9999))
+        local_addr=(ipaddr, port))
 
     print(f"press any key and enter to exit..")
     reader = await get_steam_reader(sys.stdin)
