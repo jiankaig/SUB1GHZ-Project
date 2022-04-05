@@ -16,7 +16,7 @@ def sendCommandDB(command,datetime):
     cursor.execute(query, val)
     conn.commit()
 
-    return "success"
+    return render_template('index.html')
 
 def sendMessageDB(message,datetime):
     query = "INSERT INTO dbo.message (Message,Datetime) VALUES (?,?)"
