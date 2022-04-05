@@ -116,7 +116,7 @@ def GH1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_GREEN_ON", now)
-    return "Success"
+    return render_template('index.html')
 
 @app.route('/1-GL') #For Slave 1 Green Low
 def GL1():
@@ -126,7 +126,7 @@ def GL1():
     with open('log.txt', 'a+') as f:
         f.writelines(msg + str(now) + "\n")
     SQLdb.sendCommandDB("LED1_GREEN_OFF", now)
-    return "Success"
+    return render_template('index.html')
 
                 ###
                 #R#
