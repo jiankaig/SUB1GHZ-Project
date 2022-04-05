@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if(testCase == 0):
             color = t.Green
             sendToAllBoards(noOfBoards,color.r,color.g,color.b,delay)
-            clearAllBoards(noOfBoards)
+            # clearAllBoards(noOfBoards)
     elif(testCase == 1):
             sendToBoardCycleColours(t, index, delay)
     elif(testCase == 2):
@@ -82,5 +82,5 @@ if __name__ == "__main__":
         print("end of test case 3...with board ({})".format(index))
     elif(testCase == 5):
         # led strip test
-        for i in range(5,9):
+        for i in range(index, noOfBoards):
             sendToBoardCycleColours(t, i, delay)
