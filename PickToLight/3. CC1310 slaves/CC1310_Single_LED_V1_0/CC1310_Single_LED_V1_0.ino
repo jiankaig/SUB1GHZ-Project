@@ -28,14 +28,6 @@ EasyLink myLink;
 
 /******************Global Variables*********************************************/
 String BoardID = BOARDID; // desired device identification
-String txt = "";
-int redVal;
-int greenVal;
-int blueVal;
-String IdCode;
-String redCode;
-String greenCode;
-String blueCode;
 String strValue = "";
 String strValue_copy = ""; // so not overwrited for button feedback
 bool bReadDone = false;
