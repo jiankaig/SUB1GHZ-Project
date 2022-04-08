@@ -1,7 +1,7 @@
-ESD_temp
+ESD_2.ino
 - folder with ESD code that implements for reading 2 ESD devices
 
-ESD_2.ino 
+ESD_main.ino 
 
 - this is code to load into CC1310(slave node)
 - used to read data from ESD module(L3FN)
