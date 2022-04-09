@@ -2,23 +2,24 @@
 
 EasyLink_TxPacket txPacket;
 EasyLink myLink;
-#define GREEN_LED 40
-#define RED_LED 39
-bool led_toggle = 0;
+
 const int threshold = 250;
 int P1 = 0;
 int P2 = 0;
+int P3 = 0;
+int P4 = 0;
 
-//const int p_value = 47; //
-int p_value=0;
-//const int off_value = 3;
+const int p_value = 48;
+const int off_value = 15;
 
-String stat;
-String prevStat;
-String tagName = "L9_SMT_ESD_1_Op1_Stat ";
+String stat_1;
+String stat_2;
+String prevStat_1;
+String prevStat_2;
+String tagName_1 = "L9_SMT_ESD_1_Op1 ";
+String tagName_2 = "L9_SMT_ESD_2_Op2 ";
+
 String value;
-#define calibrate_cycle 100 //take average of how many cycles..
-#define p_val_offset 75 // choose value from 0 to 100
 
 void setup() {
   Serial.begin(9600);
@@ -27,29 +28,6 @@ void setup() {
 
   // Set the destination address to 0xaa
   txPacket.dstAddr[0] = 0xaa;
-
-  //Calibration algo, Start/Reset device at "NO CONNECT" or "FAIL" state
-  pinMode(GREEN_LED, OUTPUT);     
-  Serial.print("calibrate p-value..");
-  for(int i=0;i<calibrate_cycle;i++){
-      p_value += analogRead(A0);
-      p_value += analogRead(A1);
-      Serial.print(i);
-      Serial.print(": A0, A1: ");
-      Serial.print(analogRead(A0));
-      Serial.print(", ");
-      Serial.println(analogRead(A1));
-      led_toggle = !led_toggle;
-      digitalWrite(RED_LED, led_toggle);
-  }
-  Serial.print("percent offset: ");
-  Serial.println((100.0-p_val_offset)/100.0);
-  p_value /= (40*calibrate_cycle); 
-  p_value *= ((100.0-p_val_offset)/100.0);
-  Serial.print("p_value calibrated to: ");
-  Serial.println(p_value);
-  digitalWrite(RED_LED, LOW);  
-  //end of calibration p-value
 }
 
 void loop() {
@@ -57,46 +35,66 @@ void loop() {
   sendStatus();
   P1 = 0;
   P2 = 0;
+  P3 = 0;
+  P4 = 0;
 }
 
 
 void detectStatus() {
   for (byte i = 0; i < 50; i++) {
     P1 = P1 + analogRead(A0);
-    P2 = P2 + analogRead(A1);                   
-    delay(50); //50 ms delay
+    P2 = P2 + analogRead(A1);
+    P3 = P3 + analogRead(A2);
+    P4 = P4 + analogRead(A3);
+    delay(50);
   }
 
   P1 = P1 / 1000;
   P2 = P2 / 1000;
-  Serial.print("P1: ");             //testing the analog signal from ESD
+  P3 = P3 / 1000;
+  P4 = P4 / 1000;
+  
+  Serial.print("P1: ");
   Serial.print(P1);
-  Serial.print("\tP2: ");
+  Serial.print(" P2: ");
   Serial.println(P2);
+  Serial.print("P3: ");
+  Serial.print(P3);
+  Serial.print(" P4: ");
+  Serial.println(P4);
+  Serial.println();
 
   if (P1 == 1 && P2 >= p_value) {
-    stat = "1"; // PASS
-    Serial.println("PASS"); 
+    stat_1 = "1"; // PASS
   }
-  if (P1 >= p_value && P2 >= p_value) {
-    stat = "2"; // NO CONNECT
-    Serial.println("NO CONNECT"); 
+  if (P1 >= p_value && P2 == 1) {
+    stat_1 = "2"; // NO CONNECT
   }
-  if (P2 > p_value && P1 >= p_value) {
-    stat = "3"; // FAIL
-    Serial.println("FAIL"); 
+  if (P2 > 20 && P1 >= p_value) {
+    stat_1 = "3"; // FAIL
   }
-  if (P1 < p_value && P2 < p_value) {
-    stat = "4"; // POWER OFF
-    Serial.println("POWER OFF"); 
+  if (P1 < off_value && P2 < off_value) {
+    stat_1 = "4"; // POWER OFF
+  }
+
+  if (P3 == 1 && P4 >= p_value) {
+    stat_2 = "1"; // PASS
+  }
+  if (P3 >= p_value && P4 == 1) {
+    stat_2 = "2"; // NO CONNECT
+  }
+  if (P4 > 20 && P3 >= p_value) {
+    stat_2 = "3"; // FAIL
+  }
+  if (P3 < off_value && P4 < off_value) {
+    stat_2 = "4"; // POWER OFF
   }
 }
 
 void sendStatus() {
-  if (prevStat != stat) {
-    Serial.println("SEND STATUS!");
-    value = tagName + stat;
-    char d[128];                              // declare string 
+  if (prevStat_1 != stat_1 || prevStat_2 != stat_2) {
+    value = tagName_1 + stat_1 + tagName_2 + stat_2;
+    char d[128];
     value.toCharArray(d, sizeof(d));
     memcpy(&txPacket.payload, &d, sizeof(d)); // Copy the String value into the txPacket payload
 
@@ -116,5 +114,6 @@ void sendStatus() {
       Serial.println(")");
     }
   }
-  prevStat = stat;
+  prevStat_1 = stat_1;
+  prevStat_2 = stat_2;
 }
