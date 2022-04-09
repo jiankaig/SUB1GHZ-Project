@@ -16,8 +16,8 @@ class COMMAND_TYPE(enum.Enum):
     LED_COMMAND = 2
 CommandType = COMMAND_TYPE.NO_TYPE
 
-ip_address = "http://192.168.18.16" 
-#192.168.18.16
+ip_address = "http://192.168.18.16"  #Input the CC3200 Webserver IP address
+#192.168.18.16 
 #change on top line to fit webserver ip address //192.168.43.84 (YT)
 strip_html = "<[^<]+?>"
 
